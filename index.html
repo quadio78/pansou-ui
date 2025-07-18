@@ -161,6 +161,27 @@
             background-color: rgba(10, 132, 255, 1);
             transform: scale(1.1);
         }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: rgba(0,0,0,0.05);
+            color: #1c1c1e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .filter-btn:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        .filter-btn.active {
+            background-color: #0a84ff;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(10, 132, 255, 0.2);
+        }
     </style>
 </head>
 <!-- Google tag (gtag.js) -->
@@ -175,6 +196,7 @@
 <body class="min-h-screen py-8 px-4 sm:px-8">
     <div class="max-w-4xl mx-auto">
         <!-- 标题区域 -->
+        <a href="https://pansou.jkai.de/">
         <div class="text-center mb-10 fade-in">
             <div class="w-16 h-16 bg-gradient-to-br from-ios-blue to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-cloud text-white text-2xl"></i>
@@ -182,7 +204,7 @@
             <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-ios-blue to-blue-500 bg-clip-text text-transparent">盘搜</h1>
             <p class="text-ios-gray text-lg">基于TG频道的网盘搜索工具</p>
         </div>
-        
+        </a>
         <!-- 搜索框 -->
         <div class="ios-card p-1 mb-8 search-box" id="searchContainer">
             <div class="flex items-center">
@@ -205,6 +227,13 @@
             </div>
         </div>
         
+        <!-- 筛选器 -->
+        <div id="filterContainer" class="mb-6 px-2 hidden">
+            <div class="flex flex-wrap gap-2">
+                <!-- 筛选按钮将在这里动态生成 -->
+            </div>
+        </div>
+
         <!-- 结果统计 -->
         <div id="resultsHeader" class="mb-6 px-2 hidden">
             <div class="flex justify-between items-center">
@@ -263,6 +292,9 @@
         const resultsContainer = document.getElementById('resultsContainer');
         const resultsHeader = document.getElementById('resultsHeader');
         const resultsCount = document.getElementById('resultsCount');
+        const filterContainer = document.getElementById('filterContainer');
+
+        let currentData = null; // 缓存当前搜索结果
         
         // 添加事件监听器
         searchInput.addEventListener('focus', () => {
@@ -320,6 +352,8 @@
                     return response.json();
                 })
                 .then(data => {
+                    currentData = data; // 缓存数据
+                    renderFilters(data);
                     renderResults(data);
                 })
                 .catch(error => {
@@ -345,10 +379,36 @@
                     <p class="text-ios-gray">正在各大网盘搜索 "${searchInput.value}"</p>
                 </div>
             `;
+            filterContainer.classList.add('hidden');
+        }
+
+        // 渲染筛选器
+        function renderFilters(data) {
+            if (data.code !== 0 || !data.data || !data.data.merged_by_type) {
+                filterContainer.classList.add('hidden');
+                return;
+            }
+
+            const mergedByType = data.data.merged_by_type;
+            const platforms = Object.keys(mergedByType);
+
+            if (platforms.length === 0) {
+                filterContainer.classList.add('hidden');
+                return;
+            }
+
+            let filterHTML = `<button class="filter-btn active" data-platform="all">全部</button>`;
+            for (const platformType of platforms) {
+                const platformInfo = platformMap[platformType] || { name: platformType };
+                filterHTML += `<button class="filter-btn" data-platform="${platformType}">${platformInfo.name}</button>`;
+            }
+
+            filterContainer.querySelector('div').innerHTML = filterHTML;
+            filterContainer.classList.remove('hidden');
         }
         
         // 渲染搜索结果
-        function renderResults(data) {
+        function renderResults(data, filter = 'all') {
             if (data.code !== 0) {
                 resultsContainer.innerHTML = `
                     <div class="ios-card p-8 text-center fade-in">
@@ -359,6 +419,8 @@
                         <p class="text-ios-gray">${data.message || '无法获取搜索结果'}</p>
                     </div>
                 `;
+                resultsHeader.classList.add('hidden');
+                filterContainer.classList.add('hidden');
                 return;
             }
             
@@ -368,8 +430,27 @@
             // 构建HTML
             let resultsHTML = '';
             
+            const platformsToRender = filter === 'all' 
+                ? Object.entries(mergedByType)
+                : Object.entries(mergedByType).filter(([platformType]) => platformType === filter);
+
+            if (platformsToRender.length === 0) {
+                 resultsContainer.innerHTML = `
+                    <div class="ios-card p-8 text-center fade-in">
+                        <div class="text-5xl mb-4 text-ios-gray">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h3 class="text-xl font-medium mb-2">无结果</h3>
+                        <p class="text-ios-gray">在当前筛选条件下没有找到资源。</p>
+                    </div>
+                `;
+                resultsCount.textContent = `共找到 0 个资源`;
+                resultsHeader.classList.remove('hidden');
+                return;
+            }
+
             // 按平台类型分组渲染
-            for (const [platformType, resources] of Object.entries(mergedByType)) {
+            for (const [platformType, resources] of platformsToRender) {
                 const platformInfo = platformMap[platformType] || { 
                     name: platformType, 
                     icon: 'fa-cloud', 
@@ -449,11 +530,30 @@
             resultsContainer.innerHTML = resultsHTML;
             
             // 更新结果统计
-            resultsCount.textContent = `共找到 ${totalResults} 个资源`;
+            let finalTotal = 0;
+            if (filter === 'all') {
+                finalTotal = Object.values(data.data.merged_by_type).reduce((sum, res) => sum + res.length, 0);
+            } else {
+                finalTotal = data.data.merged_by_type[filter]?.length || 0;
+            }
+            resultsCount.textContent = `共找到 ${finalTotal} 个资源`;
             resultsHeader.classList.remove('hidden');
         }
         
-        // 事件委托处理“显示更多”和“展开/收起”
+        // 事件委托处理筛选、显示更多、展开/收起
+        filterContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                const platform = e.target.dataset.platform;
+                
+                // 更新按钮激活状态
+                filterContainer.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+
+                // 重新渲染结果
+                renderResults(currentData, platform);
+            }
+        });
+
         resultsContainer.addEventListener('click', (e) => {
             const showMoreBtn = e.target.closest('.show-more-btn');
             const toggleBtn = e.target.closest('.toggle-btn');
