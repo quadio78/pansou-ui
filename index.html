@@ -214,7 +214,7 @@
                 <input 
                     type="text" 
                     id="searchInput" 
-                    placeholder="输入要搜索的资源名称..." 
+                    placeholder="输入您要搜索的资源名称，快速查找多个网盘资源，支持115、百度云、阿里云盘等主流网盘" 
                     class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-ios-gray"
                     autocomplete="off"
                 >
@@ -227,6 +227,11 @@
             </div>
         </div>
         
+        <!-- 热搜 -->
+        <div id="hotSearchesContainer" class="mb-6 px-2 flex flex-wrap gap-2 items-center">
+            <!-- 热搜词将在这里动态生成 -->
+        </div>
+
         <!-- 筛选器 -->
         <div id="filterContainer" class="mb-6 px-2 hidden">
             <div class="flex flex-wrap gap-2">
@@ -243,26 +248,11 @@
         </div>
         
         <!-- 结果容器 -->
-        <div id="resultsContainer" class="space-y-5">
-            <!-- 初始状态提示 -->
-            <div class="ios-card p-8 text-center">
-                <div class="text-5xl mb-4 text-ios-gray">
-                    <i class="fas fa-cloud-download-alt"></i>
-                </div>
-                <h3 class="text-xl font-medium mb-2">搜索网盘资源</h3>
-                <p class="text-ios-gray max-w-md mx-auto">
-                    输入您要搜索的资源名称，快速查找多个网盘资源，支持115、百度云、阿里云盘等主流网盘
-                </p>
-            </div>
-        </div>
+        <div id="resultsContainer" class="space-y-5"></div>
         
-        <!-- 示例搜索 -->
         <div class="mt-8 text-center text-ios-gray">
-            <p class="mb-2">试试搜索：<span class="text-ios-blue cursor-pointer examples">凡人修仙传</span> 
-                 | <span class="text-ios-blue cursor-pointer examples">灵笼</span> 
-            | <span class="text-ios-blue cursor-pointer examples">流浪地球</span> 
-            | <span class="text-ios-blue cursor-pointer examples">三体</span></p>
-            <p class="text-sm">数据来源：<a href="https://github.com/fish2018/pansou" target="_blank">github地址</a></p>
+            <p class="text-sm">数据来源：<a href="https://github.com/fish2018/pansou" target="_blank" class="text-ios-blue hover:underline">github地址</a></p>
+            <button id="clearHotSearches" class="mt-2 text-xs text-red-500 hover:underline">清除热搜记录</button>
         </div>
     </div>
 
@@ -295,6 +285,7 @@
         const filterContainer = document.getElementById('filterContainer');
 
         let currentData = null; // 缓存当前搜索结果
+        let isInitialLoad = true; // 跟踪是否为初始加载状态
         
         // 添加事件监听器
         searchInput.addEventListener('focus', () => {
@@ -321,6 +312,71 @@
             });
         });
 
+        // 清除热搜记录
+        const clearButton = document.getElementById('clearHotSearches');
+        clearButton.addEventListener('click', async () => {
+            const password = prompt('请输入清除密码:');
+            if (password === null) { // 用户点击了取消
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/clear-hot-searches', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: password })
+                });
+
+                if (response.ok) {
+                    alert('热搜记录已清除！');
+                    const hotSearchesContainer = document.getElementById('hotSearchesContainer');
+                    if(hotSearchesContainer) {
+                        hotSearchesContainer.innerHTML = '';
+                    }
+                } else {
+                    const result = await response.json();
+                    alert(`清除失败: ${result.error || '未知错误'}`);
+                }
+            } catch (error) {
+                alert(`请求失败: ${error.message}`);
+            }
+        });
+
+        // 获取并渲染热搜
+        async function fetchAndRenderHotSearches() {
+            try {
+                const response = await fetch('/api/hot-searches');
+                if (!response.ok) return;
+
+                const { hotSearches } = await response.json();
+                const container = document.getElementById('hotSearchesContainer');
+                
+                if (hotSearches && hotSearches.length > 0) {
+                    let html = '<span class="text-sm text-ios-gray font-medium mr-2">热搜:</span>';
+                    hotSearches.forEach(item => {
+                        html += `<button class="text-sm text-ios-blue bg-blue-50 px-3 py-1 rounded-full hover:bg-blue-100 transition-colors hot-search-btn">${item.term}</button>`;
+                    });
+                    container.innerHTML = html;
+
+                    // 为热搜按钮添加点击事件
+                    container.querySelectorAll('.hot-search-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            searchInput.value = btn.textContent;
+                            performSearch();
+                        });
+                    });
+                } else {
+                    container.innerHTML = '';
+                }
+            } catch (error) {
+                console.error('Failed to fetch hot searches:', error);
+            }
+        }
+
+        // 页面加载时获取热搜
+        document.addEventListener('DOMContentLoaded', fetchAndRenderHotSearches);
+
+
         // 返回顶部按钮逻辑
         const backToTopBtn = document.getElementById('backToTopBtn');
 
@@ -337,14 +393,35 @@
         });
         
         // 执行搜索
-        function performSearch() {
+        async function performSearch() {
             const keyword = searchInput.value.trim();
             if (!keyword) return;
+
+            isInitialLoad = false;
+
+            // 首先检查是否为违规词
+            try {
+                const checkResponse = await fetch('/api/check-term', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ term: keyword })
+                });
+                if (checkResponse.ok) {
+                    const checkResult = await checkResponse.json();
+                    if (checkResult.isForbidden) {
+                        renderEmptyResults(); // 使用默认的“无结果”提示
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to check term:", error);
+                // 如果检查失败，可以选择继续搜索或显示错误，这里我们选择继续
+            }
             
             // 显示加载状态
             showLoading();
             
-            fetch(`https://pansou.252035.xyz/api/search?kw=${encodeURIComponent(keyword)}&plugins=pansearch`)
+            fetch(`https://pansou.252035.xyz/api/search?kw=${encodeURIComponent(keyword)}&plugins=pansearch&refresh=true`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -355,6 +432,10 @@
                     currentData = data; // 缓存数据
                     renderFilters(data);
                     renderResults(data);
+                    // 只有在搜索成功且非违规时才记录
+                    if (data.code === 0) {
+                        recordSearchTerm(keyword);
+                    }
                 })
                 .catch(error => {
                     console.error('Fetch Error:', error);
@@ -365,6 +446,17 @@
                 });
         }
         
+        // 记录搜索词
+        function recordSearchTerm(term) {
+            fetch('/api/hot-searches', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ term: term }),
+            }).catch(error => console.error('Failed to record search term:', error));
+        }
+
         // 显示加载状态
         function showLoading() {
             resultsHeader.classList.add('hidden');
@@ -407,9 +499,25 @@
             filterContainer.classList.remove('hidden');
         }
         
+        // 渲染一个空的或带有特定消息的结果页面
+        function renderEmptyResults(message = "在当前筛选条件下没有找到资源。") {
+            resultsContainer.innerHTML = `
+                <div class="ios-card p-8 text-center fade-in">
+                    <div class="text-5xl mb-4 text-ios-gray">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-2">无结果</h3>
+                    <p class="text-ios-gray">${message}</p>
+                </div>
+            `;
+            resultsCount.textContent = `共找到 0 个资源`;
+            resultsHeader.classList.remove('hidden');
+            filterContainer.classList.add('hidden');
+        }
+
         // 渲染搜索结果
         function renderResults(data, filter = 'all') {
-            if (data.code !== 0) {
+            if (data.code !== 0 || !data.data || !data.data.merged_by_type) {
                 resultsContainer.innerHTML = `
                     <div class="ios-card p-8 text-center fade-in">
                         <div class="text-5xl mb-4 text-red-500">
@@ -435,17 +543,7 @@
                 : Object.entries(mergedByType).filter(([platformType]) => platformType === filter);
 
             if (platformsToRender.length === 0) {
-                 resultsContainer.innerHTML = `
-                    <div class="ios-card p-8 text-center fade-in">
-                        <div class="text-5xl mb-4 text-ios-gray">
-                            <i class="fas fa-box-open"></i>
-                        </div>
-                        <h3 class="text-xl font-medium mb-2">无结果</h3>
-                        <p class="text-ios-gray">在当前筛选条件下没有找到资源。</p>
-                    </div>
-                `;
-                resultsCount.textContent = `共找到 0 个资源`;
-                resultsHeader.classList.remove('hidden');
+                renderEmptyResults();
                 return;
             }
 
@@ -600,6 +698,58 @@
             const date = new Date(dateString);
             return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
         }
+
+        // 获取并渲染热搜
+        function fetchAndRenderHotSearches() {
+            fetch('/api/hot-searches')
+                .then(response => response.json())
+                .then(data => {
+                    let hotSearchesHTML = '';
+                    if (data.hotSearches && data.hotSearches.length > 0) {
+                        hotSearchesHTML = `
+                            <div class="ios-card p-8 text-center fade-in">
+                                <h4 class="text-xl font-semibold mb-6 text-ios-dark">热搜榜</h4>
+                                <div class="flex flex-wrap justify-center gap-x-4 gap-y-3">
+                        `;
+                        data.hotSearches.forEach(item => {
+                            hotSearchesHTML += `<span class="text-ios-blue cursor-pointer examples text-lg">${item.term}</span>`;
+                        });
+                        hotSearchesHTML += `</div></div>`;
+                    } else {
+                        // 如果没有热搜，可以显示一个默认提示
+                        hotSearchesHTML = `
+                            <div class="ios-card p-8 text-center">
+                                <div class="text-5xl mb-4 text-ios-gray">
+                                    <i class="fas fa-cloud-download-alt"></i>
+                                </div>
+                                <h3 class="text-xl font-medium mb-2">搜索网盘资源</h3>
+                                <p class="text-ios-gray max-w-md mx-auto">
+                                    开启你的第一次搜索吧
+                                </p>
+                            </div>
+                        `;
+                    }
+                    
+                    // 仅当是初始加载时才注入热搜
+                    if (isInitialLoad) {
+                        resultsContainer.innerHTML = hotSearchesHTML;
+                    }
+
+                    // 为热搜词（也是示例）添加事件监听器
+                    document.querySelectorAll('.examples').forEach(el => {
+                        el.addEventListener('click', (e) => {
+                            searchInput.value = e.target.textContent;
+                            performSearch();
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Failed to fetch hot searches:', error);
+                });
+        }
+
+        // 页面加载时获取热搜
+        document.addEventListener('DOMContentLoaded', fetchAndRenderHotSearches);
     </script>
 </body>
 </html>
