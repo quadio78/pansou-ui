@@ -466,10 +466,15 @@
                     return response.json();
                 })
                 .then(data => {
-                    currentData = data; // 缓存原始数据
+                    // 首先，检查API请求是否成功，但没有返回任何数据
+                    if (data.code === 0 && (!data.data || data.data.total === 0)) {
+                        renderEmptyResults();
+                        return;
+                    }
 
-                    if (data.code !== 0 || !data.data || !data.data.merged_by_type) {
-                        renderResults(data); // 直接渲染错误或空状态
+                    // 其次，检查API是否返回了错误
+                    if (data.code !== 0 || !data.data.merged_by_type) {
+                        renderResults(data); // 直接渲染错误状态
                         return;
                     }
 
@@ -523,9 +528,13 @@
                         renderResults(filteredData);
                     }
 
-                    // 只有在搜索成功且非违规时才记录
-                    if (data.code === 0) {
+                    if (filteredTotal > 0) {
+                        renderFilters(filteredData);
+                        renderResults(filteredData);
+                        // 只有在有有效结果时才记录搜索词
                         recordSearchTerm(keyword);
+                    } else {
+                        renderEmptyResults("未找到有效资源，已过滤无效或不匹配的链接。");
                     }
                 })
                 .catch(error => {
