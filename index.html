@@ -466,8 +466,14 @@
                 })
                 .then(data => {
                     currentData = data; // 缓存数据
-                    renderFilters(data);
-                    renderResults(data);
+                    if (data.code === 0 && (!data.data || data.data.total === 0)) {
+                        renderEmptyResults();
+                    } else if (data.code === 0) {
+                        renderFilters(data);
+                        renderResults(data);
+                    } else {
+                        renderResults(data); // Render error message
+                    }
                     // 只有在搜索成功且非违规时才记录
                     if (data.code === 0) {
                         recordSearchTerm(keyword);
@@ -505,6 +511,19 @@
                     </div>
                     <h3 class="text-xl font-medium mb-2">正在搜索资源</h3>
                     <p class="text-ios-gray">正在各大网盘搜索 "${searchInput.value}"</p>
+                </div>
+            `;
+            filterContainer.classList.add('hidden');
+        }
+
+        function renderEmptyResults() {
+            resultsHeader.classList.remove('hidden');
+            resultsCount.textContent = '共 0 条';
+            resultsContainer.innerHTML = `
+                <div class="ios-card p-8 text-center fade-in">
+                    <i class="fas fa-box-open text-4xl text-ios-gray mb-4"></i>
+                    <h3 class="text-xl font-medium mb-2">未找到相关资源</h3>
+                    <p class="text-ios-gray">请尝试更换关键词或检查输入是否正确。</p>
                 </div>
             `;
             filterContainer.classList.add('hidden');
