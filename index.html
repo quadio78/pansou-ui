@@ -257,6 +257,7 @@
                 <a href="https://github.com/fish2018/pansou" target="_blank" class="text-ios-blue hover:underline">数据来源</a>
             </p>
             <button id="clearHotSearches" class="mt-2 text-xs text-red-500 hover:underline">清除热搜记录</button>
+            <button id="deleteSingleHotSearch" class="mt-2 ml-2 text-xs text-orange-500 hover:underline">删除指定热搜</button>
         </div>
     </div>
 
@@ -340,6 +341,37 @@
                 } else {
                     const result = await response.json();
                     alert(`清除失败: ${result.error || '未知错误'}`);
+                }
+            } catch (error) {
+                alert(`请求失败: ${error.message}`);
+            }
+        });
+
+        // 删除指定热搜
+        document.getElementById('deleteSingleHotSearch').addEventListener('click', async () => {
+            const termToDelete = prompt('请输入要删除的热搜词:');
+            if (!termToDelete || termToDelete.trim() === '') {
+                return;
+            }
+
+            const password = prompt('请输入密码:');
+            if (password === null) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/delete-hot-search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: password, term: termToDelete.trim() })
+                });
+
+                if (response.ok) {
+                    alert(`热搜词 "${termToDelete}" 已删除！`);
+                    fetchAndRenderHotSearches(); // Refresh the list
+                } else {
+                    const result = await response.json();
+                    alert(`删除失败: ${result.error || '未知错误'}`);
                 }
             } catch (error) {
                 alert(`请求失败: ${error.message}`);
