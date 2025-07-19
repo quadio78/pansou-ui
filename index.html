@@ -466,15 +466,63 @@
                     return response.json();
                 })
                 .then(data => {
-                    currentData = data; // 缓存数据
-                    if (data.code === 0 && (!data.data || data.data.total === 0)) {
-                        renderEmptyResults();
-                    } else if (data.code === 0) {
-                        renderFilters(data);
-                        renderResults(data);
-                    } else {
-                        renderResults(data); // Render error message
+                    currentData = data; // 缓存原始数据
+
+                    if (data.code !== 0 || !data.data || !data.data.merged_by_type) {
+                        renderResults(data); // 直接渲染错误或空状态
+                        return;
                     }
+
+                    // --- 数据清洗和过滤 ---
+                    const platformDomains = {
+                        'aliyun': 'aliyundrive.com',
+                        'quark': 'pan.quark.cn',
+                        'baidu': 'pan.baidu.com',
+                        '115': '115.com',
+                        'xunlei': 'pan.xunlei.com',
+                        'uc': 'drive.uc.cn',
+                        'tianyi': 'cloud.189.cn',
+                        '123': '123pan.com',
+                        'mobile': 'caiyun.feixin.10086.cn'
+                    };
+
+                    let filteredMergedByType = {};
+                    let filteredTotal = 0;
+
+                    for (const platform in data.data.merged_by_type) {
+                        const items = data.data.merged_by_type[platform];
+                        const validItems = items.filter(item => {
+                            if (!item.url || item.url.trim() === '') return false;
+                            const expectedDomain = platformDomains[platform];
+                            if (expectedDomain && !item.url.includes(expectedDomain)) return false;
+                            return true;
+                        });
+
+                        if (validItems.length > 0) {
+                            filteredMergedByType[platform] = validItems;
+                            filteredTotal += validItems.length;
+                        }
+                    }
+                    // --- 过滤结束 ---
+
+                    const filteredData = {
+                        ...data,
+                        data: {
+                            ...data.data,
+                            merged_by_type: filteredMergedByType,
+                            total: filteredTotal
+                        }
+                    };
+                    
+                    currentData = filteredData; // 更新缓存为过滤后的数据
+
+                    if (filteredTotal === 0) {
+                        renderEmptyResults("未找到有效资源，已过滤无效或不匹配的链接。");
+                    } else {
+                        renderFilters(filteredData);
+                        renderResults(filteredData);
+                    }
+
                     // 只有在搜索成功且非违规时才记录
                     if (data.code === 0) {
                         recordSearchTerm(keyword);
@@ -587,7 +635,7 @@
                 filterContainer.classList.add('hidden');
                 return;
             }
-            
+
             const mergedByType = data.data.merged_by_type;
             let totalResults = 0;
             
