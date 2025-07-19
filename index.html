@@ -458,7 +458,7 @@
             // 显示加载状态
             showLoading();
             
-            fetch(`https://pansou.252035.xyz/api/search?kw=${encodeURIComponent(keyword)}&plugins=pansearch&refresh=true`)
+            fetch(`https://pansou.252035.xyz/api/search?kw=${encodeURIComponent(keyword)}&plugins=pansearch`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
