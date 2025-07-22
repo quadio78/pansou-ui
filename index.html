@@ -171,6 +171,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid transparent;
+            min-height: 44px; /* 增加触摸区域 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .filter-btn:hover {
@@ -182,6 +186,30 @@
             color: white;
             font-weight: 500;
             box-shadow: 0 2px 10px rgba(10, 132, 255, 0.2);
+        }
+        
+        /* 移动端触摸优化 */
+        @media (max-width: 768px) {
+            .result-item {
+                padding: 16px !important;
+            }
+            
+            .hot-search-btn {
+                min-height: 44px;
+                padding: 8px 16px;
+            }
+            
+            #searchButton {
+                min-height: 48px;
+                padding: 12px 24px;
+            }
+            
+            #backToTopBtn {
+                width: 56px;
+                height: 56px;
+                bottom: 24px;
+                right: 24px;
+            }
         }
     </style>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9067024774549867"
@@ -221,6 +249,8 @@
                     placeholder="输入您要搜索的资源名称，快速查找多个网盘资源，支持115、百度云、阿里云盘等主流网盘" 
                     class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-ios-gray"
                     autocomplete="off"
+                    inputmode="search"
+                    enterkeyhint="search"
                 >
                 <button 
                     id="searchButton"
@@ -295,6 +325,8 @@
 
         let currentData = null; // 缓存当前搜索结果
         let isInitialLoad = true; // 跟踪是否为初始加载状态
+        let searchTimeout = null; // 搜索防抖定时器
+        let isSearching = false; // 搜索状态标记
         
         // 添加事件监听器
         searchInput.addEventListener('focus', () => {
@@ -307,7 +339,19 @@
         
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
                 performSearch();
+            }
+        });
+        
+        // 添加输入防抖
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            const keyword = e.target.value.trim();
+            if (keyword.length >= 2) {
+                searchTimeout = setTimeout(() => {
+                    performSearch();
+                }, 800); // 800ms 防抖延迟
             }
         });
         
@@ -435,9 +479,16 @@
         // 执行搜索
         async function performSearch() {
             const keyword = searchInput.value.trim();
-            if (!keyword) return;
+            if (!keyword || isSearching) return;
 
             isInitialLoad = false;
+            isSearching = true;
+            
+            // 更新搜索按钮状态
+            const originalText = searchButton.textContent;
+            searchButton.disabled = true;
+            searchButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>搜索中';
+            searchButton.classList.add('opacity-75');
 
             // 首先检查是否为违规词
             try {
@@ -546,6 +597,13 @@
                         code: -1,
                         message: `请求失败: ${error.message}`
                     });
+                })
+                .finally(() => {
+                    // 恢复搜索按钮状态
+                    isSearching = false;
+                    searchButton.disabled = false;
+                    searchButton.textContent = originalText;
+                    searchButton.classList.remove('opacity-75');
                 });
         }
         
@@ -577,16 +635,41 @@
             filterContainer.classList.add('hidden');
         }
 
-        function renderEmptyResults() {
+        function renderEmptyResults(message = "未找到相关资源") {
             resultsHeader.classList.remove('hidden');
             resultsCount.textContent = '共 0 条';
+            
+            // 提供搜索建议
+            const suggestions = ['电影', '电视剧', '音乐', '软件', '游戏', '教程', '小说', '漫画'];
+            const randomSuggestions = suggestions.sort(() => 0.5 - Math.random()).slice(0, 4);
+            
             resultsContainer.innerHTML = `
                 <div class="ios-card p-8 text-center fade-in">
-                    <i class="fas fa-box-open text-4xl text-ios-gray mb-4"></i>
-                    <h3 class="text-xl font-medium mb-2">未找到相关资源</h3>
-                    <p class="text-ios-gray">请尝试更换关键词或检查输入是否正确。</p>
+                    <i class="fas fa-search text-4xl text-ios-gray mb-4"></i>
+                    <h3 class="text-xl font-medium mb-2">${message}</h3>
+                    <p class="text-ios-gray mb-6">请尝试更换关键词或检查输入是否正确</p>
+                    <div class="mb-4">
+                        <p class="text-sm text-ios-gray mb-3">试试这些热门搜索：</p>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            ${randomSuggestions.map(suggestion => 
+                                `<button class="suggestion-btn text-sm text-ios-blue bg-blue-50 px-3 py-2 rounded-full hover:bg-blue-100 transition-colors">${suggestion}</button>`
+                            ).join('')}
+                        </div>
+                    </div>
+                    <div class="text-xs text-ios-gray">
+                        <p>💡 小贴士：使用 Ctrl+K (Mac: Cmd+K) 快速聚焦搜索框</p>
+                    </div>
                 </div>
             `;
+            
+            // 为建议按钮添加点击事件
+            resultsContainer.querySelectorAll('.suggestion-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    searchInput.value = btn.textContent;
+                    performSearch();
+                });
+            });
+            
             filterContainer.classList.add('hidden');
         }
 
@@ -615,20 +698,22 @@
             filterContainer.classList.remove('hidden');
         }
         
-        // 渲染一个空的或带有特定消息的结果页面
-        function renderEmptyResults(message = "在当前筛选条件下没有找到资源。") {
+        // 渲染筛选后的空结果页面
+        function renderFilteredEmptyResults(message = "在当前筛选条件下没有找到资源") {
             resultsContainer.innerHTML = `
                 <div class="ios-card p-8 text-center fade-in">
                     <div class="text-5xl mb-4 text-ios-gray">
-                        <i class="fas fa-box-open"></i>
+                        <i class="fas fa-filter"></i>
                     </div>
-                    <h3 class="text-xl font-medium mb-2">无结果</h3>
-                    <p class="text-ios-gray">${message}</p>
+                    <h3 class="text-xl font-medium mb-2">筛选无结果</h3>
+                    <p class="text-ios-gray mb-4">${message}</p>
+                    <button class="clear-filter-btn text-ios-blue hover:underline" onclick="document.querySelector('.filter-btn[data-platform=all]').click()">
+                        清除筛选条件
+                    </button>
                 </div>
             `;
             resultsCount.textContent = `共找到 0 个资源`;
             resultsHeader.classList.remove('hidden');
-            filterContainer.classList.add('hidden');
         }
 
         // 渲染搜索结果
@@ -637,10 +722,16 @@
                 resultsContainer.innerHTML = `
                     <div class="ios-card p-8 text-center fade-in">
                         <div class="text-5xl mb-4 text-red-500">
-                            <i class="fas fa-exclamation-circle"></i>
+                            <i class="fas fa-exclamation-triangle"></i>
                         </div>
-                        <h3 class="text-xl font-medium mb-2">搜索失败</h3>
-                        <p class="text-ios-gray">${data.message || '无法获取搜索结果'}</p>
+                        <h3 class="text-xl font-medium mb-2">搜索遇到问题</h3>
+                        <p class="text-ios-gray mb-4">${data.message || '网络连接异常，请稍后重试'}</p>
+                        <div class="space-y-2">
+                            <button class="retry-btn bg-ios-blue text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity" onclick="performSearch()">
+                                <i class="fas fa-redo mr-2"></i>重试
+                            </button>
+                            <p class="text-xs text-ios-gray">或检查网络连接后重新搜索</p>
+                        </div>
                     </div>
                 `;
                 resultsHeader.classList.add('hidden');
@@ -659,7 +750,7 @@
                 : Object.entries(mergedByType).filter(([platformType]) => platformType === filter);
 
             if (platformsToRender.length === 0) {
-                renderEmptyResults();
+                renderFilteredEmptyResults();
                 return;
             }
 
@@ -863,6 +954,22 @@
                     console.error('Failed to fetch hot searches:', error);
                 });
         }
+
+        // 添加键盘快捷键支持
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+K 或 Cmd+K 聚焦搜索框
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+            
+            // ESC 清空搜索框
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.value = '';
+                searchInput.blur();
+            }
+        });
 
         // 页面加载时获取热搜
         document.addEventListener('DOMContentLoaded', fetchAndRenderHotSearches);
