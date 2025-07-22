@@ -275,9 +275,21 @@
 
         <!-- 结果统计 -->
         <div id="resultsHeader" class="mb-6 px-2 hidden">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center flex-wrap gap-2">
                 <h2 class="text-xl font-semibold">搜索结果</h2>
-                <span id="resultsCount" class="text-ios-gray"></span>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-ios-gray">排序:</span>
+                        <select id="sortSelect" class="text-sm bg-white border border-gray-200 rounded-lg px-3 py-1 text-ios-dark focus:outline-none focus:ring-2 focus:ring-ios-blue focus:border-transparent">
+                            <option value="default">默认</option>
+                            <option value="date-desc">时间 (新到旧)</option>
+                            <option value="date-asc">时间 (旧到新)</option>
+                            <option value="name-asc">名称 (A-Z)</option>
+                            <option value="name-desc">名称 (Z-A)</option>
+                        </select>
+                    </div>
+                    <span id="resultsCount" class="text-ios-gray"></span>
+                </div>
             </div>
         </div>
         
@@ -322,8 +334,10 @@
         const resultsHeader = document.getElementById('resultsHeader');
         const resultsCount = document.getElementById('resultsCount');
         const filterContainer = document.getElementById('filterContainer');
+        const sortSelect = document.getElementById('sortSelect');
 
         let currentData = null; // 缓存当前搜索结果
+        let currentFilter = 'all'; // 当前筛选条件
         let isInitialLoad = true; // 跟踪是否为初始加载状态
         let searchTimeout = null; // 搜索防抖定时器
         let isSearching = false; // 搜索状态标记
@@ -344,18 +358,15 @@
             }
         });
         
-        // 添加输入防抖
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            const keyword = e.target.value.trim();
-            if (keyword.length >= 2) {
-                searchTimeout = setTimeout(() => {
-                    performSearch();
-                }, 800); // 800ms 防抖延迟
-            }
-        });
         
         searchButton.addEventListener('click', performSearch);
+        
+        // 排序选择事件
+        sortSelect.addEventListener('change', () => {
+            if (currentData) {
+                renderResults(currentData, currentFilter);
+            }
+        });
         
         // 示例搜索点击事件
         document.querySelectorAll('.examples').forEach(el => {
@@ -718,6 +729,7 @@
 
         // 渲染搜索结果
         function renderResults(data, filter = 'all') {
+            currentFilter = filter; // 更新当前筛选条件
             if (data.code !== 0 || !data.data || !data.data.merged_by_type) {
                 resultsContainer.innerHTML = `
                     <div class="ios-card p-8 text-center fade-in">
@@ -762,7 +774,11 @@
                     color: 'bg-gray-500' 
                 };
                 
-                totalResults += resources.length;
+                // 应用排序
+                const sortType = sortSelect.value;
+                const sortedResources = sortResults(resources, sortType);
+                
+                totalResults += sortedResources.length;
                 
                 let platformHTML = `
                     <div class="ios-card overflow-hidden fade-in">
@@ -771,8 +787,8 @@
                                 <i class="fas ${platformInfo.icon}"></i>
                             </div>
                             <h3 class="font-semibold text-lg ml-3">${platformInfo.name}</h3>
-                            <span class="ml-auto bg-gray-100 rounded-full px-3 py-1 text-sm mr-4">${resources.length}个资源</span>
-                            ${resources.length > 3 ? `
+                            <span class="ml-auto bg-gray-100 rounded-full px-3 py-1 text-sm mr-4">${sortedResources.length}个资源</span>
+                            ${sortedResources.length > 3 ? `
                                 <button class="text-ios-blue text-sm font-medium toggle-btn" data-platform="${platformType}" data-expanded="false">
                                     <span class="expand-text">展开</span>
                                     <span class="collapse-text hidden">收起</span>
@@ -784,7 +800,7 @@
                 `;
                 
                 const initialVisibleCount = 3;
-                resources.forEach((resource, index) => {
+                sortedResources.forEach((resource, index) => {
                     // 格式化日期
                     let dateStr = '';
                     if (resource.datetime && resource.datetime !== '0001-01-01T00:00:00Z') {
@@ -806,8 +822,14 @@
                                         <i class="far fa-clock mr-1"></i>
                                         ${dateStr || '时间未知'}
                                     </div>
-                                    <div class="text-sm text-ios-blue flex items-center">
-                                        立即查看 <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                    <div class="flex items-center gap-2">
+                                        <button class="copy-link-btn text-sm text-ios-gray hover:text-ios-blue transition-colors flex items-center" data-url="${resource.url}" title="复制链接">
+                                            <i class="fas fa-copy mr-1 text-xs"></i>
+                                            复制
+                                        </button>
+                                        <div class="text-sm text-ios-blue flex items-center">
+                                            立即查看 <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -817,11 +839,11 @@
                 
                 platformHTML += `</div>`;
 
-                if (resources.length > initialVisibleCount) {
+                if (sortedResources.length > initialVisibleCount) {
                     platformHTML += `
                         <div class="p-3 text-center border-t border-gray-100 show-more-container">
                             <button class="text-ios-blue text-sm font-medium show-more-btn" data-platform="${platformType}">
-                                显示更多 (${resources.length - initialVisibleCount}个) <i class="fas fa-chevron-down ml-1 text-xs transition-transform"></i>
+                                显示更多 (${sortedResources.length - initialVisibleCount}个) <i class="fas fa-chevron-down ml-1 text-xs transition-transform"></i>
                             </button>
                         </div>
                     `;
@@ -862,8 +884,13 @@
         resultsContainer.addEventListener('click', (e) => {
             const showMoreBtn = e.target.closest('.show-more-btn');
             const toggleBtn = e.target.closest('.toggle-btn');
+            const copyBtn = e.target.closest('.copy-link-btn');
 
-            if (showMoreBtn) {
+            if (copyBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                copyToClipboard(copyBtn.dataset.url, copyBtn);
+            } else if (showMoreBtn) {
                 handleToggle(showMoreBtn.dataset.platform, showMoreBtn);
                 showMoreBtn.parentElement.classList.add('hidden'); // Hide "Show More" after click
             } else if (toggleBtn) {
@@ -904,6 +931,94 @@
             if (!dateString) return '';
             const date = new Date(dateString);
             return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        }
+
+        // 排序函数
+        function sortResults(resources, sortType) {
+            if (!resources || resources.length === 0) return resources;
+            
+            const sorted = [...resources];
+            
+            switch (sortType) {
+                case 'date-desc':
+                    return sorted.sort((a, b) => {
+                        const dateA = new Date(a.datetime || '1970-01-01');
+                        const dateB = new Date(b.datetime || '1970-01-01');
+                        return dateB - dateA;
+                    });
+                case 'date-asc':
+                    return sorted.sort((a, b) => {
+                        const dateA = new Date(a.datetime || '1970-01-01');
+                        const dateB = new Date(b.datetime || '1970-01-01');
+                        return dateA - dateB;
+                    });
+                case 'name-asc':
+                    return sorted.sort((a, b) => (a.note || '').localeCompare(b.note || '', 'zh-CN'));
+                case 'name-desc':
+                    return sorted.sort((a, b) => (b.note || '').localeCompare(a.note || '', 'zh-CN'));
+                default:
+                    return resources; // 保持原始顺序
+            }
+        }
+
+        // 复制到剪贴板功能
+        async function copyToClipboard(url, button) {
+            try {
+                await navigator.clipboard.writeText(url);
+                
+                // 更新按钮状态显示成功
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check mr-1 text-xs"></i>已复制';
+                button.classList.remove('text-ios-gray', 'hover:text-ios-blue');
+                button.classList.add('text-green-500');
+                
+                // 2秒后恢复原状
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('text-green-500');
+                    button.classList.add('text-ios-gray', 'hover:text-ios-blue');
+                }, 2000);
+                
+            } catch (err) {
+                // 如果现代API失败，尝试使用传统方法
+                try {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = url;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    textArea.style.top = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    // 更新按钮状态显示成功
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check mr-1 text-xs"></i>已复制';
+                    button.classList.remove('text-ios-gray', 'hover:text-ios-blue');
+                    button.classList.add('text-green-500');
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('text-green-500');
+                        button.classList.add('text-ios-gray', 'hover:text-ios-blue');
+                    }, 2000);
+                    
+                } catch (fallbackErr) {
+                    // 如果都失败了，显示错误状态
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-times mr-1 text-xs"></i>复制失败';
+                    button.classList.remove('text-ios-gray', 'hover:text-ios-blue');
+                    button.classList.add('text-red-500');
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('text-red-500');
+                        button.classList.add('text-ios-gray', 'hover:text-ios-blue');
+                    }, 2000);
+                }
+            }
         }
 
         // 获取并渲染热搜
