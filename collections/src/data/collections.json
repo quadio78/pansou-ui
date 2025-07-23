@@ -1,0 +1,155 @@
+{
+  "categories": [
+    {
+      "id": "games",
+      "name": "游戏合集",
+      "icon": "fa-gamepad",
+      "color": "bg-purple-500"
+    },
+    {
+      "id": "movies",
+      "name": "电影合集",
+      "icon": "fa-film",
+      "color": "bg-red-500"
+    },
+    {
+      "id": "music",
+      "name": "音乐合集",
+      "icon": "fa-music",
+      "color": "bg-green-500"
+    },
+    {
+      "id": "study",
+      "name": "学习资料",
+      "icon": "fa-book",
+      "color": "bg-yellow-500"
+    }
+  ],
+  "collections": [
+    {
+      "id": "steam-games-2024",
+      "title": "热门游戏合集",
+      "category": "games",
+      "description": "收录热门的游戏，包括3A大作和独立游戏精品,手机游戏等",
+      "cover": "/images/game.png",
+      "tags": ["Steam", "热门", "3A大作","手机游戏"],
+      "created": "2025-07-23",
+      "updated": "2025-07-23",
+      "resourceCount": 2,
+      "resources": [
+        {
+          "name": "经典3A游戏合集",
+          "platform": "quark",
+          "link": "https://pan.quark.cn/s/3f9633b77909",
+          "password": "",
+          "size": "1.6TB",
+          "tags": ["3A大作", "电脑游戏"],
+          "description": "CD Projekt RED开发的开放世界RPG游戏"
+        },
+        {
+          "name": "【安卓】手机游戏[修改版＆Mod版][1630+款]",
+          "platform": "quark",
+          "link": "https://pan.quark.cn/s/3cc61194d40e",
+          "password": "",
+          "size": "221.7GB",
+          "tags": ["经典游戏", "手机游戏"],
+          "description": "CD Projekt RED开发的开放世界RPG游戏"
+        }
+      ]
+    },
+    {
+      "id": "action-movies-2024",
+      "title": "电影精选",
+      "category": "movies",
+      "description": "精选的电影大片，包括好莱坞大片和各国佳作",
+      "cover": "/images/movie.png",
+      "tags": ["动作", "热门", "高清", "4K"],
+      "created": "2025-07-23",
+      "updated": "2025-07-23",
+      "resourceCount": 2,
+      "resources": [
+        {
+          "name": "周星驰电影33部",
+          "platform": "quark",
+          "link": "https://pan.quark.cn/s/60c159bfa831",
+          "password": "",
+          "size": "",
+          "tags": ["周星驰", "喜剧","无厘头","动作", "高清"],
+          "description": "周星驰电影"
+        },
+        {
+          "name": "宫崎骏+吉卜力工作室 30部作品总集",
+          "platform": "quark",
+          "link": "https://pan.quark.cn/s/d82372900921",
+          "password": "",
+          "size": "1T",
+          "tags": ["喜剧", "爱情", "动作", "奇幻", "冒险"],
+          "description": "【4K&蓝光原盘REMUX】【杜比视界&杜比&次世代国粤日多音轨】简繁日英双语特效多字幕"
+        }
+      ]
+    },
+    {
+      "id": "classical-music",
+      "title": "网易云音乐精选集",
+      "category": "music",
+      "description": "精选网易云音乐作品，高品质无损音频",
+      "cover": "/images/wyy.jpg",
+      "tags": ["网易云", "无损", "mp3"],
+      "created": "2025-07-23",
+      "updated": "2025-07-23",
+      "resourceCount": 2,
+      "resources": [
+        {
+          "name": "网易云评论超10W+的歌曲合集800多首",
+          "platform": "quark",
+          "link": "https://pan.quark.cn/s/3457409dc28d",
+          "password": "",
+          "size": "7.9GB",
+          "tags": ["热评", "mp3"],
+          "description": "网易云评论超10W+的歌曲合集800多首"
+        },
+        {
+          "name": "网易云音乐收藏榜单TOP5",
+          "platform": "quark",
+          "link": "https://pan.quark.cn/s/d76e2482e5af",
+          "password": "",
+          "size": "8.03GB",
+          "tags": ["收藏榜单TOP5", "mp3"],
+          "description": "网易云音乐收藏榜单TOP5"
+       
+        }
+      ]
+    },
+    {
+      "id": "programming-courses",
+      "title": "编程学习课程合集",
+      "category": "study",
+      "description": "从入门到进阶的编程学习资源，包含多种编程语言和框架",
+      "cover": "/images/bc.png",
+      "tags": ["编程", "教程", "视频课程","AI"],
+      "created": "2025-07-23",
+      "updated": "2025-07-23",
+      "resourceCount": 2,
+      "resources": [
+        {
+          "name": "编程开发教程合集",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1I5XkashUOlhY3xnz-8E-lg?pwd=mun4",
+          "password": "mun4",
+          "size": "补充中",
+          "tags": ["JavaScript", "全栈", "Python", "Java"],
+          "description": "合集"
+        },
+        {
+          "name": "AI相关资料 合集",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1eF6XpE5d9Tmfvn-4eLkJew?pwd=xmpn",
+          "password": "xmpn",
+          "size": "补充中",
+          "tags": ["AI", "AI开发", "AI项目"],
+          "description": "合集"
+        }
+      ]
+    }
+  ]
+}

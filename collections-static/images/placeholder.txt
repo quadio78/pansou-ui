@@ -1,0 +1,11 @@
+这个目录用于存放集合封面图片
+
+使用方法：
+1. 将图片文件放在这个目录下
+2. 在 collections.json 中使用 "/images/your-image.jpg" 路径引用
+3. 支持的格式：jpg, png, webp, gif
+
+示例：
+- /images/steam-games.jpg
+- /images/action-movies.png
+- /images/design-software.webp

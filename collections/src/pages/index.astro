@@ -1,0 +1,328 @@
+---
+import Layout from '../layouts/Layout.astro';
+import collectionsData from '../data/collections.json';
+
+const { categories, collections } = collectionsData;
+
+// 平台图标和名称映射
+const platformMap = {
+    '115': { name: '115网盘', icon: 'fa-box', color: 'bg-orange-500' },
+    '123': { name: '123网盘', icon: 'fa-hashtag', color: 'bg-green-500' },
+    'mobile': { name: '移动云盘', icon: 'fa-mobile-alt', color: 'bg-blue-500' },
+    'xunlei': { name: '迅雷云盘', icon: 'fa-bolt', color: 'bg-yellow-500' },
+    'aliyun': { name: '阿里云盘', icon: 'fa-cloud', color: 'bg-purple-500' },
+    'uc': { name: 'UC网盘', icon: 'fa-compass', color: 'bg-red-500' },
+    'tianyi': { name: '天翼云盘', icon: 'fa-cloud', color: 'bg-pink-500' },
+    'quark': { name: '夸克网盘', icon: 'fa-search', color: 'bg-indigo-500' },
+    'others': { name: '其他网盘', icon: 'fa-ellipsis-h', color: 'bg-gray-500' },
+    'baidu': { name: '百度网盘', icon: 'fa-database', color: 'bg-blue-600' }
+};
+---
+
+<Layout title="资源集合 - 盘搜">
+    <div class="max-w-6xl mx-auto">
+        <!-- 标题区域 -->
+        <div class="text-center mb-10 fade-in">
+            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <img src="/logo.png" alt="盘搜 Logo" class="w-full h-full object-contain">
+            </div>
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-ios-blue to-blue-500 bg-clip-text text-transparent">资源集合</h1>
+            <p class="text-ios-gray text-lg">精心整理的优质资源合集,陆续更新中...</p>
+            <div class="mt-4">
+                <a href="/" class="text-ios-blue hover:underline text-sm">← 返回搜索页面</a>
+            </div>
+        </div>
+
+        <!-- 分类导航 -->
+        <div class="mb-8">
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button class="category-tab active" data-category="all">
+                    <i class="fas fa-th-large mr-2"></i>全部
+                </button>
+                {categories.map(category => (
+                    <button class="category-tab" data-category={category.id}>
+                        <i class={`fas ${category.icon} mr-2`}></i>
+                        {category.name}
+                    </button>
+                ))}
+            </div>
+        </div>
+
+        <!-- 搜索框 -->
+        <div class="ios-card p-1 mb-8 search-box max-w-2xl mx-auto">
+            <div class="flex items-center">
+                <div class="pl-4 text-ios-gray">
+                    <i class="fas fa-search"></i>
+                </div>
+                <input 
+                    type="text" 
+                    id="collectionSearch" 
+                    placeholder="搜索集合名称或标签..." 
+                    class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-ios-gray"
+                    autocomplete="off"
+                >
+            </div>
+        </div>
+
+        <!-- 集合展示区域 -->
+        <div id="collectionsContainer" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {collections.map(collection => {
+                const category = categories.find(cat => cat.id === collection.category);
+                return (
+                    <div class="ios-card collection-card p-6" data-category={collection.category} data-tags={collection.tags.join(',').toLowerCase()}>
+                        <!-- 集合封面 -->
+                        <div class="mb-4">
+                            {collection.cover ? (
+                                <div class="collection-cover overflow-hidden">
+                                    <img
+                                        src={collection.cover}
+                                        alt={collection.title}
+                                        class="w-full h-full object-cover"
+                                        onError="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                    />
+                                    <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;">
+                                        <i class={`fas ${category?.icon || 'fa-folder'}`}></i>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div class="collection-cover flex items-center justify-center text-white text-4xl">
+                                    <i class={`fas ${category?.icon || 'fa-folder'}`}></i>
+                                </div>
+                            )}
+                        </div>
+                        
+                        <!-- 集合信息 -->
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xl font-semibold text-ios-dark line-clamp-2">{collection.title}</h3>
+                                <span class={`platform-icon ${category?.color || 'bg-gray-500'} text-xs px-2 py-1 rounded-full`}>
+                                    <i class={`fas ${category?.icon || 'fa-folder'}`}></i>
+                                </span>
+                            </div>
+                            <p class="text-ios-gray text-sm mb-3 line-clamp-2">{collection.description}</p>
+                            
+                            <!-- 标签 -->
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                {collection.tags.slice(0, 3).map(tag => (
+                                    <span class="platform-tag text-xs">{tag}</span>
+                                ))}
+                                {collection.tags.length > 3 && (
+                                    <span class="platform-tag text-xs">+{collection.tags.length - 3}</span>
+                                )}
+                            </div>
+                            
+                            <!-- 统计信息 -->
+                            <div class="flex items-center justify-between text-sm text-ios-gray">
+                                <span>
+                                    <i class="fas fa-file-alt mr-1"></i>
+                                    {collection.resourceCount} 个资源
+                                </span>
+                                <span>
+                                    <i class="fas fa-clock mr-1"></i>
+                                    {new Date(collection.updated).toLocaleDateString('zh-CN')}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- 操作按钮 -->
+                        <div class="flex gap-2">
+                            <button class="flex-1 bg-gradient-to-r from-ios-blue to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id={collection.id}>
+                                查看详情
+                            </button>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+
+        <!-- 集合详情模态框 -->
+        <div id="collectionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 p-4">
+            <div class="max-w-4xl mx-auto mt-8 bg-white rounded-2xl max-h-[90vh] overflow-hidden">
+                <!-- 模态框头部 -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 id="modalTitle" class="text-2xl font-bold text-ios-dark"></h2>
+                            <p id="modalDescription" class="text-ios-gray mt-1"></p>
+                        </div>
+                        <button id="closeModal" class="text-ios-gray hover:text-ios-dark text-2xl">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 模态框内容 -->
+                <div class="p-6 overflow-y-auto max-h-[70vh]">
+                    <div id="modalContent">
+                        <!-- 资源列表将在这里动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="mt-12 text-center text-ios-gray">
+            <p class="text-sm">
+                <a href="/" class="text-ios-blue hover:underline">返回搜索页面</a>
+            </p>
+        </div>
+    </div>
+
+    <script define:vars={{ collections, platformMap }}>
+        // 分类筛选功能
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        const collectionCards = document.querySelectorAll('.collection-card');
+        const searchInput = document.getElementById('collectionSearch');
+
+        // 分类筛选
+        categoryTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 更新活跃状态
+                categoryTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const category = tab.dataset.category;
+                filterCollections(category, searchInput.value);
+            });
+        });
+
+        // 搜索功能
+        searchInput.addEventListener('input', (e) => {
+            const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+            filterCollections(activeCategory, e.target.value);
+        });
+
+        // 筛选函数
+        function filterCollections(category, searchTerm) {
+            collectionCards.forEach(card => {
+                const cardCategory = card.dataset.category;
+                const cardTags = card.dataset.tags;
+                const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+                
+                const matchesCategory = category === 'all' || cardCategory === category;
+                const matchesSearch = !searchTerm || 
+                    cardTitle.includes(searchTerm.toLowerCase()) || 
+                    cardTags.includes(searchTerm.toLowerCase());
+                
+                if (matchesCategory && matchesSearch) {
+                    card.style.display = 'block';
+                    card.classList.add('fade-in');
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // 模态框功能
+        const modal = document.getElementById('collectionModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalContent = document.getElementById('modalContent');
+        const closeModal = document.getElementById('closeModal');
+
+        // 查看详情按钮
+        document.querySelectorAll('.view-collection-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const collectionId = btn.dataset.collectionId;
+                const collection = collections.find(c => c.id === collectionId);
+                showCollectionDetail(collection);
+            });
+        });
+
+        // 显示集合详情
+        function showCollectionDetail(collection) {
+            modalTitle.textContent = collection.title;
+            modalDescription.textContent = collection.description;
+            
+            let resourcesHtml = '<div class="space-y-4">';
+            collection.resources.forEach(resource => {
+                const platform = platformMap[resource.platform] || platformMap.others;
+                resourcesHtml += `
+                    <div class="result-item p-4 rounded-lg border border-gray-200">
+                        <div class="flex items-start gap-4">
+                            <div class="platform-icon ${platform.color}">
+                                <i class="fas ${platform.icon}"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-ios-dark mb-1">${resource.name}</h4>
+                                <p class="text-sm text-ios-gray mb-2">${resource.description || ''}</p>
+                                <div class="flex flex-wrap gap-2 mb-2">
+                                    <span class="platform-tag">${platform.name}</span>
+                                    <span class="platform-tag">${resource.size}</span>
+                                    ${resource.tags.map(tag => `<span class="platform-tag">${tag}</span>`).join('')}
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="text-ios-blue hover:underline text-sm copy-link-btn" data-link="${resource.link}">
+                                        <i class="fas fa-copy mr-1"></i>复制链接
+                                    </button>
+                                    <button class="text-ios-blue hover:underline text-sm open-link-btn" data-link="${resource.link}">
+                                        <i class="fas fa-external-link-alt mr-1"></i>立即查看
+                                    </button>
+                                    ${resource.password ? `
+                                        <button class="text-ios-blue hover:underline text-sm copy-password-btn" data-password="${resource.password}">
+                                            <i class="fas fa-key mr-1"></i>复制密码
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            resourcesHtml += '</div>';
+            
+            modalContent.innerHTML = resourcesHtml;
+            modal.classList.remove('hidden');
+            
+            // 添加复制功能
+            addCopyFunctionality();
+        }
+
+        // 复制功能
+        function addCopyFunctionality() {
+            document.querySelectorAll('.copy-link-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(btn.dataset.link);
+                    btn.innerHTML = '<i class="fas fa-check mr-1"></i>已复制';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-copy mr-1"></i>复制链接';
+                    }, 2000);
+                });
+            });
+
+            document.querySelectorAll('.open-link-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    window.open(btn.dataset.link, '_blank');
+                });
+            });
+
+            document.querySelectorAll('.copy-password-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(btn.dataset.password);
+                    btn.innerHTML = '<i class="fas fa-check mr-1"></i>已复制';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fas fa-key mr-1"></i>复制密码';
+                    }, 2000);
+                });
+            });
+        }
+
+        // 关闭模态框
+        closeModal.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // 点击背景关闭模态框
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+
+        // ESC键关闭模态框
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                modal.classList.add('hidden');
+            }
+        });
+    </script>

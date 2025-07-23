@@ -235,6 +235,11 @@
             </div>
             <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-ios-blue to-blue-500 bg-clip-text text-transparent">盘搜</h1>
             <p class="text-ios-gray text-lg">基于TG频道的网盘搜索工具</p>
+            
+            <!-- 导航链接 -->
+            <div class="mt-4 text-center">
+                <a href="/collections-static/collections.html" class="text-ios-blue hover:underline font-medium">资源集合</a>
+            </div>
         </div>
         </a>
         <!-- 搜索框 -->
@@ -662,10 +667,15 @@
                     <div class="mb-4">
                         <p class="text-sm text-ios-gray mb-3">试试这些热门搜索：</p>
                         <div class="flex flex-wrap justify-center gap-2">
-                            ${randomSuggestions.map(suggestion => 
+                            ${randomSuggestions.map(suggestion =>
                                 `<button class="suggestion-btn text-sm text-ios-blue bg-blue-50 px-3 py-2 rounded-full hover:bg-blue-100 transition-colors">${suggestion}</button>`
                             ).join('')}
                         </div>
+                    </div>
+                    <div class="mb-4">
+                        <a href="/collections-static/collections.html" class="inline-block bg-gradient-to-r from-ios-blue to-blue-500 text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition-opacity">
+                            <i class="fas fa-folder-open mr-2"></i>去资源集合看看
+                        </a>
                     </div>
                     <div class="text-xs text-ios-gray">
                         <p>💡 小贴士：使用 Ctrl+K (Mac: Cmd+K) 快速聚焦搜索框</p>
