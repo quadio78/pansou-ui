@@ -4,16 +4,30 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:auto": "npm run auto-sync & npm run dev",
     "build": "astro build && node build-script.js",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sync": "node sync-to-json.js",
+    "auto-sync": "node auto-sync.js",
+    "validate": "node validate-mdoc.js"
   },
   "dependencies": {
+    "@astrojs/react": "^4.3.0",
+    "@keystatic/astro": "^5.0.6",
+    "@keystatic/core": "^0.5.48",
     "@tailwindcss/vite": "^4.1.11",
-    "astro": "^5.12.2"
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "astro": "^5.12.2",
+    "js-yaml": "^4.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@astrojs/node": "^9.3.0",
     "@tailwindcss/typography": "^0.5.16",
+    "chokidar": "^4.0.3",
     "tailwindcss": "^4.1.11"
   }
 }

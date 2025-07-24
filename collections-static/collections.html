@@ -1,19 +1,452 @@
-<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>资源集合 - 盘搜</title><link rel="icon" href="/collections-static/logo.png" type="image/png"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="/collections-static/_astro/index.DFzbNsUI.css"></head> <body class="min-h-screen py-8 px-4 sm:px-8">  <div class="max-w-6xl mx-auto"> <!-- 标题区域 --> <div class="text-center mb-10 fade-in"> <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4"> <img src="/collections-static/logo.png" alt="盘搜 Logo" class="w-full h-full object-contain"> </div> <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-ios-blue to-blue-500 bg-clip-text text-transparent">资源集合</h1> <p class="text-ios-gray text-lg">精心整理的优质资源合集,陆续更新中...</p> <div class="mt-4"> <a href="/" class="text-ios-blue hover:underline text-sm">← 返回搜索页面</a> </div> </div> <!-- 分类导航 --> <div class="mb-8"> <div class="flex flex-wrap gap-3 justify-center"> <button class="category-tab active" data-category="all"> <i class="fas fa-th-large mr-2"></i>全部
-</button> <button class="category-tab" data-category="games"> <i class="fas fa-gamepad mr-2"></i> 游戏合集 </button><button class="category-tab" data-category="movies"> <i class="fas fa-film mr-2"></i> 电影合集 </button><button class="category-tab" data-category="music"> <i class="fas fa-music mr-2"></i> 音乐合集 </button><button class="category-tab" data-category="study"> <i class="fas fa-book mr-2"></i> 学习资料 </button> </div> </div> <!-- 搜索框 --> <div class="ios-card p-1 mb-8 search-box max-w-2xl mx-auto"> <div class="flex items-center"> <div class="pl-4 text-ios-gray"> <i class="fas fa-search"></i> </div> <input type="text" id="collectionSearch" placeholder="搜索集合名称或标签..." class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-ios-gray" autocomplete="off"> </div> </div> <!-- 集合展示区域 --> <div id="collectionsContainer" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"> <div class="ios-card collection-card p-6" data-category="games" data-tags="steam,热门,3a大作,手机游戏"> <!-- 集合封面 --> <div class="mb-4"> <div class="collection-cover overflow-hidden"> <img src="/collections-static/images/game.png" alt="热门游戏合集" class="w-full h-full object-cover" onError="this.style.display='none'; this.nextElementSibling.style.display='flex';"> <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;"> <i class="fas fa-gamepad"></i> </div> </div> </div> <!-- 集合信息 --> <div class="mb-4"> <div class="flex items-center justify-between mb-2"> <h3 class="text-xl font-semibold text-ios-dark line-clamp-2">热门游戏合集</h3> <span class="platform-icon bg-purple-500 text-xs px-2 py-1 rounded-full"> <i class="fas fa-gamepad"></i> </span> </div> <p class="text-ios-gray text-sm mb-3 line-clamp-2">收录热门的游戏，包括3A大作和独立游戏精品,手机游戏等</p> <!-- 标签 --> <div class="flex flex-wrap gap-1 mb-3"> <span class="platform-tag text-xs">Steam</span><span class="platform-tag text-xs">热门</span><span class="platform-tag text-xs">3A大作</span> <span class="platform-tag text-xs">+1</span> </div> <!-- 统计信息 --> <div class="flex items-center justify-between text-sm text-ios-gray"> <span> <i class="fas fa-file-alt mr-1"></i> 2 个资源
-</span> <span> <i class="fas fa-clock mr-1"></i> 2025/7/23 </span> </div> </div> <!-- 操作按钮 --> <div class="flex gap-2"> <button class="flex-1 bg-gradient-to-r from-ios-blue to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="steam-games-2024">
-查看详情
-</button> </div> </div><div class="ios-card collection-card p-6" data-category="movies" data-tags="动作,热门,高清,4k"> <!-- 集合封面 --> <div class="mb-4"> <div class="collection-cover overflow-hidden"> <img src="/collections-static/images/movie.png" alt="电影精选" class="w-full h-full object-cover" onError="this.style.display='none'; this.nextElementSibling.style.display='flex';"> <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;"> <i class="fas fa-film"></i> </div> </div> </div> <!-- 集合信息 --> <div class="mb-4"> <div class="flex items-center justify-between mb-2"> <h3 class="text-xl font-semibold text-ios-dark line-clamp-2">电影精选</h3> <span class="platform-icon bg-red-500 text-xs px-2 py-1 rounded-full"> <i class="fas fa-film"></i> </span> </div> <p class="text-ios-gray text-sm mb-3 line-clamp-2">精选的电影大片，包括好莱坞大片和各国佳作</p> <!-- 标签 --> <div class="flex flex-wrap gap-1 mb-3"> <span class="platform-tag text-xs">动作</span><span class="platform-tag text-xs">热门</span><span class="platform-tag text-xs">高清</span> <span class="platform-tag text-xs">+1</span> </div> <!-- 统计信息 --> <div class="flex items-center justify-between text-sm text-ios-gray"> <span> <i class="fas fa-file-alt mr-1"></i> 2 个资源
-</span> <span> <i class="fas fa-clock mr-1"></i> 2025/7/23 </span> </div> </div> <!-- 操作按钮 --> <div class="flex gap-2"> <button class="flex-1 bg-gradient-to-r from-ios-blue to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="action-movies-2024">
-查看详情
-</button> </div> </div><div class="ios-card collection-card p-6" data-category="music" data-tags="网易云,无损,mp3"> <!-- 集合封面 --> <div class="mb-4"> <div class="collection-cover overflow-hidden"> <img src="/collections-static/images/wyy.jpg" alt="网易云音乐精选集" class="w-full h-full object-cover" onError="this.style.display='none'; this.nextElementSibling.style.display='flex';"> <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;"> <i class="fas fa-music"></i> </div> </div> </div> <!-- 集合信息 --> <div class="mb-4"> <div class="flex items-center justify-between mb-2"> <h3 class="text-xl font-semibold text-ios-dark line-clamp-2">网易云音乐精选集</h3> <span class="platform-icon bg-green-500 text-xs px-2 py-1 rounded-full"> <i class="fas fa-music"></i> </span> </div> <p class="text-ios-gray text-sm mb-3 line-clamp-2">精选网易云音乐作品，高品质无损音频</p> <!-- 标签 --> <div class="flex flex-wrap gap-1 mb-3"> <span class="platform-tag text-xs">网易云</span><span class="platform-tag text-xs">无损</span><span class="platform-tag text-xs">mp3</span>  </div> <!-- 统计信息 --> <div class="flex items-center justify-between text-sm text-ios-gray"> <span> <i class="fas fa-file-alt mr-1"></i> 2 个资源
-</span> <span> <i class="fas fa-clock mr-1"></i> 2025/7/23 </span> </div> </div> <!-- 操作按钮 --> <div class="flex gap-2"> <button class="flex-1 bg-gradient-to-r from-ios-blue to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="classical-music">
-查看详情
-</button> </div> </div><div class="ios-card collection-card p-6" data-category="study" data-tags="编程,教程,视频课程,ai"> <!-- 集合封面 --> <div class="mb-4"> <div class="collection-cover overflow-hidden"> <img src="/collections-static/images/bc.png" alt="编程学习课程合集" class="w-full h-full object-cover" onError="this.style.display='none'; this.nextElementSibling.style.display='flex';"> <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;"> <i class="fas fa-book"></i> </div> </div> </div> <!-- 集合信息 --> <div class="mb-4"> <div class="flex items-center justify-between mb-2"> <h3 class="text-xl font-semibold text-ios-dark line-clamp-2">编程学习课程合集</h3> <span class="platform-icon bg-yellow-500 text-xs px-2 py-1 rounded-full"> <i class="fas fa-book"></i> </span> </div> <p class="text-ios-gray text-sm mb-3 line-clamp-2">从入门到进阶的编程学习资源，包含多种编程语言和框架</p> <!-- 标签 --> <div class="flex flex-wrap gap-1 mb-3"> <span class="platform-tag text-xs">编程</span><span class="platform-tag text-xs">教程</span><span class="platform-tag text-xs">视频课程</span> <span class="platform-tag text-xs">+1</span> </div> <!-- 统计信息 --> <div class="flex items-center justify-between text-sm text-ios-gray"> <span> <i class="fas fa-file-alt mr-1"></i> 2 个资源
-</span> <span> <i class="fas fa-clock mr-1"></i> 2025/7/23 </span> </div> </div> <!-- 操作按钮 --> <div class="flex gap-2"> <button class="flex-1 bg-gradient-to-r from-ios-blue to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="programming-courses">
-查看详情
-</button> </div> </div> </div> <!-- 集合详情模态框 --> <div id="collectionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 p-4"> <div class="max-w-4xl mx-auto mt-8 bg-white rounded-2xl max-h-[90vh] overflow-hidden"> <!-- 模态框头部 --> <div class="p-6 border-b border-gray-200"> <div class="flex items-center justify-between"> <div> <h2 id="modalTitle" class="text-2xl font-bold text-ios-dark"></h2> <p id="modalDescription" class="text-ios-gray mt-1"></p> </div> <button id="closeModal" class="text-ios-gray hover:text-ios-dark text-2xl"> <i class="fas fa-times"></i> </button> </div> </div> <!-- 模态框内容 --> <div class="p-6 overflow-y-auto max-h-[70vh]"> <div id="modalContent"> <!-- 资源列表将在这里动态生成 --> </div> </div> </div> </div> <!-- 页脚 --> <div class="mt-12 text-center text-ios-gray"> <p class="text-sm"> <a href="/" class="text-ios-blue hover:underline">返回搜索页面</a> </p> </div> </div> <script>(function(){const collections = [{"id":"steam-games-2024","title":"热门游戏合集","category":"games","description":"收录热门的游戏，包括3A大作和独立游戏精品,手机游戏等","cover":"/images/game.png","tags":["Steam","热门","3A大作","手机游戏"],"created":"2025-07-23","updated":"2025-07-23","resourceCount":2,"resources":[{"name":"经典3A游戏合集","platform":"quark","link":"https://pan.quark.cn/s/3f9633b77909","password":"","size":"1.6TB","tags":["3A大作","电脑游戏"],"description":"CD Projekt RED开发的开放世界RPG游戏"},{"name":"【安卓】手机游戏[修改版＆Mod版][1630+款]","platform":"quark","link":"https://pan.quark.cn/s/3cc61194d40e","password":"","size":"221.7GB","tags":["经典游戏","手机游戏"],"description":"CD Projekt RED开发的开放世界RPG游戏"}]},{"id":"action-movies-2024","title":"电影精选","category":"movies","description":"精选的电影大片，包括好莱坞大片和各国佳作","cover":"/images/movie.png","tags":["动作","热门","高清","4K"],"created":"2025-07-23","updated":"2025-07-23","resourceCount":2,"resources":[{"name":"周星驰电影33部","platform":"quark","link":"https://pan.quark.cn/s/60c159bfa831","password":"","size":"","tags":["周星驰","喜剧","无厘头","动作","高清"],"description":"周星驰电影"},{"name":"宫崎骏+吉卜力工作室 30部作品总集","platform":"quark","link":"https://pan.quark.cn/s/d82372900921","password":"","size":"1T","tags":["喜剧","爱情","动作","奇幻","冒险"],"description":"【4K&蓝光原盘REMUX】【杜比视界&杜比&次世代国粤日多音轨】简繁日英双语特效多字幕"}]},{"id":"classical-music","title":"网易云音乐精选集","category":"music","description":"精选网易云音乐作品，高品质无损音频","cover":"/images/wyy.jpg","tags":["网易云","无损","mp3"],"created":"2025-07-23","updated":"2025-07-23","resourceCount":2,"resources":[{"name":"网易云评论超10W+的歌曲合集800多首","platform":"quark","link":"https://pan.quark.cn/s/3457409dc28d","password":"","size":"7.9GB","tags":["热评","mp3"],"description":"网易云评论超10W+的歌曲合集800多首"},{"name":"网易云音乐收藏榜单TOP5","platform":"quark","link":"https://pan.quark.cn/s/d76e2482e5af","password":"","size":"8.03GB","tags":["收藏榜单TOP5","mp3"],"description":"网易云音乐收藏榜单TOP5"}]},{"id":"programming-courses","title":"编程学习课程合集","category":"study","description":"从入门到进阶的编程学习资源，包含多种编程语言和框架","cover":"/images/bc.png","tags":["编程","教程","视频课程","AI"],"created":"2025-07-23","updated":"2025-07-23","resourceCount":2,"resources":[{"name":"编程开发教程合集","platform":"baidu","link":"https://pan.baidu.com/s/1I5XkashUOlhY3xnz-8E-lg?pwd=mun4","password":"mun4","size":"补充中","tags":["JavaScript","全栈","Python","Java"],"description":"合集"},{"name":"AI相关资料 合集","platform":"baidu","link":"https://pan.baidu.com/s/1eF6XpE5d9Tmfvn-4eLkJew?pwd=xmpn","password":"xmpn","size":"补充中","tags":["AI","AI开发","AI项目"],"description":"合集"}]}];
-const platformMap = {"115":{"name":"115网盘","icon":"fa-box","color":"bg-orange-500"},"123":{"name":"123网盘","icon":"fa-hashtag","color":"bg-green-500"},"mobile":{"name":"移动云盘","icon":"fa-mobile-alt","color":"bg-blue-500"},"xunlei":{"name":"迅雷云盘","icon":"fa-bolt","color":"bg-yellow-500"},"aliyun":{"name":"阿里云盘","icon":"fa-cloud","color":"bg-purple-500"},"uc":{"name":"UC网盘","icon":"fa-compass","color":"bg-red-500"},"tianyi":{"name":"天翼云盘","icon":"fa-cloud","color":"bg-pink-500"},"quark":{"name":"夸克网盘","icon":"fa-search","color":"bg-indigo-500"},"others":{"name":"其他网盘","icon":"fa-ellipsis-h","color":"bg-gray-500"},"baidu":{"name":"百度网盘","icon":"fa-database","color":"bg-blue-600"}};
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资源集合 - 盘搜</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .collection-cover {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .category-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #6b7280;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .category-tab.active,
+        .category-tab:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .ios-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .ios-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .platform-icon.bg-orange-500 { background-color: #f97316; }
+        .platform-icon.bg-green-500 { background-color: #22c55e; }
+        .platform-icon.bg-blue-500 { background-color: #3b82f6; }
+        .platform-icon.bg-yellow-500 { background-color: #eab308; }
+        .platform-icon.bg-purple-500 { background-color: #a855f7; }
+        .platform-icon.bg-red-500 { background-color: #ef4444; }
+        .platform-icon.bg-pink-500 { background-color: #ec4899; }
+        .platform-icon.bg-indigo-500 { background-color: #6366f1; }
+        .platform-icon.bg-gray-500 { background-color: #6b7280; }
+        .platform-icon.bg-blue-600 { background-color: #2563eb; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto p-4">
+        <!-- 标题区域 -->
+        <div class="text-center mb-10 fade-in">
+            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <img src="/collections-static/logo.png" alt="盘搜 Logo" class="w-full h-full object-contain">
+            </div>
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">资源集合</h1>
+            <p class="text-gray-600 text-lg">精心整理的优质资源合集,陆续更新中...</p>
+            <div class="mt-4">
+                <a href="/" class="text-blue-600 hover:underline text-sm">← 返回搜索页面</a>
+            </div>
+        </div>
 
+        <!-- 分类导航 -->
+        <div class="mb-8">
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button class="category-tab active" data-category="all">
+                    <i class="fas fa-th-large mr-2"></i>全部
+                </button>
+                
+        <button class="category-tab" data-category="games">
+            <i class="fas fa-gamepad mr-2"></i>
+            游戏合集
+        </button>
+    
+        <button class="category-tab" data-category="movies">
+            <i class="fas fa-film mr-2"></i>
+            电影合集
+        </button>
+    
+        <button class="category-tab" data-category="music">
+            <i class="fas fa-music mr-2"></i>
+            音乐合集
+        </button>
+    
+        <button class="category-tab" data-category="study">
+            <i class="fas fa-book mr-2"></i>
+            学习资料
+        </button>
+    
+            </div>
+        </div>
+
+        <!-- 搜索框 -->
+        <div class="bg-white rounded-2xl shadow-sm p-1 mb-8 max-w-2xl mx-auto">
+            <div class="flex items-center">
+                <div class="pl-4 text-gray-400">
+                    <i class="fas fa-search"></i>
+                </div>
+                <input
+                    type="text"
+                    id="collectionSearch"
+                    placeholder="搜索集合名称或标签..."
+                    class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-gray-400"
+                    autocomplete="off"
+                >
+            </div>
+        </div>
+
+        <!-- 集合展示区域 -->
+        <div id="collectionsContainer" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            
+            <div class="ios-card collection-card p-6" data-category="movies" data-tags="动作,热门,高清,4k">
+                <!-- 集合封面 -->
+                <div class="mb-4">
+                    
+                        <div class="collection-cover overflow-hidden">
+                            <img
+                                src="/collections-static/images/movie.png"
+                                alt="电影精选"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            />
+                            <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;">
+                                <i class="fas fa-film"></i>
+                            </div>
+                        </div>
+                    
+                </div>
+                
+                <!-- 集合信息 -->
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-semibold text-gray-800 line-clamp-2">电影精选</h3>
+                        <span class="platform-icon bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-film"></i>
+                        </span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">精选的电影大片，包括好莱坞大片和各国佳作</p>
+                    
+                    <!-- 标签 -->
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">动作</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">热门</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">高清</span>
+                        <span class="platform-tag text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">+1</span>
+                    </div>
+                    
+                    <!-- 统计信息 -->
+                    <div class="flex items-center justify-between text-sm text-gray-600">
+                        <span>
+                            <i class="fas fa-file-alt mr-1"></i>
+                            3 个资源
+                        </span>
+                        <span>
+                            <i class="fas fa-clock mr-1"></i>
+                            2025/7/23
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="action-movies-2024">
+                        查看详情
+                    </button>
+                </div>
+            </div>
+        
+            <div class="ios-card collection-card p-6" data-category="movies" data-tags="2025,热门,动作">
+                <!-- 集合封面 -->
+                <div class="mb-4">
+                    
+                        <div class="collection-cover overflow-hidden">
+                            <img
+                                src="/collections-static/images/2025movie.png"
+                                alt="2025热门电影"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            />
+                            <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;">
+                                <i class="fas fa-film"></i>
+                            </div>
+                        </div>
+                    
+                </div>
+                
+                <!-- 集合信息 -->
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-semibold text-gray-800 line-clamp-2">2025热门电影</h3>
+                        <span class="platform-icon bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-film"></i>
+                        </span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">2025热门电影合集，包含最新上映的动作大片。</p>
+                    
+                    <!-- 标签 -->
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">2025</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">热门</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">动作</span>
+                        
+                    </div>
+                    
+                    <!-- 统计信息 -->
+                    <div class="flex items-center justify-between text-sm text-gray-600">
+                        <span>
+                            <i class="fas fa-file-alt mr-1"></i>
+                            3 个资源
+                        </span>
+                        <span>
+                            <i class="fas fa-clock mr-1"></i>
+                            2025/7/24
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="action-movies-2025">
+                        查看详情
+                    </button>
+                </div>
+            </div>
+        
+            <div class="ios-card collection-card p-6" data-category="music" data-tags="网易云,无损,mp3">
+                <!-- 集合封面 -->
+                <div class="mb-4">
+                    
+                        <div class="collection-cover overflow-hidden">
+                            <img
+                                src="/collections-static/images/wyy.jpg"
+                                alt="网易云音乐精选集"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            />
+                            <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;">
+                                <i class="fas fa-music"></i>
+                            </div>
+                        </div>
+                    
+                </div>
+                
+                <!-- 集合信息 -->
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-semibold text-gray-800 line-clamp-2">网易云音乐精选集</h3>
+                        <span class="platform-icon bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-music"></i>
+                        </span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">精选网易云音乐作品，高品质无损音频</p>
+                    
+                    <!-- 标签 -->
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">网易云</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">无损</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">mp3</span>
+                        
+                    </div>
+                    
+                    <!-- 统计信息 -->
+                    <div class="flex items-center justify-between text-sm text-gray-600">
+                        <span>
+                            <i class="fas fa-file-alt mr-1"></i>
+                            2 个资源
+                        </span>
+                        <span>
+                            <i class="fas fa-clock mr-1"></i>
+                            2025/7/23
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="classical-music">
+                        查看详情
+                    </button>
+                </div>
+            </div>
+        
+            <div class="ios-card collection-card p-6" data-category="study" data-tags="编程,教程,视频课程,ai">
+                <!-- 集合封面 -->
+                <div class="mb-4">
+                    
+                        <div class="collection-cover overflow-hidden">
+                            <img
+                                src="/collections-static/images/bc.png"
+                                alt="编程学习课程合集"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            />
+                            <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;">
+                                <i class="fas fa-book"></i>
+                            </div>
+                        </div>
+                    
+                </div>
+                
+                <!-- 集合信息 -->
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-semibold text-gray-800 line-clamp-2">编程学习课程合集</h3>
+                        <span class="platform-icon bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-book"></i>
+                        </span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">从入门到进阶的编程学习资源，包含多种编程语言和框架</p>
+                    
+                    <!-- 标签 -->
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">编程</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">教程</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">视频课程</span>
+                        <span class="platform-tag text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">+1</span>
+                    </div>
+                    
+                    <!-- 统计信息 -->
+                    <div class="flex items-center justify-between text-sm text-gray-600">
+                        <span>
+                            <i class="fas fa-file-alt mr-1"></i>
+                            2 个资源
+                        </span>
+                        <span>
+                            <i class="fas fa-clock mr-1"></i>
+                            2025/7/23
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="programming-courses">
+                        查看详情
+                    </button>
+                </div>
+            </div>
+        
+            <div class="ios-card collection-card p-6" data-category="games" data-tags="steam,热门,3a大作,手机游戏">
+                <!-- 集合封面 -->
+                <div class="mb-4">
+                    
+                        <div class="collection-cover overflow-hidden">
+                            <img
+                                src="/collections-static/images/game.png"
+                                alt="热门游戏合集"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            />
+                            <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                        </div>
+                    
+                </div>
+                
+                <!-- 集合信息 -->
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xl font-semibold text-gray-800 line-clamp-2">热门游戏合集</h3>
+                        <span class="platform-icon bg-purple-500 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-gamepad"></i>
+                        </span>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">收录热门的游戏，包括3A大作和独立游戏精品,手机游戏等</p>
+                    
+                    <!-- 标签 -->
+                    <div class="flex flex-wrap gap-1 mb-3">
+                        <span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Steam</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">热门</span><span class="platform-tag text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">3A大作</span>
+                        <span class="platform-tag text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">+1</span>
+                    </div>
+                    
+                    <!-- 统计信息 -->
+                    <div class="flex items-center justify-between text-sm text-gray-600">
+                        <span>
+                            <i class="fas fa-file-alt mr-1"></i>
+                            2 个资源
+                        </span>
+                        <span>
+                            <i class="fas fa-clock mr-1"></i>
+                            2025/7/23
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="flex gap-2">
+                    <button class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="steam-games-2024">
+                        查看详情
+                    </button>
+                </div>
+            </div>
+        
+        </div>
+
+        <!-- 集合详情模态框 -->
+        <div id="collectionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 p-4">
+            <div class="max-w-4xl mx-auto mt-8 bg-white rounded-2xl max-h-[90vh] overflow-hidden">
+                <!-- 模态框头部 -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 id="modalTitle" class="text-2xl font-bold text-gray-800"></h2>
+                            <p id="modalDescription" class="text-gray-600 mt-1"></p>
+                        </div>
+                        <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 模态框内容 -->
+                <div class="p-6 overflow-y-auto max-h-[70vh]">
+                    <div id="modalContent">
+                        <!-- 资源列表将在这里动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="mt-12 text-center text-gray-600">
+            <p class="text-sm">
+                <a href="/" class="text-blue-600 hover:underline">返回搜索页面</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const collections = [{"id":"action-movies-2024","title":"电影精选","category":"movies","description":"精选的电影大片，包括好莱坞大片和各国佳作","cover":"/images/movie.png","tags":["动作","热门","高清","4K"],"created":"2025-07-23T00:00:00.000Z","updated":"2025-07-23T00:00:00.000Z","resourceCount":3,"resources":[{"name":"周星驰电影33部","platform":"quark","link":"https://pan.quark.cn/s/60c159bfa831","password":"","size":"","tags":["周星驰","喜剧","无厘头","动作","高清"],"description":"周星驰电影"},{"name":"宫崎骏+吉卜力工作室 30部作品总集","platform":"quark","link":"https://pan.quark.cn/s/d82372900921","password":"","size":"1T","tags":["喜剧","爱情","动作","奇幻","冒险"],"description":"【4K&蓝光原盘REMUX】【杜比视界&杜比&次世代国粤日多音轨】简繁日英双语特效多字幕"},{"name":"成龙经典电影合集68部","platform":"quark","link":"https://pan.quark.cn/s/217a7822c439","password":"","size":"","tags":["1080P蓝光","国粤双语音轨","动作","爱情"],"description":"成龙经典电影合集"}]},{"id":"action-movies-2025","title":"2025热门电影","category":"movies","description":"2025热门电影合集，包含最新上映的动作大片。","cover":"/images/2025movie.png","tags":["2025","热门","动作"],"created":"2025-07-24T00:00:00.000Z","updated":"2025-07-24T00:00:00.000Z","resourceCount":3,"resources":[{"name":"《F1：狂飙飞车》","platform":"baidu","link":"https://pan.baidu.com/s/1MSSIwVakuYf5T_eX0AOfHQ?pwd=2kdc","password":"2kdc","size":"17GB","tags":["动作","赛车"],"description":"豆瓣8.5分，近期院线片最佳。\n布拉德·皮特主演的赛车电影《F1：狂飙飞车》豆瓣开分8.5分，很可以的评分，今年好莱坞电影最高评分"},{"name":"时间之子","platform":"baidu","link":"https://pan.baidu.com/s/1qn9lwIE_KcZMclJZsDu1MA?pwd=v693","password":"v693","size":"3.8GB","tags":["爱情","动画","奇幻","冒险"],"description":"冷面杀手十七与渔村少女千晓因神秘时轮结缘，一个想“离职”找自由，一个想“离岛”寻精彩，他们决定暂时合作成为“一日时轮搭子”，在繁华的大都会开启了一场有惊有喜的浪漫奇遇。在这个过程中，十七和千晓的关系悄悄发生着变化，从最初的冤家对头逐渐变成了默契搭档，两颗心在不经意间靠近的同时，殊不知时轮背后的秘密，也在悄然影响着两人的命运……"},{"name":"物质主义者Materialists","platform":"baidu","link":"https://pan.baidu.com/s/1hbEZWqA_wEpsAL28Sm3q-w?pwd=96m4","password":"96m4","size":"8.7GB","tags":["喜剧","爱情"],"description":"年轻且企图心旺盛的纽约恋爱顾问Lucy（达科塔·约翰逊 Dakota Johnson 饰）发现自己在完美的另一半（佩德罗·帕斯卡 Pedro Pascal 饰）和不完美的前任（克里斯·埃文斯 Chris Evans 饰）之间犹豫不决。"}]},{"id":"classical-music","title":"网易云音乐精选集","category":"music","description":"精选网易云音乐作品，高品质无损音频","cover":"/images/wyy.jpg","tags":["网易云","无损","mp3"],"created":"2025-07-23T00:00:00.000Z","updated":"2025-07-23T00:00:00.000Z","resourceCount":2,"resources":[{"name":"网易云评论超10W+的歌曲合集800多首","platform":"quark","link":"https://pan.quark.cn/s/3457409dc28d","password":"","size":"7.9GB","tags":["热评","mp3"],"description":"网易云评论超10W+的歌曲合集800多首"},{"name":"网易云音乐收藏榜单TOP5","platform":"quark","link":"https://pan.quark.cn/s/d76e2482e5af","password":"","size":"8.03GB","tags":["收藏榜单TOP5","mp3"],"description":"网易云音乐收藏榜单TOP5"}]},{"id":"programming-courses","title":"编程学习课程合集","category":"study","description":"从入门到进阶的编程学习资源，包含多种编程语言和框架","cover":"/images/bc.png","tags":["编程","教程","视频课程","AI"],"created":"2025-07-23T00:00:00.000Z","updated":"2025-07-23T00:00:00.000Z","resourceCount":2,"resources":[{"name":"编程开发教程合集","platform":"baidu","link":"https://pan.baidu.com/s/1I5XkashUOlhY3xnz-8E-lg?pwd=mun4","password":"mun4","size":"补充中","tags":["JavaScript","全栈","Python","Java"],"description":"合集"},{"name":"AI相关资料 合集","platform":"baidu","link":"https://pan.baidu.com/s/1eF6XpE5d9Tmfvn-4eLkJew?pwd=xmpn","password":"xmpn","size":"补充中","tags":["AI","AI开发","AI项目"],"description":"合集"}]},{"id":"steam-games-2024","title":"热门游戏合集","category":"games","description":"收录热门的游戏，包括3A大作和独立游戏精品,手机游戏等","cover":"/images/game.png","tags":["Steam","热门","3A大作","手机游戏"],"created":"2025-07-23T00:00:00.000Z","updated":"2025-07-23T00:00:00.000Z","resourceCount":2,"resources":[{"name":"经典3A游戏合集","platform":"quark","link":"https://pan.quark.cn/s/3f9633b77909","password":"","size":"1.6TB","tags":["3A大作","电脑游戏"],"description":"CD Projekt RED开发的开放世界RPG游戏"},{"name":"【安卓】手机游戏[修改版＆Mod版][1630+款]","platform":"quark","link":"https://pan.quark.cn/s/3cc61194d40e","password":"","size":"221.7GB","tags":["经典游戏","手机游戏"],"description":"CD Projekt RED开发的开放世界RPG游戏"}]}];
+        
         // 分类筛选功能
         const categoryTabs = document.querySelectorAll('.category-tab');
         const collectionCards = document.querySelectorAll('.collection-card');
@@ -22,7 +455,6 @@ const platformMap = {"115":{"name":"115网盘","icon":"fa-box","color":"bg-orang
         // 分类筛选
         categoryTabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                // 更新活跃状态
                 categoryTabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 
@@ -45,8 +477,8 @@ const platformMap = {"115":{"name":"115网盘","icon":"fa-box","color":"bg-orang
                 const cardTitle = card.querySelector('h3').textContent.toLowerCase();
                 
                 const matchesCategory = category === 'all' || cardCategory === category;
-                const matchesSearch = !searchTerm || 
-                    cardTitle.includes(searchTerm.toLowerCase()) || 
+                const matchesSearch = !searchTerm ||
+                    cardTitle.includes(searchTerm.toLowerCase()) ||
                     cardTags.includes(searchTerm.toLowerCase());
                 
                 if (matchesCategory && matchesSearch) {
@@ -58,14 +490,21 @@ const platformMap = {"115":{"name":"115网盘","icon":"fa-box","color":"bg-orang
             });
         }
 
-        // 模态框功能
-        const modal = document.getElementById('collectionModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalDescription = document.getElementById('modalDescription');
-        const modalContent = document.getElementById('modalContent');
-        const closeModal = document.getElementById('closeModal');
+        // 平台映射
+        const platformMap = {
+            '115': { name: '115网盘', icon: 'fa-box', color: 'bg-orange-500' },
+            '123': { name: '123网盘', icon: 'fa-hashtag', color: 'bg-green-500' },
+            'mobile': { name: '移动云盘', icon: 'fa-mobile-alt', color: 'bg-blue-500' },
+            'xunlei': { name: '迅雷云盘', icon: 'fa-bolt', color: 'bg-yellow-500' },
+            'aliyun': { name: '阿里云盘', icon: 'fa-cloud', color: 'bg-purple-500' },
+            'uc': { name: 'UC网盘', icon: 'fa-compass', color: 'bg-red-500' },
+            'tianyi': { name: '天翼云盘', icon: 'fa-cloud', color: 'bg-pink-500' },
+            'quark': { name: '夸克网盘', icon: 'fa-search', color: 'bg-indigo-500' },
+            'others': { name: '其他网盘', icon: 'fa-ellipsis-h', color: 'bg-gray-500' },
+            'baidu': { name: '百度网盘', icon: 'fa-database', color: 'bg-blue-600' }
+        };
 
-        // 查看详情按钮
+        // 查看详情功能
         document.querySelectorAll('.view-collection-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const collectionId = btn.dataset.collectionId;
@@ -76,6 +515,11 @@ const platformMap = {"115":{"name":"115网盘","icon":"fa-box","color":"bg-orang
 
         // 显示集合详情
         function showCollectionDetail(collection) {
+            const modal = document.getElementById('collectionModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            const modalContent = document.getElementById('modalContent');
+            
             modalTitle.textContent = collection.title;
             modalDescription.textContent = collection.description;
             
@@ -83,28 +527,28 @@ const platformMap = {"115":{"name":"115网盘","icon":"fa-box","color":"bg-orang
             collection.resources.forEach(resource => {
                 const platform = platformMap[resource.platform] || platformMap.others;
                 resourcesHtml += `
-                    <div class="result-item p-4 rounded-lg border border-gray-200">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <div class="flex items-start gap-4">
-                            <div class="platform-icon ${platform.color}">
+                            <div class="w-10 h-10 ${platform.color.replace('bg-', 'bg-')} text-white rounded-lg flex items-center justify-center">
                                 <i class="fas ${platform.icon}"></i>
                             </div>
                             <div class="flex-1">
-                                <h4 class="font-semibold text-ios-dark mb-1">${resource.name}</h4>
-                                <p class="text-sm text-ios-gray mb-2">${resource.description || ''}</p>
+                                <h4 class="font-semibold text-gray-800 mb-1">${resource.name}</h4>
+                                <p class="text-sm text-gray-600 mb-2">${resource.description || ''}</p>
                                 <div class="flex flex-wrap gap-2 mb-2">
-                                    <span class="platform-tag">${platform.name}</span>
-                                    <span class="platform-tag">${resource.size}</span>
-                                    ${resource.tags.map(tag => `<span class="platform-tag">${tag}</span>`).join('')}
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">${platform.name}</span>
+                                    <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">${resource.size}</span>
+                                    ${resource.tags.map(tag => `<span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">${tag}</span>`).join('')}
                                 </div>
                                 <div class="flex gap-2">
-                                    <button class="text-ios-blue hover:underline text-sm copy-link-btn" data-link="${resource.link}">
+                                    <button class="text-blue-600 hover:underline text-sm copy-link-btn" data-link="${resource.link}">
                                         <i class="fas fa-copy mr-1"></i>复制链接
                                     </button>
-                                    <button class="text-ios-blue hover:underline text-sm open-link-btn" data-link="${resource.link}">
+                                    <button class="text-blue-600 hover:underline text-sm open-link-btn" data-link="${resource.link}">
                                         <i class="fas fa-external-link-alt mr-1"></i>立即查看
                                     </button>
                                     ${resource.password ? `
-                                        <button class="text-ios-blue hover:underline text-sm copy-password-btn" data-password="${resource.password}">
+                                        <button class="text-blue-600 hover:underline text-sm copy-password-btn" data-password="${resource.password}">
                                             <i class="fas fa-key mr-1"></i>复制密码
                                         </button>
                                     ` : ''}
@@ -152,7 +596,10 @@ const platformMap = {"115":{"name":"115网盘","icon":"fa-box","color":"bg-orang
             });
         }
 
-        // 关闭模态框
+        // 模态框控制
+        const modal = document.getElementById('collectionModal');
+        const closeModal = document.getElementById('closeModal');
+        
         closeModal.addEventListener('click', () => {
             modal.classList.add('hidden');
         });
@@ -170,4 +617,6 @@ const platformMap = {"115":{"name":"115网盘","icon":"fa-box","color":"bg-orang
                 modal.classList.add('hidden');
             }
         });
-    })();</script> <button id="backToTopBtn" title="返回顶部"> <i class="fas fa-arrow-up"></i> </button> <script type="module">const o=document.getElementById("backToTopBtn");window.onscroll=function(){document.body.scrollTop>200||document.documentElement.scrollTop>200?o.style.display="flex":o.style.display="none"};o.addEventListener("click",()=>{window.scrollTo({top:0,behavior:"smooth"})});</script> </body> </html>
+    </script>
+</body>
+</html>
