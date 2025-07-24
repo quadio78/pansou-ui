@@ -161,7 +161,13 @@ const $$Index = createComponent(($$result, $$props, $$slots) => {
 
             document.querySelectorAll('.open-link-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    window.open(btn.dataset.link, '_blank');
+                    const link = document.createElement('a');
+                    link.href = btn.dataset.link;
+                    link.target = '_blank';
+                    link.rel = 'noreferrer';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
                 });
             });
 
@@ -318,7 +324,13 @@ const $$Index = createComponent(($$result, $$props, $$slots) => {
 
             document.querySelectorAll('.open-link-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    window.open(btn.dataset.link, '_blank');
+                    const link = document.createElement('a');
+                    link.href = btn.dataset.link;
+                    link.target = '_blank';
+                    link.rel = 'noreferrer';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
                 });
             });
 

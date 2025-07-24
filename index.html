@@ -824,7 +824,7 @@
                     const isHidden = index >= initialVisibleCount ? 'hidden' : '';
 
                     platformHTML += `
-                        <a href="${resource.url}" target="_blank" class="block result-item ${isHidden}" data-platform="${platformType}">
+                        <a href="${resource.url}" target="_blank" rel="noreferrer" class="block result-item ${isHidden}" data-platform="${platformType}">
                             <div class="p-4">
                                 <div class="flex justify-between">
                                     <div class="font-medium truncate pr-2">${resource.note}</div>
