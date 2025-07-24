@@ -23,22 +23,40 @@ const watcher = chokidar.watch([categoriesDir, collectionsDir], {
 });
 
 let syncTimeout;
+let configUpdateTimeout;
 
-// 防抖函数，避免频繁同步
+// 防抖函数 - 更新Keystatic配置
+function debouncedUpdateConfig() {
+  clearTimeout(configUpdateTimeout);
+  configUpdateTimeout = setTimeout(() => {
+    console.log('🔄 检测到分类变化，开始更新Keystatic配置...');
+    try {
+      execSync('npm run update-config', {
+        stdio: 'inherit',
+        cwd: __dirname
+      });
+      console.log('✅ Keystatic配置更新成功！');
+    } catch (error) {
+      console.error('❌ Keystatic配置更新失败:', error.message);
+    }
+  }, 500);
+}
+
+// 防抖函数 - 同步到JSON
 function debouncedSync() {
   clearTimeout(syncTimeout);
   syncTimeout = setTimeout(() => {
-    console.log('🔄 检测到文件变化，开始自动同步...');
+    console.log('🔄 检测到文件变化，开始同步到JSON...');
     try {
-      execSync('node sync-to-json.js', { 
+      execSync('node sync-to-json.js', {
         stdio: 'inherit',
-        cwd: __dirname 
+        cwd: __dirname
       });
-      console.log('✅ 自动同步完成！');
+      console.log('✅ 同步到JSON完成！');
     } catch (error) {
-      console.error('❌ 自动同步失败:', error.message);
+      console.error('❌ 同步到JSON失败:', error.message);
     }
-  }, 1000); // 1秒延迟，避免频繁触发
+  }, 1000);
 }
 
 // 监听文件变化
@@ -47,18 +65,28 @@ watcher
     if (filePath.endsWith('.mdoc')) {
       console.log(`📄 新增文件: ${path.basename(filePath)}`);
       debouncedSync();
+      // 如果是分类文件，则触发配置更新
+      if (path.dirname(filePath) === categoriesDir) {
+        debouncedUpdateConfig();
+      }
     }
   })
   .on('change', (filePath) => {
     if (filePath.endsWith('.mdoc')) {
       console.log(`📝 修改文件: ${path.basename(filePath)}`);
       debouncedSync();
+      if (path.dirname(filePath) === categoriesDir) {
+        debouncedUpdateConfig();
+      }
     }
   })
   .on('unlink', (filePath) => {
     if (filePath.endsWith('.mdoc')) {
       console.log(`🗑️ 删除文件: ${path.basename(filePath)}`);
       debouncedSync();
+      if (path.dirname(filePath) === categoriesDir) {
+        debouncedUpdateConfig();
+      }
     }
   })
   .on('error', (error) => {
