@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "dev:auto": "npm run auto-sync & npm run dev",
+    "dev:auto": "node dev-auto.js",
     "build": "astro build && node build-script.js",
     "preview": "astro preview",
     "astro": "astro",
@@ -28,6 +28,7 @@
     "@astrojs/node": "^9.3.0",
     "@tailwindcss/typography": "^0.5.16",
     "chokidar": "^4.0.3",
+    "concurrently": "^9.2.0",
     "tailwindcss": "^4.1.11"
   }
 }

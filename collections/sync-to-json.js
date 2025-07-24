@@ -8,11 +8,16 @@ const __dirname = path.dirname(__filename);
 
 // 解析 YAML frontmatter
 function parseFrontmatter(content) {
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = content.match(frontmatterRegex);
+  // 标准化换行符，处理Windows的\r\n
+  const normalizedContent = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  
+  // 更宽松的frontmatter正则表达式
+  const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/;
+  const match = normalizedContent.match(frontmatterRegex);
   
   if (!match) {
-    return { frontmatter: {}, content: content };
+    console.log('未找到frontmatter，内容开头:', normalizedContent.substring(0, 100));
+    return { frontmatter: {}, content: normalizedContent };
   }
   
   const yamlContent = match[1];
@@ -23,6 +28,7 @@ function parseFrontmatter(content) {
     return { frontmatter, content: bodyContent };
   } catch (error) {
     console.error('YAML解析错误:', error);
+    console.error('YAML内容:', yamlContent);
     return { frontmatter: {}, content: bodyContent };
   }
 }
