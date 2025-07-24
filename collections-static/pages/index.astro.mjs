@@ -1,4 +1,4 @@
-import { e as createComponent, f as createAstro, l as renderHead, n as renderSlot, o as renderScript, r as renderTemplate, k as renderComponent, p as defineScriptVars, h as addAttribute, m as maybeRenderHead } from '../chunks/astro/server_DkYMhDvy.mjs';
+import { e as createComponent, f as createAstro, l as renderHead, o as renderSlot, p as renderScript, r as renderTemplate, n as renderComponent, k as defineScriptVars, h as addAttribute, m as maybeRenderHead } from '../chunks/astro/server_9n8BqP71.mjs';
 import 'kleur/colors';
 import 'clsx';
 /* empty css                                 */
@@ -161,13 +161,8 @@ const $$Index = createComponent(($$result, $$props, $$slots) => {
 
             document.querySelectorAll('.open-link-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const link = document.createElement('a');
-                    link.href = btn.dataset.link;
-                    link.target = '_blank';
-                    link.rel = 'noreferrer';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    const targetUrl = btn.dataset.link;
+                    window.open(\`/go?url=\${encodeURIComponent(targetUrl)}\`, '_blank');
                 });
             });
 
@@ -324,13 +319,8 @@ const $$Index = createComponent(($$result, $$props, $$slots) => {
 
             document.querySelectorAll('.open-link-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const link = document.createElement('a');
-                    link.href = btn.dataset.link;
-                    link.target = '_blank';
-                    link.rel = 'noreferrer';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    const targetUrl = btn.dataset.link;
+                    window.open(\\\`/go?url=\\\${encodeURIComponent(targetUrl)}\\\`, '_blank');
                 });
             });
 

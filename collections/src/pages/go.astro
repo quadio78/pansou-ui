@@ -1,0 +1,64 @@
+---
+const { url } = Astro.request.query;
+
+if (!url) {
+    return new Response("URL not provided", { status: 400 });
+}
+
+// Basic validation for URL
+if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return new Response("Invalid URL format", { status: 400 });
+}
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正在跳转...</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #09f;
+            animation: spin 1s ease infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <p>正在安全跳转, 请稍候...</p>
+    </div>
+    <script define:vars={{ url }}>
+        // Redirect using a meta tag for browsers with JS disabled
+        const meta = document.createElement('meta');
+        meta.httpEquiv = 'refresh';
+        meta.content = `0;url=${url}`;
+        document.head.appendChild(meta);
+
+        // Also attempt redirect with JS for faster performance
+        window.location.replace(url);
+    </script>
+</body>
+</html>
