@@ -73,10 +73,12 @@ export default config({
         category: fields.select({
           label: '所属分类',
           options: [
+            { label: '📺 电视剧', value: 'episodes' },
             { label: '🎮 游戏合集', value: 'games' },
             { label: '🎬 电影合集', value: 'movies' },
             { label: '🎵 音乐合集', value: 'music' },
             { label: '📚 学习资料', value: 'study' },
+
           ],
           defaultValue: 'games'
         }),

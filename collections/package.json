@@ -10,7 +10,8 @@
     "astro": "astro",
     "sync": "node sync-to-json.js",
     "auto-sync": "node auto-sync.js",
-    "validate": "node validate-mdoc.js"
+    "validate": "node validate-mdoc.js",
+    "update-config": "node update-keystatic-config.js"
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
