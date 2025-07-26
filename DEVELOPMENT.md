@@ -72,5 +72,9 @@ pansou-ui/
 
 ## 注意事项
 
-1. 修改页面组件后需要重新构建项目才能看到效果
-2. 所有静态资源最终都生成到 `collections-static/` 目录
+1.  修改页面组件后需要重新构建项目才能看到效果。
+2.  所有静态资源最终都生成到 `collections-static/` 目录。
+3.  **【重要】** 本项目使用自定义构建脚本 `collections/build-script.js` 来生成部分核心页面的**最终静态文件**，例如**单个集合详情页** (`collection.html`) 和**集合列表页** (`collections.html`)。
+    -   **生产构建 (`npm run build`)**: 最终的 `collections-static/*.html` 文件内容由 `build-script.js` 中的 HTML 生成函数（如 `generateStaticCollectionHtml`）决定。因此，对这些页面的最终修改**必须在 `build-script.js` 中完成**。
+    -   **开发环境 (`npm run dev`)**: 开发服务器直接使用 `.astro` 文件（如 `src/pages/collection.astro`）来实时渲染页面。
+    -   **开发流程建议**: 为了确保开发环境和最终构建的一致性，当修改这些页面时，**建议同时修改对应的 `.astro` 文件和 `build-script.js` 中的 HTML 生成逻辑**。这样可以保证在 `dev` 模式下实时预览效果，同时确保 `build` 后的生产文件也包含了这些更改。
