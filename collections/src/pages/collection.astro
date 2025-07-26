@@ -38,7 +38,11 @@ if (!collection) {
 const category = categories.find(cat => cat.id === collection.category);
 ---
 
-<Layout title={`${collection.title} - 资源集合 - 盘搜`}>
+<Layout
+    title={`${collection.title} - 资源集合 - 盘搜`}
+    description={collection.description}
+    keywords={`${collection.title},${collection.tags.join(',')},${collection.resources.map(r => r.name).join(',')}`}
+>
     <div class="max-w-6xl mx-auto">
         <!-- 标题区域 -->
         <div class="text-center mb-6 fade-in">

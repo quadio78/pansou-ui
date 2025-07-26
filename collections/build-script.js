@@ -635,6 +635,8 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${collection.title} - 资源集合 - 盘搜</title>
+    <meta name="description" content="${collection.description}">
+    <meta name="keywords" content="${collection.title},${collection.tags.join(',')},${collection.resources.map(r => r.name).join(',')}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
