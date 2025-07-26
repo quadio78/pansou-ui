@@ -606,9 +606,9 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
                             <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="${resource.link}">
                                 <i class="fas fa-copy mr-2"></i>复制链接
                             </button>
-                            <button class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 open-link-btn" data-link="${resource.link}">
+                            <a href="${resource.link}" target="_blank" rel="noopener noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
-                            </button>
+                            </a>
                             ${resource.password ? `
                                 <button class="text-white bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-password-btn" data-password="${resource.password}">
                                     <i class="fas fa-key mr-2"></i>复制密码
@@ -803,12 +803,6 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
             });
         });
 
-        document.querySelectorAll('.open-link-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const targetUrl = btn.dataset.link;
-                window.open('/collections-static/go.html?url=' + encodeURIComponent(targetUrl), '_blank');
-            });
-        });
 
         document.querySelectorAll('.copy-password-btn').forEach(btn => {
             btn.addEventListener('click', () => {

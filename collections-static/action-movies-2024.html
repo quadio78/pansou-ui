@@ -174,9 +174,9 @@
                             <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="https://pan.quark.cn/s/60c159bfa831">
                                 <i class="fas fa-copy mr-2"></i>复制链接
                             </button>
-                            <button class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 open-link-btn" data-link="https://pan.quark.cn/s/60c159bfa831">
+                            <a href="https://pan.quark.cn/s/60c159bfa831" target="_blank" rel="noopener noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
-                            </button>
+                            </a>
                             
                         </div>
                     </div>
@@ -200,9 +200,9 @@
                             <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="https://pan.quark.cn/s/d82372900921">
                                 <i class="fas fa-copy mr-2"></i>复制链接
                             </button>
-                            <button class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 open-link-btn" data-link="https://pan.quark.cn/s/d82372900921">
+                            <a href="https://pan.quark.cn/s/d82372900921" target="_blank" rel="noopener noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
-                            </button>
+                            </a>
                             
                         </div>
                     </div>
@@ -226,9 +226,9 @@
                             <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="https://pan.quark.cn/s/217a7822c439">
                                 <i class="fas fa-copy mr-2"></i>复制链接
                             </button>
-                            <button class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 open-link-btn" data-link="https://pan.quark.cn/s/217a7822c439">
+                            <a href="https://pan.quark.cn/s/217a7822c439" target="_blank" rel="noopener noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
-                            </button>
+                            </a>
                             
                         </div>
                     </div>
@@ -259,12 +259,6 @@
             });
         });
 
-        document.querySelectorAll('.open-link-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const targetUrl = btn.dataset.link;
-                window.open('/collections-static/go.html?url=' + encodeURIComponent(targetUrl), '_blank');
-            });
-        });
 
         document.querySelectorAll('.copy-password-btn').forEach(btn => {
             btn.addEventListener('click', () => {
