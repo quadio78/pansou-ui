@@ -1,5 +1,5 @@
 ---
-const { url } = Astro.request.query;
+const url = Astro.url.searchParams.get('url');
 
 if (!url) {
     return new Response("URL not provided", { status: 400 });

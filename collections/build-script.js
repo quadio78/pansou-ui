@@ -111,6 +111,32 @@ if (fs.existsSync(imagesSrcDir)) {
 // 生成静态的collections.html文件
 generateStaticCollectionsHtml();
 
+// 为每个集合生成单独的静态HTML文件
+const collectionsDataPath = path.join(__dirname, 'src/data/collections.json');
+const collectionsData = JSON.parse(fs.readFileSync(collectionsDataPath, 'utf8'));
+const { categories, collections } = collectionsData;
+
+// 平台图标和名称映射
+const platformMap = {
+    '115': { name: '115网盘', icon: 'fa-box', color: 'bg-orange-500' },
+    '123': { name: '123网盘', icon: 'fa-hashtag', color: 'bg-green-500' },
+    'mobile': { name: '移动云盘', icon: 'fa-mobile-alt', color: 'bg-blue-500' },
+    'xunlei': { name: '迅雷云盘', icon: 'fa-bolt', color: 'bg-yellow-500' },
+    'aliyun': { name: '阿里云盘', icon: 'fa-cloud', color: 'bg-purple-500' },
+    'uc': { name: 'UC网盘', icon: 'fa-compass', color: 'bg-red-500' },
+    'tianyi': { name: '天翼云盘', icon: 'fa-cloud', color: 'bg-pink-500' },
+    'quark': { name: '夸克网盘', icon: 'fa-search', color: 'bg-indigo-500' },
+    'others': { name: '其他网盘', icon: 'fa-ellipsis-h', color: 'bg-gray-500' },
+    'baidu': { name: '百度网盘', icon: 'fa-database', color: 'bg-blue-600' }
+};
+
+collections.forEach(collection => {
+    generateStaticCollectionHtml(collection, categories, platformMap);
+});
+
+// 生成静态的go.html文件
+generateStaticGoHtml();
+
 function generateStaticCollectionsHtml() {
     try {
         // 读取集合数据
@@ -209,9 +235,9 @@ function generateCollectionsHTML(collectionsData) {
                 
                 <!-- 操作按钮 -->
                 <div class="flex gap-2">
-                    <button class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity cursor-pointer view-collection-btn" data-collection-id="${collection.id}">
+                    <a href="/collections-static/${collection.id}.html" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity text-center">
                         查看详情
-                    </button>
+                    </a>
                 </div>
             </div>
         `;
@@ -555,3 +581,374 @@ function generateCollectionsHTML(collectionsData) {
 }
 
 console.log('🎉 构建完成！');
+// 为单个集合生成静态HTML文件
+function generateStaticCollectionHtml(collection, categories, platformMap) {
+    const category = categories.find(cat => cat.id === collection.category);
+    
+    // 生成资源列表HTML
+    const resourcesHtml = collection.resources.map((resource, index) => {
+        const platform = platformMap[resource.platform] || platformMap.others;
+        return `
+            <div class="ios-card p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-${(index % 5) + 1}">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="platform-icon ${platform.color} flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fas ${platform.icon} text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-ios-dark mb-2 text-xl">${resource.name}</h4>
+                        <p class="text-ios-gray mb-4 leading-relaxed">${resource.description || ''}</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="platform-tag px-3 py-1 rounded-full">${platform.name}</span>
+                            ${resource.size ? `<span class="platform-tag px-3 py-1 rounded-full">${resource.size}</span>` : ''}
+                            ${resource.tags.map(tag => `<span class="platform-tag px-3 py-1 rounded-full">${tag}</span>`).join('')}
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="${resource.link}">
+                                <i class="fas fa-copy mr-2"></i>复制链接
+                            </button>
+                            <button class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 open-link-btn" data-link="${resource.link}">
+                                <i class="fas fa-external-link-alt mr-2"></i>立即查看
+                            </button>
+                            ${resource.password ? `
+                                <button class="text-white bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-password-btn" data-password="${resource.password}">
+                                    <i class="fas fa-key mr-2"></i>复制密码
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    // 生成标签HTML
+    const tagsHtml = collection.tags.map((tag, index) => `
+        <span class="platform-tag text-sm px-4 py-2 rounded-full shadow-sm fade-in delay-${(index % 5) + 1}">
+            ${tag}
+        </span>
+    `).join('');
+    
+    // 生成完整的HTML
+    const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${collection.title} - 资源集合 - 盘搜</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
+            min-height: 100vh;
+            color: #1c1c1e;
+            transition: all 0.3s ease;
+        }
+        
+        .ios-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.5);
+            overflow: hidden;
+        }
+        
+        .platform-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .platform-tag {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: rgba(10, 132, 255, 0.1);
+            color: #0a84ff;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        
+        .img-hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="max-w-6xl mx-auto p-4">
+        <!-- 标题区域 -->
+        <div class="text-center mb-10 fade-in">
+            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <img src="/collections-static/logo.png" alt="盘搜 Logo" class="w-full h-full object-contain">
+            </div>
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">资源集合</h1>
+            <p class="text-gray-600 text-lg">精心整理的优质资源合集,陆续更新中...</p>
+            <div class="mt-4">
+                <a href="/collections-static/collections.html" class="text-blue-600 hover:underline text-sm">← 返回资源集合页面</a>
+            </div>
+        </div>
+
+        <!-- 集合详情 -->
+        <div class="ios-card p-8 mb-8 fade-in">
+            <div class="max-w-4xl mx-auto">
+                <!-- 集合封面 -->
+                <div class="mb-8">
+                    <div class="relative overflow-hidden rounded-2xl shadow-xl transform transition-transform hover:scale-105 duration-300">
+                        ${collection.cover ? `
+                            <div class="relative h-80 md:h-96">
+                                <img
+                                    src="/collections-static${collection.cover}"
+                                    alt="${collection.title}"
+                                    class="w-full h-full object-cover"
+                                    onerror="this.classList.add('img-hidden'); this.nextElementSibling.nextElementSibling.classList.remove('img-hidden');"
+                                />
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 right-6 text-white img-placeholder img-hidden">
+                                    <h2 class="text-2xl font-bold mb-2">${collection.title}</h2>
+                                    <p class="text-lg opacity-90">${collection.description}</p>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="h-80 md:h-96 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
+                                <div class="text-center text-white">
+                                    <i class="fas ${category?.icon || 'fa-folder'} text-6xl mb-4"></i>
+                                    <h2 class="text-3xl font-bold">${collection.title}</h2>
+                                </div>
+                            </div>
+                        `}
+                    </div>
+                </div>
+                
+                <!-- 集合信息 -->
+                <div class="text-center mb-8 fade-in">
+                    <div class="flex flex-wrap items-center justify-center gap-3 mb-4">
+                        <h2 class="text-3xl md:text-4xl font-bold text-ios-dark">${collection.title}</h2>
+                        <span class="flex items-center ${category?.color || 'bg-gray-500'} text-sm px-4 py-2 rounded-full shadow-md">
+                            <i class="fas ${category?.icon || 'fa-folder'} mr-2"></i>
+                            ${category?.name || '未知分类'}
+                        </span>
+                    </div>
+                    <p class="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto mb-6 leading-relaxed">${collection.description}</p>
+                    
+                    <!-- 标签 -->
+                    <div class="flex flex-wrap justify-center gap-3 mb-6">
+                        ${tagsHtml}
+                    </div>
+                    
+                    <!-- 统计信息 -->
+                    <div class="flex flex-wrap items-center justify-center gap-6 text-gray-600 bg-gray-50 rounded-2xl p-4 max-w-2xl mx-auto">
+                        <div class="flex items-center">
+                            <i class="fas fa-file-alt text-blue-500 mr-2 text-xl"></i>
+                            <span class="font-semibold text-lg">${collection.resourceCount} 个资源</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-clock text-green-500 mr-2 text-xl"></i>
+                            <span class="font-semibold text-lg">更新于 ${new Date(collection.updated).toLocaleDateString('zh-CN')}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 资源列表 -->
+        <div class="mb-12 fade-in">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-3xl font-bold text-ios-dark mb-8 text-center relative">
+                    <span class="relative z-10 px-4 bg-white">资源列表</span>
+                    <div class="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                </h3>
+                <div class="space-y-6">
+                    ${resourcesHtml}
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="mt-12 text-center text-gray-600">
+            <p class="text-sm">
+                <a href="/collections-static/collections.html" class="text-blue-600 hover:underline">← 返回资源集合页面</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 复制功能
+        document.querySelectorAll('.copy-link-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(btn.dataset.link);
+                btn.innerHTML = '<i class="fas fa-check mr-1"></i>已复制';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy mr-1"></i>复制链接';
+                }, 2000);
+            });
+        });
+
+        document.querySelectorAll('.open-link-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetUrl = btn.dataset.link;
+                window.open('/collections-static/go.html?url=' + encodeURIComponent(targetUrl), '_blank');
+            });
+        });
+
+        document.querySelectorAll('.copy-password-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(btn.dataset.password);
+                btn.innerHTML = '<i class="fas fa-check mr-1"></i>已复制';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-key mr-1"></i>复制密码';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>`;
+    
+    // 写入文件
+    const targetDir = path.join(__dirname, '..', 'collections-static');
+    const filePath = path.join(targetDir, `${collection.id}.html`);
+    
+    fs.writeFileSync(filePath, html);
+    console.log(`✓ ${collection.id}.html 已生成`);
+}
+// 生成静态的go.html文件
+function generateStaticGoHtml() {
+    const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正在跳转...</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
+            color: #1c1c1e;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #0a84ff;
+            animation: spin 1s ease infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #8e8e93;
+            margin-bottom: 20px;
+        }
+        .url-display {
+            background: rgba(10, 132, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin-bottom: 20px;
+        }
+        .redirect-btn {
+            background: linear-gradient(to right, #0a84ff, #0a84ff);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .redirect-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <h1>正在安全跳转</h1>
+        <p>请稍候...</p>
+        <div class="url-display" id="urlDisplay">正在获取目标链接...</div>
+        <button class="redirect-btn" id="redirectBtn" style="display: none;">立即跳转</button>
+    </div>
+    <script>
+        // 获取URL参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetUrl = urlParams.get('url');
+        
+        if (targetUrl) {
+            // 显示目标URL
+            document.getElementById('urlDisplay').textContent = decodeURIComponent(targetUrl);
+            
+            // 创建meta刷新标签
+            const meta = document.createElement('meta');
+            meta.httpEquiv = 'refresh';
+            meta.content = '0;url=' + targetUrl;
+            document.head.appendChild(meta);
+            
+            // 显示跳转按钮
+            const redirectBtn = document.getElementById('redirectBtn');
+            redirectBtn.style.display = 'block';
+            redirectBtn.addEventListener('click', () => {
+                window.location.replace(targetUrl);
+            });
+            
+            // 尝试立即跳转
+            window.location.replace(targetUrl);
+        } else {
+            document.getElementById('urlDisplay').textContent = '未提供有效的跳转链接';
+        }
+    </script>
+</body>
+</html>`;
+    
+    // 写入文件
+    const targetDir = path.join(__dirname, '..', 'collections-static');
+    const filePath = path.join(targetDir, 'go.html');
+    
+    fs.writeFileSync(filePath, html);
+    console.log('✓ go.html 已生成');
+}
