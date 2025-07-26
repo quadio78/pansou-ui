@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热门游戏合集 - 资源集合 - 盘搜</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
+            min-height: 100vh;
+            color: #1c1c1e;
+            transition: all 0.3s ease;
+        }
+        
+        .ios-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.5);
+            overflow: hidden;
+        }
+        
+        .platform-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .platform-tag {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: rgba(10, 132, 255, 0.1);
+            color: #0a84ff;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        
+        .img-hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="max-w-6xl mx-auto p-4">
+        <!-- 标题区域 -->
+        <div class="text-center mb-10 fade-in">
+            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <img src="/collections-static/logo.png" alt="盘搜 Logo" class="w-full h-full object-contain">
+            </div>
+            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">资源集合</h1>
+            <p class="text-gray-600 text-lg">精心整理的优质资源合集,陆续更新中...</p>
+            <div class="mt-4">
+                <a href="/collections-static/collections.html" class="text-blue-600 hover:underline text-sm">← 返回资源集合页面</a>
+            </div>
+        </div>
+
+        <!-- 集合详情 -->
+        <div class="ios-card p-8 mb-8 fade-in">
+            <div class="max-w-4xl mx-auto">
+                <!-- 集合封面 -->
+                <div class="mb-8">
+                    <div class="relative overflow-hidden rounded-2xl shadow-xl transform transition-transform hover:scale-105 duration-300">
+                        
+                            <div class="relative h-80 md:h-96">
+                                <img
+                                    src="/collections-static/images/game.png"
+                                    alt="热门游戏合集"
+                                    class="w-full h-full object-cover"
+                                    onerror="this.classList.add('img-hidden'); this.nextElementSibling.nextElementSibling.classList.remove('img-hidden');"
+                                />
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                                <div class="absolute bottom-6 left-6 right-6 text-white img-placeholder img-hidden">
+                                    <h2 class="text-2xl font-bold mb-2">热门游戏合集</h2>
+                                    <p class="text-lg opacity-90">收录热门的游戏，包括3A大作和独立游戏精品,手机游戏等</p>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+                
+                <!-- 集合信息 -->
+                <div class="text-center mb-8 fade-in">
+                    <div class="flex flex-wrap items-center justify-center gap-3 mb-4">
+                        <h2 class="text-3xl md:text-4xl font-bold text-ios-dark">热门游戏合集</h2>
+                        <span class="flex items-center bg-purple-500 text-sm px-4 py-2 rounded-full shadow-md">
+                            <i class="fas fa-gamepad mr-2"></i>
+                            游戏合集
+                        </span>
+                    </div>
+                    <p class="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto mb-6 leading-relaxed">收录热门的游戏，包括3A大作和独立游戏精品,手机游戏等</p>
+                    
+                    <!-- 标签 -->
+                    <div class="flex flex-wrap justify-center gap-3 mb-6">
+                        
+        <span class="platform-tag text-sm px-4 py-2 rounded-full shadow-sm fade-in delay-1">
+            Steam
+        </span>
+    
+        <span class="platform-tag text-sm px-4 py-2 rounded-full shadow-sm fade-in delay-2">
+            热门
+        </span>
+    
+        <span class="platform-tag text-sm px-4 py-2 rounded-full shadow-sm fade-in delay-3">
+            3A大作
+        </span>
+    
+        <span class="platform-tag text-sm px-4 py-2 rounded-full shadow-sm fade-in delay-4">
+            手机游戏
+        </span>
+    
+                    </div>
+                    
+                    <!-- 统计信息 -->
+                    <div class="flex flex-wrap items-center justify-center gap-6 text-gray-600 bg-gray-50 rounded-2xl p-4 max-w-2xl mx-auto">
+                        <div class="flex items-center">
+                            <i class="fas fa-file-alt text-blue-500 mr-2 text-xl"></i>
+                            <span class="font-semibold text-lg">2 个资源</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-clock text-green-500 mr-2 text-xl"></i>
+                            <span class="font-semibold text-lg">更新于 2025/7/23</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 资源列表 -->
+        <div class="mb-12 fade-in">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-3xl font-bold text-ios-dark mb-8 text-center relative">
+                    <span class="relative z-10 px-4 bg-white">资源列表</span>
+                    <div class="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                </h3>
+                <div class="space-y-6">
+                    
+            <div class="ios-card p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-1">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="platform-icon bg-indigo-500 flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fas fa-search text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-ios-dark mb-2 text-xl">经典3A游戏合集</h4>
+                        <p class="text-ios-gray mb-4 leading-relaxed">CD Projekt RED开发的开放世界RPG游戏</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="platform-tag px-3 py-1 rounded-full">夸克网盘</span>
+                            <span class="platform-tag px-3 py-1 rounded-full">1.6TB</span>
+                            <span class="platform-tag px-3 py-1 rounded-full">3A大作</span><span class="platform-tag px-3 py-1 rounded-full">电脑游戏</span>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="https://pan.quark.cn/s/3f9633b77909">
+                                <i class="fas fa-copy mr-2"></i>复制链接
+                            </button>
+                            <a href="https://pan.quark.cn/s/3f9633b77909" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
+                                <i class="fas fa-external-link-alt mr-2"></i>立即查看
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="ios-card p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-2">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="platform-icon bg-indigo-500 flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fas fa-search text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-ios-dark mb-2 text-xl">【安卓】手机游戏[修改版＆Mod版][1630+款]</h4>
+                        <p class="text-ios-gray mb-4 leading-relaxed">CD Projekt RED开发的开放世界RPG游戏</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="platform-tag px-3 py-1 rounded-full">夸克网盘</span>
+                            <span class="platform-tag px-3 py-1 rounded-full">221.7GB</span>
+                            <span class="platform-tag px-3 py-1 rounded-full">经典游戏</span><span class="platform-tag px-3 py-1 rounded-full">手机游戏</span>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="https://pan.quark.cn/s/3cc61194d40e">
+                                <i class="fas fa-copy mr-2"></i>复制链接
+                            </button>
+                            <a href="https://pan.quark.cn/s/3cc61194d40e" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
+                                <i class="fas fa-external-link-alt mr-2"></i>立即查看
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="mt-12 text-center text-gray-600">
+            <p class="text-sm">
+                <a href="/collections-static/collections.html" class="text-blue-600 hover:underline">← 返回资源集合页面</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 复制功能
+        document.querySelectorAll('.copy-link-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(btn.dataset.link);
+                btn.innerHTML = '<i class="fas fa-check mr-1"></i>已复制';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy mr-1"></i>复制链接';
+                }, 2000);
+            });
+        });
+
+
+        document.querySelectorAll('.copy-password-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(btn.dataset.password);
+                btn.innerHTML = '<i class="fas fa-check mr-1"></i>已复制';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-key mr-1"></i>复制密码';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

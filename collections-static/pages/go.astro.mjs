@@ -1,4 +1,4 @@
-import { e as createComponent, f as createAstro, r as renderTemplate, k as defineScriptVars, l as renderHead } from '../chunks/astro/server_9n8BqP71.mjs';
+import { e as createComponent, f as createAstro, r as renderTemplate, n as defineScriptVars, o as renderHead } from '../chunks/astro/server_CzBadtu_.mjs';
 import 'kleur/colors';
 import 'clsx';
 /* empty css                              */
@@ -12,7 +12,7 @@ const $$Astro = createAstro();
 const $$Go = createComponent(($$result, $$props, $$slots) => {
   const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
   Astro2.self = $$Go;
-  const { url } = Astro2.request.query;
+  const url = Astro2.url.searchParams.get("url");
   if (!url) {
     return new Response("URL not provided", { status: 400 });
   }
