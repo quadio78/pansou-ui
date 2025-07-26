@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "dev:auto": "node dev-auto.js",
-    "build": "astro build && node build-script.js",
+    "build": "astro build && node build-script.js && node generate-sitemap.js",
     "preview": "astro preview",
     "astro": "astro",
     "sync": "node sync-to-json.js",
