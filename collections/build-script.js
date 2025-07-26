@@ -589,28 +589,28 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
     const resourcesHtml = collection.resources.map((resource, index) => {
         const platform = platformMap[resource.platform] || platformMap.others;
         return `
-            <div class="ios-card p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-${(index % 5) + 1}">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="platform-icon ${platform.color} flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center shadow-md">
-                        <i class="fas ${platform.icon} text-2xl"></i>
+            <div class="ios-card p-4 md:p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-${(index % 5) + 1}">
+                <div class="flex flex-col md:flex-row gap-4 md:gap-6">
+                    <div class="platform-icon ${platform.color} flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fas ${platform.icon} text-xl md:text-2xl"></i>
                     </div>
                     <div class="flex-1">
-                        <h4 class="font-bold text-ios-dark mb-2 text-xl">${resource.name}</h4>
-                        <p class="text-ios-gray mb-4 leading-relaxed">${resource.description || ''}</p>
+                        <h4 class="font-bold text-ios-dark mb-2 text-lg md:text-xl">${resource.name}</h4>
+                        <p class="text-ios-gray mb-4 leading-relaxed text-sm md:text-base">${resource.description || ''}</p>
                         <div class="flex flex-wrap gap-2 mb-4">
                             <span class="platform-tag px-3 py-1 rounded-full">${platform.name}</span>
                             ${resource.size ? `<span class="platform-tag px-3 py-1 rounded-full">${resource.size}</span>` : ''}
                             ${resource.tags.map(tag => `<span class="platform-tag px-3 py-1 rounded-full">${tag}</span>`).join('')}
                         </div>
-                        <div class="flex flex-wrap gap-3">
-                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="${resource.link}">
+                        <div class="flex flex-wrap gap-2 md:gap-3">
+                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base copy-link-btn" data-link="${resource.link}">
                                 <i class="fas fa-copy mr-2"></i>复制链接
                             </button>
-                            <a href="${resource.link}" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
+                            <a href="${resource.link}" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base">
                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
                             </a>
                             ${resource.password ? `
-                                <button class="text-white bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-password-btn" data-password="${resource.password}">
+                                <button class="text-white bg-purple-500 hover:bg-purple-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base copy-password-btn" data-password="${resource.password}">
                                     <i class="fas fa-key mr-2"></i>复制密码
                                 </button>
                             ` : ''}
@@ -701,21 +701,21 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
             <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <img src="/collections-static/logo.png" alt="盘搜 Logo" class="w-full h-full object-contain">
             </div>
-            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">资源集合</h1>
-            <p class="text-gray-600 text-lg">精心整理的优质资源合集,陆续更新中...</p>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">资源集合</h1>
+            <p class="text-gray-600 text-base md:text-lg">精心整理的优质资源合集,陆续更新中...</p>
             <div class="mt-4">
                 <a href="/collections-static/collections.html" class="text-blue-600 hover:underline text-sm">← 返回资源集合页面</a>
             </div>
         </div>
 
         <!-- 集合详情 -->
-        <div class="ios-card p-8 mb-8 fade-in">
+        <div class="ios-card p-4 md:p-8 mb-8 fade-in hidden md:block">
             <div class="max-w-4xl mx-auto">
                 <!-- 集合封面 -->
                 <div class="mb-8">
                     <div class="relative overflow-hidden rounded-2xl shadow-xl transform transition-transform hover:scale-105 duration-300">
                         ${collection.cover ? `
-                            <div class="relative h-80 md:h-96">
+                            <div class="relative h-48 md:h-80">
                                 <img
                                     src="/collections-static${collection.cover}"
                                     alt="${collection.title}"
@@ -729,10 +729,10 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
                                 </div>
                             </div>
                         ` : `
-                            <div class="h-80 md:h-96 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
-                                <div class="text-center text-white">
-                                    <i class="fas ${category?.icon || 'fa-folder'} text-6xl mb-4"></i>
-                                    <h2 class="text-3xl font-bold">${collection.title}</h2>
+                            <div class="h-48 md:h-80 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
+                                <div class="text-center text-white p-4">
+                                    <i class="fas ${category?.icon || 'fa-folder'} text-5xl md:text-6xl mb-4"></i>
+                                    <h2 class="text-2xl md:text-3xl font-bold">${collection.title}</h2>
                                 </div>
                             </div>
                         `}
@@ -742,13 +742,13 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
                 <!-- 集合信息 -->
                 <div class="text-center mb-8 fade-in">
                     <div class="flex flex-wrap items-center justify-center gap-3 mb-4">
-                        <h2 class="text-3xl md:text-4xl font-bold text-ios-dark">${collection.title}</h2>
+                        <h2 class="text-2xl md:text-4xl font-bold text-ios-dark">${collection.title}</h2>
                         <span class="flex items-center ${category?.color || 'bg-gray-500'} text-sm px-4 py-2 rounded-full shadow-md">
                             <i class="fas ${category?.icon || 'fa-folder'} mr-2"></i>
                             ${category?.name || '未知分类'}
                         </span>
                     </div>
-                    <p class="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto mb-6 leading-relaxed">${collection.description}</p>
+                    <p class="text-gray-600 text-base md:text-xl max-w-3xl mx-auto mb-6 leading-relaxed">${collection.description}</p>
                     
                     <!-- 标签 -->
                     <div class="flex flex-wrap justify-center gap-3 mb-6">
@@ -773,8 +773,8 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
         <!-- 资源列表 -->
         <div class="mb-12 fade-in">
             <div class="max-w-4xl mx-auto">
-                <h3 class="text-3xl font-bold text-ios-dark mb-8 text-center relative">
-                    <span class="relative z-10 px-4 bg-white">资源列表</span>
+                <h3 class="text-2xl md:text-3xl font-bold text-ios-dark mb-8 text-center relative">
+                    <span class="relative z-10 px-4 bg-gray-50">资源列表</span>
                     <div class="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
                 </h3>
                 <div class="space-y-6">

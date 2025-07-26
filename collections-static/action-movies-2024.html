@@ -70,21 +70,21 @@
             <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <img src="/collections-static/logo.png" alt="盘搜 Logo" class="w-full h-full object-contain">
             </div>
-            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">资源集合</h1>
-            <p class="text-gray-600 text-lg">精心整理的优质资源合集,陆续更新中...</p>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">资源集合</h1>
+            <p class="text-gray-600 text-base md:text-lg">精心整理的优质资源合集,陆续更新中...</p>
             <div class="mt-4">
                 <a href="/collections-static/collections.html" class="text-blue-600 hover:underline text-sm">← 返回资源集合页面</a>
             </div>
         </div>
 
         <!-- 集合详情 -->
-        <div class="ios-card p-8 mb-8 fade-in">
+        <div class="ios-card p-4 md:p-8 mb-8 fade-in hidden md:block">
             <div class="max-w-4xl mx-auto">
                 <!-- 集合封面 -->
                 <div class="mb-8">
                     <div class="relative overflow-hidden rounded-2xl shadow-xl transform transition-transform hover:scale-105 duration-300">
                         
-                            <div class="relative h-80 md:h-96">
+                            <div class="relative h-48 md:h-80">
                                 <img
                                     src="/collections-static/images/movie.png"
                                     alt="电影精选"
@@ -104,13 +104,13 @@
                 <!-- 集合信息 -->
                 <div class="text-center mb-8 fade-in">
                     <div class="flex flex-wrap items-center justify-center gap-3 mb-4">
-                        <h2 class="text-3xl md:text-4xl font-bold text-ios-dark">电影精选</h2>
+                        <h2 class="text-2xl md:text-4xl font-bold text-ios-dark">电影精选</h2>
                         <span class="flex items-center bg-red-500 text-sm px-4 py-2 rounded-full shadow-md">
                             <i class="fas fa-film mr-2"></i>
                             电影合集
                         </span>
                     </div>
-                    <p class="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto mb-6 leading-relaxed">精选的电影大片，包括好莱坞大片和各国佳作</p>
+                    <p class="text-gray-600 text-base md:text-xl max-w-3xl mx-auto mb-6 leading-relaxed">精选的电影大片，包括好莱坞大片和各国佳作</p>
                     
                     <!-- 标签 -->
                     <div class="flex flex-wrap justify-center gap-3 mb-6">
@@ -151,30 +151,30 @@
         <!-- 资源列表 -->
         <div class="mb-12 fade-in">
             <div class="max-w-4xl mx-auto">
-                <h3 class="text-3xl font-bold text-ios-dark mb-8 text-center relative">
-                    <span class="relative z-10 px-4 bg-white">资源列表</span>
+                <h3 class="text-2xl md:text-3xl font-bold text-ios-dark mb-8 text-center relative">
+                    <span class="relative z-10 px-4 bg-gray-50">资源列表</span>
                     <div class="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
                 </h3>
                 <div class="space-y-6">
                     
-            <div class="ios-card p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-1">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="platform-icon bg-indigo-500 flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center shadow-md">
-                        <i class="fas fa-search text-2xl"></i>
+            <div class="ios-card p-4 md:p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-1">
+                <div class="flex flex-col md:flex-row gap-4 md:gap-6">
+                    <div class="platform-icon bg-indigo-500 flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fas fa-search text-xl md:text-2xl"></i>
                     </div>
                     <div class="flex-1">
-                        <h4 class="font-bold text-ios-dark mb-2 text-xl">周星驰电影33部</h4>
-                        <p class="text-ios-gray mb-4 leading-relaxed">周星驰电影</p>
+                        <h4 class="font-bold text-ios-dark mb-2 text-lg md:text-xl">周星驰电影33部</h4>
+                        <p class="text-ios-gray mb-4 leading-relaxed text-sm md:text-base">周星驰电影</p>
                         <div class="flex flex-wrap gap-2 mb-4">
                             <span class="platform-tag px-3 py-1 rounded-full">夸克网盘</span>
                             
                             <span class="platform-tag px-3 py-1 rounded-full">周星驰</span><span class="platform-tag px-3 py-1 rounded-full">喜剧</span><span class="platform-tag px-3 py-1 rounded-full">无厘头</span><span class="platform-tag px-3 py-1 rounded-full">动作</span><span class="platform-tag px-3 py-1 rounded-full">高清</span>
                         </div>
-                        <div class="flex flex-wrap gap-3">
-                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="https://pan.quark.cn/s/60c159bfa831">
+                        <div class="flex flex-wrap gap-2 md:gap-3">
+                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base copy-link-btn" data-link="https://pan.quark.cn/s/60c159bfa831">
                                 <i class="fas fa-copy mr-2"></i>复制链接
                             </button>
-                            <a href="https://pan.quark.cn/s/60c159bfa831" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
+                            <a href="https://pan.quark.cn/s/60c159bfa831" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base">
                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
                             </a>
                             
@@ -183,24 +183,24 @@
                 </div>
             </div>
         
-            <div class="ios-card p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-2">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="platform-icon bg-indigo-500 flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center shadow-md">
-                        <i class="fas fa-search text-2xl"></i>
+            <div class="ios-card p-4 md:p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-2">
+                <div class="flex flex-col md:flex-row gap-4 md:gap-6">
+                    <div class="platform-icon bg-indigo-500 flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fas fa-search text-xl md:text-2xl"></i>
                     </div>
                     <div class="flex-1">
-                        <h4 class="font-bold text-ios-dark mb-2 text-xl">宫崎骏+吉卜力工作室 30部作品总集</h4>
-                        <p class="text-ios-gray mb-4 leading-relaxed">【4K&蓝光原盘REMUX】【杜比视界&杜比&次世代国粤日多音轨】简繁日英双语特效多字幕</p>
+                        <h4 class="font-bold text-ios-dark mb-2 text-lg md:text-xl">宫崎骏+吉卜力工作室 30部作品总集</h4>
+                        <p class="text-ios-gray mb-4 leading-relaxed text-sm md:text-base">【4K&蓝光原盘REMUX】【杜比视界&杜比&次世代国粤日多音轨】简繁日英双语特效多字幕</p>
                         <div class="flex flex-wrap gap-2 mb-4">
                             <span class="platform-tag px-3 py-1 rounded-full">夸克网盘</span>
                             <span class="platform-tag px-3 py-1 rounded-full">1T</span>
                             <span class="platform-tag px-3 py-1 rounded-full">喜剧</span><span class="platform-tag px-3 py-1 rounded-full">爱情</span><span class="platform-tag px-3 py-1 rounded-full">动作</span><span class="platform-tag px-3 py-1 rounded-full">奇幻</span><span class="platform-tag px-3 py-1 rounded-full">冒险</span>
                         </div>
-                        <div class="flex flex-wrap gap-3">
-                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="https://pan.quark.cn/s/d82372900921">
+                        <div class="flex flex-wrap gap-2 md:gap-3">
+                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base copy-link-btn" data-link="https://pan.quark.cn/s/d82372900921">
                                 <i class="fas fa-copy mr-2"></i>复制链接
                             </button>
-                            <a href="https://pan.quark.cn/s/d82372900921" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
+                            <a href="https://pan.quark.cn/s/d82372900921" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base">
                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
                             </a>
                             
@@ -209,24 +209,24 @@
                 </div>
             </div>
         
-            <div class="ios-card p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-3">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <div class="platform-icon bg-indigo-500 flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center shadow-md">
-                        <i class="fas fa-search text-2xl"></i>
+            <div class="ios-card p-4 md:p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-3">
+                <div class="flex flex-col md:flex-row gap-4 md:gap-6">
+                    <div class="platform-icon bg-indigo-500 flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fas fa-search text-xl md:text-2xl"></i>
                     </div>
                     <div class="flex-1">
-                        <h4 class="font-bold text-ios-dark mb-2 text-xl">成龙经典电影合集68部</h4>
-                        <p class="text-ios-gray mb-4 leading-relaxed">成龙经典电影合集</p>
+                        <h4 class="font-bold text-ios-dark mb-2 text-lg md:text-xl">成龙经典电影合集68部</h4>
+                        <p class="text-ios-gray mb-4 leading-relaxed text-sm md:text-base">成龙经典电影合集</p>
                         <div class="flex flex-wrap gap-2 mb-4">
                             <span class="platform-tag px-3 py-1 rounded-full">夸克网盘</span>
                             
                             <span class="platform-tag px-3 py-1 rounded-full">1080P蓝光</span><span class="platform-tag px-3 py-1 rounded-full">国粤双语音轨</span><span class="platform-tag px-3 py-1 rounded-full">动作</span><span class="platform-tag px-3 py-1 rounded-full">爱情</span>
                         </div>
-                        <div class="flex flex-wrap gap-3">
-                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="https://pan.quark.cn/s/217a7822c439">
+                        <div class="flex flex-wrap gap-2 md:gap-3">
+                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base copy-link-btn" data-link="https://pan.quark.cn/s/217a7822c439">
                                 <i class="fas fa-copy mr-2"></i>复制链接
                             </button>
-                            <a href="https://pan.quark.cn/s/217a7822c439" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
+                            <a href="https://pan.quark.cn/s/217a7822c439" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base">
                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
                             </a>
                             

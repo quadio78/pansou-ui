@@ -41,25 +41,25 @@ const category = categories.find(cat => cat.id === collection.category);
 <Layout title={`${collection.title} - 资源集合 - 盘搜`}>
     <div class="max-w-6xl mx-auto">
         <!-- 标题区域 -->
-        <div class="text-center mb-10 fade-in">
-            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
+        <div class="text-center mb-6 fade-in">
+            <div class="w-12 h-12 flex items-center justify-center mx-auto mb-4">
                 <img src="/logo.png" alt="盘搜 Logo" class="w-full h-full object-contain">
             </div>
-            <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-ios-blue to-blue-500 bg-clip-text text-transparent">资源集合</h1>
-            <p class="text-ios-gray text-lg">精心整理的优质资源合集,陆续更新中...</p>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-ios-blue to-blue-500 bg-clip-text text-transparent">资源集合</h1>
+            <p class="text-ios-gray text-base md:text-lg">精心整理的优质资源合集,陆续更新中...</p>
             <div class="mt-4">
                 <a href="/collections" class="text-ios-blue hover:underline text-sm">← 返回资源集合页面</a>
             </div>
         </div>
 
         <!-- 集合详情 -->
-        <div class="ios-card p-8 mb-8 fade-in">
+        <div class="ios-card p-8 mb-8 fade-in hidden md:block">
             <div class="max-w-4xl mx-auto">
                 <!-- 集合封面 -->
                 <div class="mb-8">
                     <div class="relative overflow-hidden rounded-2xl shadow-xl transform transition-transform hover:scale-105 duration-300">
                         {collection.cover ? (
-                            <div class="relative h-80 md:h-96">
+                            <div class="relative h-48 md:h-96">
                                 <img
                                     src={collection.cover}
                                     alt={collection.title}
@@ -132,30 +132,30 @@ const category = categories.find(cat => cat.id === collection.category);
                     {collection.resources.map((resource, index) => {
                         const platform = platformMap[resource.platform] || platformMap.others;
                         return (
-                            <div key={index} class={`ios-card p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-${(index % 5) + 1}`}>
+                            <div key={index} class={`ios-card p-4 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-${(index % 5) + 1}`}>
                                 <div class="flex flex-col md:flex-row gap-6">
-                                    <div class={`platform-icon ${platform.color} flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center shadow-md`}>
+                                    <div class={`platform-icon ${platform.color} flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center shadow-md`}>
                                         <i class={`fas ${platform.icon} text-2xl`}></i>
                                     </div>
                                     <div class="flex-1">
                                         <h4 class="font-bold text-ios-dark mb-2 text-xl">{resource.name}</h4>
                                         <p class="text-ios-gray mb-4 leading-relaxed">{resource.description || ''}</p>
                                         <div class="flex flex-wrap gap-2 mb-4">
-                                            <span class="platform-tag px-3 py-1 rounded-full">{platform.name}</span>
-                                            {resource.size && <span class="platform-tag px-3 py-1 rounded-full">{resource.size}</span>}
+                                            <span class="platform-tag px-2 py-0.5 rounded-full">{platform.name}</span>
+                                            {resource.size && <span class="platform-tag px-2 py-0.5 rounded-full">{resource.size}</span>}
                                             {resource.tags.map((tag, tagIndex) => (
-                                                <span key={tagIndex} class="platform-tag px-3 py-1 rounded-full">{tag}</span>
+                                                <span key={tagIndex} class="platform-tag px-2 py-0.5 rounded-full">{tag}</span>
                                             ))}
                                         </div>
-                                        <div class="flex flex-wrap gap-3">
-                                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link={resource.link}>
+                                        <div class="flex flex-wrap gap-2">
+                                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1.5 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link={resource.link}>
                                                 <i class="fas fa-copy mr-2"></i>复制链接
                                             </button>
-                                            <a href={resource.link} target="_blank" rel="noopener noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
+                                            <a href={resource.link} target="_blank" rel="noopener noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 rounded-lg flex items-center transition-colors duration-200">
                                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
                                             </a>
                                             {resource.password && (
-                                                <button class="text-white bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-password-btn" data-password={resource.password}>
+                                                <button class="text-white bg-purple-500 hover:bg-purple-600 px-3 py-1.5 rounded-lg flex items-center transition-colors duration-200 copy-password-btn" data-password={resource.password}>
                                                     <i class="fas fa-key mr-2"></i>复制密码
                                                 </button>
                                             )}
