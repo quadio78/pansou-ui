@@ -10,10 +10,11 @@ const clientDir = path.join(__dirname, 'dist', 'client');
 const serverDir = path.join(__dirname, 'dist', 'server');
 const targetDir = path.join(__dirname, '..', 'collections-static');
 
-// 确保目标目录存在
-if (!fs.existsSync(targetDir)) {
-    fs.mkdirSync(targetDir, { recursive: true });
+// 清理并重建目标目录
+if (fs.existsSync(targetDir)) {
+    fs.rmSync(targetDir, { recursive: true, force: true });
 }
+fs.mkdirSync(targetDir, { recursive: true });
 
 // 由于使用SSR，我们需要复制服务器文件到collections-static
 // 复制服务器端文件
