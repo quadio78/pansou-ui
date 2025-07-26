@@ -606,7 +606,7 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
                             <button class="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200 copy-link-btn" data-link="${resource.link}">
                                 <i class="fas fa-copy mr-2"></i>复制链接
                             </button>
-                            <a href="${resource.link}" target="_blank" rel="noopener noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
+                            <a href="${resource.link}" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
                                 <i class="fas fa-external-link-alt mr-2"></i>立即查看
                             </a>
                             ${resource.password ? `
