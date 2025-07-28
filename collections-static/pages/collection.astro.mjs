@@ -1,6 +1,6 @@
 import { e as createComponent, f as createAstro, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute, l as renderScript } from '../chunks/astro/server_CzBadtu_.mjs';
 import 'kleur/colors';
-import { c as collectionsData, $ as $$Layout } from '../chunks/collections_BW-dVHrS.mjs';
+import { c as collectionsData, $ as $$Layout } from '../chunks/collections_BDcKvR1P.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Astro = createAstro();
@@ -36,10 +36,10 @@ const $$Collection = createComponent(($$result, $$props, $$slots) => {
 </button> <a${addAttribute(resource.link, "href")} target="_blank" rel="noopener noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 rounded-lg flex items-center transition-colors duration-200"> <i class="fas fa-external-link-alt mr-2"></i>立即查看
 </a> ${resource.password && renderTemplate`<button class="text-white bg-purple-500 hover:bg-purple-600 px-3 py-1.5 rounded-lg flex items-center transition-colors duration-200 copy-password-btn"${addAttribute(resource.password, "data-password")}> <i class="fas fa-key mr-2"></i>复制密码
 </button>`} </div> </div> </div> </div>`;
-  })} </div> </div> </div> <!-- 页脚 --> <div class="mt-12 text-center text-ios-gray"> <p class="text-sm"> <a href="/collections" class="text-ios-blue hover:underline">← 返回资源集合页面</a> </p> </div> </div> ${renderScript($$result2, "D:/vhost/pansou/collections/src/pages/collection.astro?astro&type=script&index=0&lang.ts")} ` })}`;
-}, "D:/vhost/pansou/collections/src/pages/collection.astro", void 0);
+  })} </div> </div> </div> <!-- 页脚 --> <div class="mt-12 text-center text-ios-gray"> <p class="text-sm"> <a href="/collections" class="text-ios-blue hover:underline">← 返回资源集合页面</a> </p> </div> </div> ${renderScript($$result2, "/Users/hua/Documents/vhost/pansou-ui/collections/src/pages/collection.astro?astro&type=script&index=0&lang.ts")} ` })}`;
+}, "/Users/hua/Documents/vhost/pansou-ui/collections/src/pages/collection.astro", void 0);
 
-const $$file = "D:/vhost/pansou/collections/src/pages/collection.astro";
+const $$file = "/Users/hua/Documents/vhost/pansou-ui/collections/src/pages/collection.astro";
 const $$url = "/collection";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

@@ -53,7 +53,7 @@
       "created": "2025-07-23T00:00:00.000Z",
       "updated": "2025-07-23T00:00:00.000Z",
       "resourceCount": 3,
-      "views": 0,
+      "views": 1,
       "resources": [
         {
           "name": "周星驰电影33部",
@@ -291,7 +291,7 @@
       "created": "2025-07-24T00:00:00.000Z",
       "updated": "2025-07-24T00:00:00.000Z",
       "resourceCount": 6,
-      "views": 0,
+      "views": 1,
       "resources": [
         {
           "name": "凡人修仙传",
@@ -387,7 +387,7 @@
       "created": "2025-07-23T00:00:00.000Z",
       "updated": "2025-07-23T00:00:00.000Z",
       "resourceCount": 2,
-      "views": 0,
+      "views": 1,
       "resources": [
         {
           "name": "网易云评论超10W+的歌曲合集800多首",
@@ -574,7 +574,7 @@
       "created": "2025-07-23T00:00:00.000Z",
       "updated": "2025-07-23T00:00:00.000Z",
       "resourceCount": 2,
-      "views": 0,
+      "views": 1,
       "resources": [
         {
           "name": "编程开发教程合集",
@@ -645,6 +645,79 @@
             "手机游戏"
           ],
           "description": "CD Projekt RED开发的开放世界RPG游戏"
+        }
+      ]
+    },
+    {
+      "id": "zombie-movies",
+      "title": "丧尸电影",
+      "category": "movies",
+      "description": "**持续更新全球丧尸影视资源**",
+      "cover": "https://img.jkai.de/2025/07/c02e857688ad54ec6e39c35b9d24d6e0.png",
+      "tags": [
+        "丧尸",
+        "合集",
+        "恐怖"
+      ],
+      "created": "2025-07-28T00:00:00.000Z",
+      "updated": "2025-07-28T00:00:00.000Z",
+      "resourceCount": 4,
+      "views": 0,
+      "resources": [
+        {
+          "name": "生化危机1-6合集",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1YQToDnHxkqc3AzZbbLNKHg?pwd=umy2",
+          "password": "umy2",
+          "size": "全集",
+          "tags": [
+            "生化危机",
+            "丧尸",
+            "经典"
+          ],
+          "description": "《生化危机1-6合集》包含了该系列六部经典影片，构建出一个震撼人心的丧尸末世世界。"
+        },
+        {
+          "name": "我是传奇 (2007) ",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1QAsPF1lMVFd2W_HVArNF_Q?pwd=kc5n",
+          "password": "kc5n",
+          "size": "46G",
+          "tags": [
+            "4K原盘REMUX",
+            "内封字幕",
+            "剧情",
+            " 科幻"
+          ],
+          "description": "2012年，人类被不知名病毒感染，纽约成为一座空城。Robert Neville是为军方服务的科学家，也是对病毒有免疫力的幸存者。白天，他带着狗Sam在街道上寻找食物，用广播寻找幸存者，在实验室里研究治愈病毒的方法；晚上，他只能躲在屋子里，因为那些感染病毒而没有死亡的人们，成为了“夜魔”只能夜晚出来活动，丧失理智，会攻击所有的人。某天，Sam也感染病毒死去，Robert Neville陷入了前所未有的孤独。当他准备和“夜魔”们同归于尽的时候，另外一个幸存者Anna救了他。Anna相信山上的隔离区还有幸存者，但是固执的Robert Neville却坚持守在纽约。又一个晚上，“夜魔”攻击Robert Neville的住所，此时他的研究已经获得成功，但是只有坚持到天亮，人类才能得以延存。"
+        },
+        {
+          "name": "僵尸肖恩 (2004)",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1uzbPA3NrC-N15g9tB7_Luw?pwd=7gfb",
+          "password": "7gfb",
+          "size": "49.7G",
+          "tags": [
+            "僵尸肖恩",
+            "恐怖",
+            " 喜剧"
+          ],
+          "description": "肖恩（西蒙·佩吉 Simon Pegg 饰）事业不如意，爱情也不怎么顺心。认识了一帮同样游手好闲的朋友，整天和他们厮混，包括皮特，和只会打机和讨人厌的艾德。难得肖恩为了女朋友振作一次，却遭到同事嘲笑，女友也不能会意，肖恩只有继续和朋友醉酒纵乐。 但这天整个城市却有了翻天覆地的变化。僵尸入侵了，只要是被他们咬到的人，都会随之变成僵尸。而肖恩正和艾德在酒吧里豪饮，却发现陷入僵尸的重重包围中。现在肖恩必须拿出英雄气概，去捍卫家人朋友。"
+        },
+        {
+          "name": " 《僵尸国度 第一季~第五季》",
+          "platform": "quark",
+          "link": "https://pan.quark.cn/s/91d0807b8826",
+          "password": "",
+          "size": "全集",
+          "tags": [
+            "丧尸国度",
+            "剧情",
+            " 动作",
+            "科幻",
+            "恐怖"
+          ],
+          "description": "近未来，名为ZN1的神秘病毒蔓延全球，导致成千上万的人变成嗜血如命的丧尸，而被他们咬过的人则很快受到感染成为丧尸的同类。美国政府彻底瘫痪，人类面临灭亡的厄运。在上纽约一处临时聚集点，国民警卫队负责人查尔斯·加内特（Tom Everett Scott 饰）和搭档罗伯塔·沃伦（Kellita Smith 饰）迎来了意外的访客。来者名叫马克·哈蒙德（Harold Perrineau 饰），自称是三角洲部队的中尉，他请求加内特等人协助护送名叫摩菲（Keith Allan 饰）的男子前往加州。摩菲曾先后被八只丧尸袭击，但正因为他注射了ZN1病毒抗体而安然无恙活了下来。作为人类最后的希望，临时政府要求无论如何保住摩菲的性命。旅途中哈蒙德遇袭身亡，而加内特则承担起护送的重任，和身边的幸存者们踏上命运多舛的征程…"
         }
       ]
     }

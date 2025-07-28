@@ -181,8 +181,10 @@ function generateCollectionsHTML(collectionsData) {
     // 生成集合卡片HTML
     const collectionsHTML = collections.map(collection => {
         const category = categories.find(cat => cat.id === collection.category);
-        const coverImage = collection.cover ? 
-            `/collections-static/images/${path.basename(collection.cover)}` : 
+        // 检查封面是否为外部URL
+        const isExternalUrl = collection.cover && (collection.cover.startsWith('http://') || collection.cover.startsWith('https://'));
+        const coverImage = collection.cover ?
+            (isExternalUrl ? collection.cover : `/collections-static/images/${path.basename(collection.cover)}`) :
             '';
         
         return `
