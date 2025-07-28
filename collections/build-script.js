@@ -517,14 +517,24 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
         `;
     }).join('');
 
+    // 提取所有资源名称作为额外的keywords
+    const resourceNames = collection.resources.map(resource => resource.name);
+    // 合并集合标签和资源名称，去除重复项
+    const allKeywords = [...new Set([...collection.tags, ...resourceNames])].join(', ');
+    
+    // 创建更详细的description，包含资源数量和部分资源名称
+    const resourceCount = collection.resources.length;
+    const sampleResources = collection.resources.slice(0, 3).map(resource => resource.name);
+    const detailedDescription = `${collection.description} 包含${resourceCount}个资源，如：${sampleResources.join(', ')}等。`;
+
     const htmlContent = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${collection.title} - 盘搜</title>
-    <meta name="description" content="${collection.description}">
-    <meta name="keywords" content="${collection.tags.join(', ')}">
+    <meta name="description" content="${detailedDescription}">
+    <meta name="keywords" content="${allKeywords}">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DQW3NHY60Z"><\/script>
     <script>
