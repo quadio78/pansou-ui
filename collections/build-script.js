@@ -517,10 +517,15 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
         `;
     }).join('');
 
-    // 提取所有资源名称作为额外的keywords
-    const resourceNames = collection.resources.map(resource => resource.name);
-    // 合并集合标签和资源名称，去除重复项
-    const allKeywords = [...new Set([...collection.tags, ...resourceNames])].join(', ');
+    // 提取资源名称作为额外的keywords，但限制数量以避免过度优化
+    const resourceNames = collection.resources
+        .slice(0, 5) // 限制最多使用前5个资源名称
+        .map(resource => resource.name);
+    
+    // 合并集合标签和部分资源名称，去除重复项，限制总数量
+    const allKeywords = [...new Set([...collection.tags, ...resourceNames])]
+        .slice(0, 15) // 限制总keywords数量不超过15个
+        .join(', ');
     
     // 创建更详细的description，包含资源数量和部分资源名称
     const resourceCount = collection.resources.length;
