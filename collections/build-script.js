@@ -227,6 +227,10 @@ function generateCollectionsHTML(collectionsData) {
                     <!-- 统计信息 -->
                     <div class="flex items-center justify-between text-sm text-gray-600">
                         <span>
+                            <i class="fas fa-file-alt mr-1"></i>
+                            ${collection.resourceCount} 个资源
+                        </span>
+                        <span>
                             <i class="fas fa-eye mr-1"></i>
                             <span class="view-count">${collection.views || 0}</span> 次访问
                         </span>

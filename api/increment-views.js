@@ -18,7 +18,8 @@ export default async function handler(request, response) {
         }
 
         // --- IP-based rate limiting ---
-        const ip = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
+        const forwarded = request.headers['x-forwarded-for'];
+        const ip = typeof forwarded === 'string' ? forwarded.split(',')[0]?.trim() : request.socket.remoteAddress;
         const key = `view:${collectionId}:${ip}`;
         const lastViewTimestamp = await kv.get(key);
 
