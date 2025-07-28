@@ -21,10 +21,14 @@ export default async function handler(request, response) {
         const forwarded = request.headers['x-forwarded-for'];
         const ip = typeof forwarded === 'string' ? forwarded.split(',')[0]?.trim() : request.socket.remoteAddress;
         const key = `view:${collectionId}:${ip}`;
+        console.log(`DEBUG: IP extracted: ${ip}`);
+        console.log(`DEBUG: KV key: ${key}`);
         const lastViewTimestamp = await kv.get(key);
+        console.log(`DEBUG: lastViewTimestamp from KV:`, lastViewTimestamp);
 
         const now = Date.now();
         if (lastViewTimestamp && (now - lastViewTimestamp < COOLDOWN_PERIOD)) {
+            console.log(`DEBUG: View blocked by cooldown. Last view was at: ${new Date(lastViewTimestamp).toISOString()}`);
             return response.status(200).json({ message: 'View already recorded recently.' });
         }
         // --- End of IP-based rate limiting ---
@@ -50,7 +54,9 @@ export default async function handler(request, response) {
         await fs.writeFile(filePath, newFileContent, 'utf-8');
 
         // Update the timestamp in KV store
+        console.log(`DEBUG: About to set new timestamp in KV: ${now}`);
         await kv.set(key, now, { ex: COOLDOWN_PERIOD / 1000 }); // Set with expiration
+        console.log(`DEBUG: KV timestamp set successfully.`);
 
         return response.status(200).json({ message: 'View count incremented.', views: data.views });
 
