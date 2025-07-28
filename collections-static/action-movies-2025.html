@@ -447,13 +447,25 @@
             .then(response => response.json())
             .then(data => {
                 if (data && data.views !== undefined) {
+                    // 成功增加计数，直接更新显示
                     const viewCountSpan = document.getElementById('view-count');
                     if (viewCountSpan) {
                         viewCountSpan.textContent = data.views;
                     }
+                } else {
+                    // 被速率限制阻止，需要主动获取当前计数
+                    return fetch('/api/get-all-views')
+                        .then(response => response.json())
+                        .then(allViews => {
+                            const currentViews = allViews['action-movies-2025'] || 0;
+                            const viewCountSpan = document.getElementById('view-count');
+                            if (viewCountSpan) {
+                                viewCountSpan.textContent = currentViews;
+                            }
+                        });
                 }
             })
-            .catch(error => console.error('Error incrementing view count:', error));
+            .catch(error => console.error('Error incrementing/viewing view count:', error));
         });
     </script>
 </body>
