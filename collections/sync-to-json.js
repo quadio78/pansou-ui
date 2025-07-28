@@ -97,6 +97,7 @@ function readCollections() {
       created: frontmatter.created || new Date().toISOString().split('T')[0],
       updated: frontmatter.updated || new Date().toISOString().split('T')[0],
       resourceCount: resources.length,
+      views: frontmatter.views || 0,
       resources: resources
     };
     

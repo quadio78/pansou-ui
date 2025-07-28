@@ -120,6 +120,10 @@ const category = categories.find(cat => cat.id === collection.category);
                             <i class="fas fa-clock text-green-500 mr-2 text-xl"></i>
                             <span class="font-semibold text-lg">更新于 {new Date(collection.updated).toLocaleDateString('zh-CN')}</span>
                         </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-eye text-purple-500 mr-2 text-xl"></i>
+                            <span class="font-semibold text-lg" id="view-count">{collection.views || 0}</span> 次访问
+                        </div>
                     </div>
                 </div>
             </div>
@@ -182,6 +186,26 @@ const category = categories.find(cat => cat.id === collection.category);
     </div>
 
     <script>
+       document.addEventListener('DOMContentLoaded', () => {
+           // 增加访问次数
+           fetch('/api/increment-views', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({ collectionId: '{collection.id}' }),
+           })
+           .then(response => response.json())
+           .then(data => {
+               if (data && data.views !== undefined) {
+                   const viewCountSpan = document.getElementById('view-count');
+                   if (viewCountSpan) {
+                       viewCountSpan.textContent = data.views;
+                   }
+               }
+           })
+           .catch(error => console.error('Error incrementing view count:', error));
+       });
         // 复制功能
         document.querySelectorAll('.copy-link-btn').forEach(btn => {
             btn.addEventListener('click', () => {

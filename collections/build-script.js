@@ -163,7 +163,7 @@ function generateStaticCollectionsHtml() {
 </head>
 <body>
     <p>正在跳转到资源集合页面...</p>
-    <script>window.location.href = '/';</script>
+    <script>window.location.href = '/';<\/script>
 </body>
 </html>`;
         const collectionsPath = path.join(targetDir, 'collections.html');
@@ -175,6 +175,9 @@ function generateStaticCollectionsHtml() {
 function generateCollectionsHTML(collectionsData) {
     const { categories, collections } = collectionsData;
     
+    // 默认按更新日期降序排序
+    collections.sort((a, b) => new Date(b.updated) - new Date(a.updated));
+
     // 生成集合卡片HTML
     const collectionsHTML = collections.map(collection => {
         const category = categories.find(cat => cat.id === collection.category);
@@ -183,7 +186,7 @@ function generateCollectionsHTML(collectionsData) {
             '';
         
         return `
-            <div class="ios-card collection-card p-6" data-category="${collection.category}" data-tags="${collection.tags.join(',').toLowerCase()}">
+            <div class="ios-card collection-card p-6" data-id="${collection.id}" data-category="${collection.category}" data-tags="${collection.tags.join(',').toLowerCase()}" data-views="${collection.views || 0}" data-updated="${collection.updated}" data-created="${collection.created}">
                 <!-- 集合封面 -->
                 <div class="mb-4">
                     ${coverImage ? `
@@ -224,8 +227,8 @@ function generateCollectionsHTML(collectionsData) {
                     <!-- 统计信息 -->
                     <div class="flex items-center justify-between text-sm text-gray-600">
                         <span>
-                            <i class="fas fa-file-alt mr-1"></i>
-                            ${collection.resourceCount} 个资源
+                            <i class="fas fa-eye mr-1"></i>
+                            <span class="view-count">${collection.views || 0}</span> 次访问
                         </span>
                         <span>
                             <i class="fas fa-clock mr-1"></i>
@@ -259,69 +262,34 @@ function generateCollectionsHTML(collectionsData) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>资源集合 - 盘搜</title>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DQW3NHY60Z"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DQW3NHY60Z"><\/script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-DQW3NHY60Z');
-    </script>
+    <\/script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"><\/script>
     <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
         .collection-cover {
             width: 100%;
             height: 200px;
             border-radius: 12px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        .category-tab {
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid #e5e7eb;
-            background: white;
-            color: #6b7280;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        
-        .category-tab.active,
-        .category-tab:hover {
-            background: #3b82f6;
-            color: white;
-            border-color: #3b82f6;
-        }
-        
-        .ios-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .ios-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-        
+        .category-tab { padding: 8px 16px; border-radius: 20px; border: 1px solid #e5e7eb; background: white; color: #6b7280; transition: all 0.2s; cursor: pointer; }
+        .category-tab.active, .category-tab:hover { background: #3b82f6; color: white; border-color: #3b82f6; }
+        .ios-card { background: white; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .ios-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
         .platform-icon.bg-orange-500 { background-color: #f97316; }
         .platform-icon.bg-green-500 { background-color: #22c55e; }
         .platform-icon.bg-blue-500 { background-color: #3b82f6; }
@@ -332,6 +300,16 @@ function generateCollectionsHTML(collectionsData) {
         .platform-icon.bg-indigo-500 { background-color: #6366f1; }
         .platform-icon.bg-gray-500 { background-color: #6b7280; }
         .platform-icon.bg-blue-600 { background-color: #2563eb; }
+        #sortOrder {
+           -webkit-appearance: none;
+           -moz-appearance: none;
+           appearance: none;
+           background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+           background-repeat: no-repeat;
+           background-position: right 0.75rem center;
+           background-size: 1em;
+           padding-right: 2.5rem;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -358,50 +336,36 @@ function generateCollectionsHTML(collectionsData) {
             </div>
         </div>
 
-        <!-- 搜索框 -->
-        <div class="bg-white rounded-2xl shadow-sm p-1 mb-8 max-w-2xl mx-auto">
-            <div class="flex items-center">
-                <div class="pl-4 text-gray-400">
-                    <i class="fas fa-search"></i>
-                </div>
-                <input
-                    type="text"
-                    id="collectionSearch"
-                    placeholder="搜索集合名称或标签..."
-                    class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-gray-400"
-                    autocomplete="off"
-                >
-            </div>
-        </div>
+        <!-- 筛选和排序 -->
+       <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+           <!-- 搜索框 -->
+           <div class="ios-card p-1 search-box flex-grow w-full md:w-auto">
+               <div class="flex items-center">
+                   <div class="pl-4 text-gray-400">
+                       <i class="fas fa-search"></i>
+                   </div>
+                   <input 
+                       type="text" 
+                       id="collectionSearch" 
+                       placeholder="搜索集合名称或标签..." 
+                       class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-gray-400"
+                       autocomplete="off"
+                   >
+               </div>
+           </div>
+           <!-- 排序方式 -->
+           <div class="ios-card p-1">
+               <select id="sortOrder" class="w-full md:w-auto py-4 px-4 bg-transparent outline-none text-lg text-gray-500">
+                   <option value="updated">按更新时间</option>
+                   <option value="views">按访问次数</option>
+                   <option value="created">按创建日期</option>
+               </select>
+           </div>
+       </div>
 
         <!-- 集合展示区域 -->
         <div id="collectionsContainer" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             ${collectionsHTML}
-        </div>
-
-        <!-- 集合详情模态框 -->
-        <div id="collectionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 p-4">
-            <div class="max-w-4xl mx-auto mt-8 bg-white rounded-2xl max-h-[90vh] overflow-hidden">
-                <!-- 模态框头部 -->
-                <div class="p-6 border-b border-gray-200">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 id="modalTitle" class="text-2xl font-bold text-gray-800"></h2>
-                            <p id="modalDescription" class="text-gray-600 mt-1"></p>
-                        </div>
-                        <button id="closeModal" class="text-gray-400 hover:text-gray-600 text-2xl">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- 模态框内容 -->
-                <div class="p-6 overflow-y-auto max-h-[70vh]">
-                    <div id="modalContent">
-                        <!-- 资源列表将在这里动态生成 -->
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- 页脚 -->
@@ -413,130 +377,197 @@ function generateCollectionsHTML(collectionsData) {
     </div>
 
     <script>
-        const collections = ${JSON.stringify(collections)};
-        
-        // 分类筛选功能
-        const categoryTabs = document.querySelectorAll('.category-tab');
-        const collectionCards = document.querySelectorAll('.collection-card');
-        const searchInput = document.getElementById('collectionSearch');
+        window.addEventListener('pageshow', () => {
+            fetchAllViews();
+        });
 
-        // 分类筛选
-        categoryTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                categoryTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                const category = tab.dataset.category;
-                filterCollections(category, searchInput.value);
+        document.addEventListener('DOMContentLoaded', () => {
+            const categoryTabs = document.querySelectorAll('.category-tab');
+            const searchInput = document.getElementById('collectionSearch');
+            const sortOrderSelect = document.getElementById('sortOrder');
+            const collectionsContainer = document.getElementById('collectionsContainer');
+            
+            let allCollectionCards = Array.from(document.querySelectorAll('.collection-card'));
+
+            function renderCollections(cards) {
+                collectionsContainer.innerHTML = '';
+                cards.forEach(card => {
+                    collectionsContainer.appendChild(card);
+                });
+            }
+
+            function sortCollections(cards, sortBy) {
+                return [...cards].sort((a, b) => {
+                    const aValue = a.dataset[sortBy];
+                    const bValue = b.dataset[sortBy];
+
+                    if (sortBy === 'views') {
+                        return parseInt(bValue, 10) - parseInt(aValue, 10);
+                    }
+                    return new Date(bValue) - new Date(aValue);
+                });
+            }
+
+            function filterAndSort() {
+                const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+                const searchTerm = searchInput.value.toLowerCase();
+                const sortBy = sortOrderSelect.value;
+
+                let filteredCards = allCollectionCards.filter(card => {
+                    const cardCategory = card.dataset.category;
+                    const cardTags = card.dataset.tags;
+                    const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+                    
+                    const matchesCategory = activeCategory === 'all' || cardCategory === activeCategory;
+                    const matchesSearch = !searchTerm || cardTitle.includes(searchTerm) || cardTags.includes(searchTerm);
+                    
+                    return matchesCategory && matchesSearch;
+                });
+
+                const sortedCards = sortCollections(filteredCards, sortBy);
+                renderCollections(sortedCards);
+            }
+
+            categoryTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    categoryTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    filterAndSort();
+                });
             });
-        });
 
-        // 搜索功能
-        searchInput.addEventListener('input', (e) => {
-            const activeCategory = document.querySelector('.category-tab.active').dataset.category;
-            filterCollections(activeCategory, e.target.value);
-        });
+            searchInput.addEventListener('input', filterAndSort);
+            sortOrderSelect.addEventListener('change', filterAndSort);
 
-        // 筛选函数
-        function filterCollections(category, searchTerm) {
-            collectionCards.forEach(card => {
-                const cardCategory = card.dataset.category;
-                const cardTags = card.dataset.tags;
-                const cardTitle = card.querySelector('h3').textContent.toLowerCase();
-                
-                const matchesCategory = category === 'all' || cardCategory === category;
-                const matchesSearch = !searchTerm ||
-                    cardTitle.includes(searchTerm.toLowerCase()) ||
-                    cardTags.includes(searchTerm.toLowerCase());
-                
-                if (matchesCategory && matchesSearch) {
-                    card.style.display = 'block';
-                    card.classList.add('fade-in');
-                } else {
-                    card.style.display = 'none';
+            filterAndSort(); // Initial sort and render
+
+            async function fetchAllViews() {
+                try {
+                    const response = await fetch('/api/get-all-views');
+                    if (!response.ok) return;
+                    const views = await response.json();
+                    
+                    document.querySelectorAll('.collection-card').forEach(card => {
+                        const collectionId = card.dataset.id;
+                        if (views[collectionId] !== undefined) {
+                            const viewCountSpan = card.querySelector('.view-count');
+                            if (viewCountSpan) {
+                                viewCountSpan.textContent = views[collectionId];
+                            }
+                            card.dataset.views = views[collectionId];
+                        }
+                    });
+                    filterAndSort();
+                } catch (error) {
+                    console.error('Failed to fetch all views:', error);
                 }
-            });
-        }
+            }
 
-        // 平台映射
-        const platformMap = {
-            '115': { name: '115网盘', icon: 'fa-box', color: 'bg-orange-500' },
-            '123': { name: '123网盘', icon: 'fa-hashtag', color: 'bg-green-500' },
-            'mobile': { name: '移动云盘', icon: 'fa-mobile-alt', color: 'bg-blue-500' },
-            'xunlei': { name: '迅雷云盘', icon: 'fa-bolt', color: 'bg-yellow-500' },
-            'aliyun': { name: '阿里云盘', icon: 'fa-cloud', color: 'bg-purple-500' },
-            'uc': { name: 'UC网盘', icon: 'fa-compass', color: 'bg-red-500' },
-            'tianyi': { name: '天翼云盘', icon: 'fa-cloud', color: 'bg-pink-500' },
-            'quark': { name: '夸克网盘', icon: 'fa-search', color: 'bg-indigo-500' },
-            'others': { name: '其他网盘', icon: 'fa-ellipsis-h', color: 'bg-gray-500' },
-            'baidu': { name: '百度网盘', icon: 'fa-database', color: 'bg-blue-600' }
-        };
-
-        // 查看详情功能
-        document.querySelectorAll('.view-collection-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const collectionId = btn.dataset.collectionId;
-                const collection = collections.find(c => c.id === collectionId);
-                showCollectionDetail(collection);
-            });
+            fetchAllViews();
         });
+    <\/script>
+</body>
+</html>`;
+}
 
-        // 显示集合详情
-        function showCollectionDetail(collection) {
-            const modal = document.getElementById('collectionModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDescription = document.getElementById('modalDescription');
-            const modalContent = document.getElementById('modalContent');
-            
-            modalTitle.textContent = collection.title;
-            modalDescription.textContent = collection.description;
-            
-            let resourcesHtml = '<div class="space-y-4">';
-            collection.resources.forEach(resource => {
-                const platform = platformMap[resource.platform] || platformMap.others;
-                resourcesHtml += \`
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 \${platform.color.replace('bg-', 'bg-')} text-white rounded-lg flex items-center justify-center">
-                                <i class="fas \${platform.icon}"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-gray-800 mb-1">\${resource.name}</h4>
-                                <p class="text-sm text-gray-600 mb-2">\${resource.description || ''}</p>
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">\${platform.name}</span>
-                                    <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">\${resource.size}</span>
-                                    \${resource.tags.map(tag => \`<span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">\${tag}</span>\`).join('')}
-                                </div>
-                                <div class="flex gap-2">
-                                    <button class="text-blue-600 hover:underline text-sm copy-link-btn" data-link="\${resource.link}">
-                                        <i class="fas fa-copy mr-1"></i>复制链接
-                                    </button>
-                                    <button class="text-blue-600 hover:underline text-sm open-link-btn" data-link="\${resource.link}">
-                                        <i class="fas fa-external-link-alt mr-1"></i>立即查看
-                                    </button>
-                                    \${resource.password ? \`
-                                        <button class="text-blue-600 hover:underline text-sm copy-password-btn" data-password="\${resource.password}">
-                                            <i class="fas fa-key mr-1"></i>复制密码
-                                        </button>
-                                    \` : ''}
-                                </div>
-                            </div>
+function generateStaticCollectionHtml(collection, categories, platformMap) {
+    const category = categories.find(cat => cat.id === collection.category);
+    const coverImage = collection.cover ? 
+        `/collections-static/images/${path.basename(collection.cover)}` : 
+        '';
+
+    const resourcesHtml = collection.resources.map(resource => {
+        const platform = platformMap[resource.platform] || platformMap.others;
+        return `
+            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 ${platform.color.replace('bg-', 'bg-')} text-white rounded-lg flex items-center justify-center">
+                        <i class="fas ${platform.icon}"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-gray-800 mb-1">${resource.name}</h4>
+                        <p class="text-sm text-gray-600 mb-2">${resource.description || ''}</p>
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">${platform.name}</span>
+                            <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">${resource.size}</span>
+                            ${resource.tags.map(tag => `<span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">${tag}</span>`).join('')}
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="text-blue-600 hover:underline text-sm copy-link-btn" data-link="${resource.link}">
+                                <i class="fas fa-copy mr-1"></i>复制链接
+                            </button>
+                            <button class="text-blue-600 hover:underline text-sm open-link-btn" data-link="${resource.link}">
+                                <i class="fas fa-external-link-alt mr-1"></i>立即查看
+                            </button>
+                            ${resource.password ? `
+                                <button class="text-blue-600 hover:underline text-sm copy-password-btn" data-password="${resource.password}">
+                                    <i class="fas fa-key mr-1"></i>复制密码
+                                </button>
+                            ` : ''}
                         </div>
                     </div>
-                \`;
-            });
-            resourcesHtml += '</div>';
-            
-            modalContent.innerHTML = resourcesHtml;
-            modal.classList.remove('hidden');
-            
-            // 添加复制功能
-            addCopyFunctionality();
-        }
+                </div>
+            </div>
+        `;
+    }).join('');
 
-        // 复制功能
-        function addCopyFunctionality() {
+    const htmlContent = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${collection.title} - 盘搜</title>
+    <meta name="description" content="${collection.description}">
+    <meta name="keywords" content="${collection.tags.join(', ')}">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DQW3NHY60Z"><\/script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-DQW3NHY60Z');
+    <\/script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto p-4">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+            <!-- 返回按钮 -->
+            <div class="mb-6">
+                <a href="/collections-static/collections.html" class="text-blue-600 hover:underline">
+                    <i class="fas fa-arrow-left mr-2"></i>返回集合列表
+                </a>
+            </div>
+
+            <!-- 集合头部 -->
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800">${collection.title}</h1>
+                <p class="text-gray-600 mt-2">${collection.description}</p>
+                <div class="mt-4 flex justify-center items-center gap-4 text-sm text-gray-500">
+                    <span><i class="fas fa-clock mr-1"></i>更新于 ${new Date(collection.updated).toLocaleDateString('zh-CN')}</span>
+                    <span><i class="fas fa-eye mr-1"></i><span id="view-count">${collection.views || 0}</span> 次访问</span>
+                </div>
+            </div>
+
+            <!-- 资源列表 -->
+            <div class="space-y-4">
+                ${resourcesHtml}
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 复制功能
             document.querySelectorAll('.copy-link-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     navigator.clipboard.writeText(btn.dataset.link);
@@ -549,7 +580,7 @@ function generateCollectionsHTML(collectionsData) {
 
             document.querySelectorAll('.open-link-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    window.open(btn.dataset.link, '_blank');
+                    window.open('/go?url=' + encodeURIComponent(btn.dataset.link), '_blank');
                 });
             });
 
@@ -562,408 +593,68 @@ function generateCollectionsHTML(collectionsData) {
                     }, 2000);
                 });
             });
-        }
 
-        // 模态框控制
-        const modal = document.getElementById('collectionModal');
-        const closeModal = document.getElementById('closeModal');
-        
-        closeModal.addEventListener('click', () => {
-            modal.classList.add('hidden');
+            // 增加访问次数
+            fetch('/api/increment-views', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ collectionId: '${collection.id}' }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.views !== undefined) {
+                    const viewCountSpan = document.getElementById('view-count');
+                    if (viewCountSpan) {
+                        viewCountSpan.textContent = data.views;
+                    }
+                }
+            })
+            .catch(error => console.error('Error incrementing view count:', error));
         });
-
-        // 点击背景关闭模态框
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-
-        // ESC键关闭模态框
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                modal.classList.add('hidden');
-            }
-        });
-    </script>
+    <\/script>
 </body>
 </html>`;
-}
 
-console.log('🎉 构建完成！');
-// 为单个集合生成静态HTML文件
-function generateStaticCollectionHtml(collection, categories, platformMap) {
-    const category = categories.find(cat => cat.id === collection.category);
-    
-    // 生成资源列表HTML
-    const resourcesHtml = collection.resources.map((resource, index) => {
-        const platform = platformMap[resource.platform] || platformMap.others;
-        return `
-            <div class="ios-card p-4 md:p-6 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 fade-in delay-${(index % 5) + 1}">
-                <div class="flex flex-col md:flex-row gap-4 md:gap-6">
-                    <div class="platform-icon ${platform.color} flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-xl flex items-center justify-center shadow-md">
-                        <i class="fas ${platform.icon} text-xl md:text-2xl"></i>
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="font-bold text-ios-dark mb-2 text-lg md:text-xl">${resource.name}</h4>
-                        <p class="text-ios-gray mb-4 leading-relaxed text-sm md:text-base">${resource.description || ''}</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="platform-tag px-3 py-1 rounded-full">${platform.name}</span>
-                            ${resource.size ? `<span class="platform-tag px-3 py-1 rounded-full">${resource.size}</span>` : ''}
-                            ${resource.tags.map(tag => `<span class="platform-tag px-3 py-1 rounded-full">${tag}</span>`).join('')}
-                        </div>
-                        <div class="flex flex-wrap gap-2 md:gap-3">
-                            <button class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base copy-link-btn" data-link="${resource.link}">
-                                <i class="fas fa-copy mr-2"></i>复制链接
-                            </button>
-                            <a href="${resource.link}" target="_blank" rel="noreferrer" class="text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base">
-                                <i class="fas fa-external-link-alt mr-2"></i>立即查看
-                            </a>
-                            ${resource.password ? `
-                                <button class="text-white bg-purple-500 hover:bg-purple-600 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center transition-colors duration-200 text-sm md:text-base copy-password-btn" data-password="${resource.password}">
-                                    <i class="fas fa-key mr-2"></i>复制密码
-                                </button>
-                            ` : ''}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-    
-    // 生成标签HTML
-    const tagsHtml = collection.tags.map((tag, index) => `
-        <span class="platform-tag text-sm px-4 py-2 rounded-full shadow-sm fade-in delay-${(index % 5) + 1}">
-            ${tag}
-        </span>
-    `).join('');
-    
-    // 生成完整的HTML
-    const html = `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${collection.title} - 资源集合 - 盘搜</title>
-    <meta name="description" content="${collection.description}">
-    <meta name="keywords" content="${collection.title},${collection.tags.join(',')},${collection.resources.map(r => r.name).join(',')}">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DQW3NHY60Z"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-DQW3NHY60Z');
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
-            min-height: 100vh;
-            color: #1c1c1e;
-            transition: all 0.3s ease;
-        }
-        
-        .ios-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.5);
-            overflow: hidden;
-        }
-        
-        .platform-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            flex-shrink: 0;
-        }
-        
-        .platform-tag {
-            font-size: 0.75rem;
-            padding: 2px 8px;
-            border-radius: 20px;
-            background: rgba(10, 132, 255, 0.1);
-            color: #0a84ff;
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
-        
-        .img-hidden { display: none; }
-    </style>
-</head>
-<body>
-    <div class="max-w-6xl mx-auto p-4">
-        <!-- 标题区域 -->
-        <div class="text-center mb-10 fade-in">
-            <div class="w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <img src="/collections-static/logo.png" alt="盘搜 Logo" class="w-full h-full object-contain">
-            </div>
-            <h1 class="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent">资源集合</h1>
-            <p class="text-gray-600 text-base md:text-lg">精心整理的优质资源合集,陆续更新中...</p>
-            <div class="mt-4">
-                <a href="/collections-static/collections.html" class="text-blue-600 hover:underline text-sm">← 返回资源集合页面</a>
-            </div>
-        </div>
-
-        <!-- 集合详情 -->
-        <div class="ios-card p-4 md:p-8 mb-8 fade-in hidden md:block">
-            <div class="max-w-4xl mx-auto">
-                <!-- 集合封面 -->
-                <div class="mb-8">
-                    <div class="relative overflow-hidden rounded-2xl shadow-xl transform transition-transform hover:scale-105 duration-300">
-                        ${collection.cover ? `
-                            <div class="relative h-48 md:h-80">
-                                <img
-                                    src="/collections-static${collection.cover}"
-                                    alt="${collection.title}"
-                                    class="w-full h-full object-cover"
-                                    onerror="this.classList.add('img-hidden'); this.nextElementSibling.nextElementSibling.classList.remove('img-hidden');"
-                                />
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                                <div class="absolute bottom-6 left-6 right-6 text-white img-placeholder img-hidden">
-                                    <h2 class="text-2xl font-bold mb-2">${collection.title}</h2>
-                                    <p class="text-lg opacity-90">${collection.description}</p>
-                                </div>
-                            </div>
-                        ` : `
-                            <div class="h-48 md:h-80 flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
-                                <div class="text-center text-white p-4">
-                                    <i class="fas ${category?.icon || 'fa-folder'} text-5xl md:text-6xl mb-4"></i>
-                                    <h2 class="text-2xl md:text-3xl font-bold">${collection.title}</h2>
-                                </div>
-                            </div>
-                        `}
-                    </div>
-                </div>
-                
-                <!-- 集合信息 -->
-                <div class="text-center mb-8 fade-in">
-                    <div class="flex flex-wrap items-center justify-center gap-3 mb-4">
-                        <h2 class="text-2xl md:text-4xl font-bold text-ios-dark">${collection.title}</h2>
-                        <span class="flex items-center ${category?.color || 'bg-gray-500'} text-sm px-4 py-2 rounded-full shadow-md">
-                            <i class="fas ${category?.icon || 'fa-folder'} mr-2"></i>
-                            ${category?.name || '未知分类'}
-                        </span>
-                    </div>
-                    <p class="text-gray-600 text-base md:text-xl max-w-3xl mx-auto mb-6 leading-relaxed">${collection.description}</p>
-                    
-                    <!-- 标签 -->
-                    <div class="flex flex-wrap justify-center gap-3 mb-6">
-                        ${tagsHtml}
-                    </div>
-                    
-                    <!-- 统计信息 -->
-                    <div class="flex flex-wrap items-center justify-center gap-6 text-gray-600 bg-gray-50 rounded-2xl p-4 max-w-2xl mx-auto">
-                        <div class="flex items-center">
-                            <i class="fas fa-file-alt text-blue-500 mr-2 text-xl"></i>
-                            <span class="font-semibold text-lg">${collection.resourceCount} 个资源</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-clock text-green-500 mr-2 text-xl"></i>
-                            <span class="font-semibold text-lg">更新于 ${new Date(collection.updated).toLocaleDateString('zh-CN')}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 资源列表 -->
-        <div class="mb-12 fade-in">
-            <div class="max-w-4xl mx-auto">
-                <h3 class="text-2xl md:text-3xl font-bold text-ios-dark mb-8 text-center relative">
-                    <span class="relative z-10 px-4 bg-gray-50">资源列表</span>
-                    <div class="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-                </h3>
-                <div class="space-y-6">
-                    ${resourcesHtml}
-                </div>
-            </div>
-        </div>
-
-        <!-- 页脚 -->
-        <div class="mt-12 text-center text-gray-600">
-            <p class="text-sm">
-                <a href="/collections-static/collections.html" class="text-blue-600 hover:underline">← 返回资源集合页面</a>
-            </p>
-        </div>
-    </div>
-
-    <script>
-        // 复制功能
-        document.querySelectorAll('.copy-link-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                navigator.clipboard.writeText(btn.dataset.link);
-                btn.innerHTML = '<i class="fas fa-check mr-1"></i>已复制';
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="fas fa-copy mr-1"></i>复制链接';
-                }, 2000);
-            });
-        });
-
-
-        document.querySelectorAll('.copy-password-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                navigator.clipboard.writeText(btn.dataset.password);
-                btn.innerHTML = '<i class="fas fa-check mr-1"></i>已复制';
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="fas fa-key mr-1"></i>复制密码';
-                }, 2000);
-            });
-        });
-    </script>
-</body>
-</html>`;
-    
-    // 写入文件
-    const targetDir = path.join(__dirname, '..', 'collections-static');
-    const filePath = path.join(targetDir, `${collection.id}.html`);
-    
-    fs.writeFileSync(filePath, html);
+    const targetPath = path.join(targetDir, `${collection.id}.html`);
+    fs.writeFileSync(targetPath, htmlContent);
     console.log(`✓ ${collection.id}.html 已生成`);
 }
-// 生成静态的go.html文件
+
 function generateStaticGoHtml() {
-    const html = `<!DOCTYPE html>
+    const htmlContent = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>正在跳转...</title>
     <style>
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
-            color: #1c1c1e;
-        }
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.5);
-            padding: 40px;
-            max-width: 400px;
-            width: 90%;
-        }
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #0a84ff;
-            animation: spin 1s ease infinite;
-            margin: 0 auto 20px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        p {
-            color: #8e8e93;
-            margin-bottom: 20px;
-        }
-        .url-display {
-            background: rgba(10, 132, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            font-size: 0.9rem;
-            word-break: break-all;
-            margin-bottom: 20px;
-        }
-        .redirect-btn {
-            background: linear-gradient(to right, #0a84ff, #0a84ff);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        .redirect-btn:hover {
-            opacity: 0.9;
-        }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
+        .container { text-align: center; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="spinner"></div>
-        <h1>正在安全跳转</h1>
-        <p>请稍候...</p>
-        <div class="url-display" id="urlDisplay">正在获取目标链接...</div>
-        <button class="redirect-btn" id="redirectBtn" style="display: none;">立即跳转</button>
+        <div class="loader"></div>
+        <p>正在安全跳转，请稍候...</p>
     </div>
     <script>
-        // 获取URL参数
         const urlParams = new URLSearchParams(window.location.search);
         const targetUrl = urlParams.get('url');
-        
         if (targetUrl) {
-            // 显示目标URL
-            document.getElementById('urlDisplay').textContent = decodeURIComponent(targetUrl);
-            
-            // 创建meta刷新标签
-            const meta = document.createElement('meta');
-            meta.httpEquiv = 'refresh';
-            meta.content = '0;url=' + targetUrl;
-            document.head.appendChild(meta);
-            
-            // 显示跳转按钮
-            const redirectBtn = document.getElementById('redirectBtn');
-            redirectBtn.style.display = 'block';
-            redirectBtn.addEventListener('click', () => {
-                window.location.replace(targetUrl);
-            });
-            
-            // 尝试立即跳转
-            window.location.replace(targetUrl);
-        } else {
-            document.getElementById('urlDisplay').textContent = '未提供有效的跳转链接';
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 500);
         }
-    </script>
+    <\/script>
 </body>
 </html>`;
-    
-    // 写入文件
-    const targetDir = path.join(__dirname, '..', 'collections-static');
-    const filePath = path.join(targetDir, 'go.html');
-    
-    fs.writeFileSync(filePath, html);
-    console.log('✓ go.html 已生成');
+    const targetPath = path.join(targetDir, 'go.html');
+    fs.writeFileSync(targetPath, htmlContent);
+    console.log(`✓ go.html 已生成`);
 }
+
+console.log('🎉 构建完成！');

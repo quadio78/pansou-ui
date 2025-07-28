@@ -4,6 +4,9 @@ import collectionsData from '../data/collections.json';
 
 const { categories, collections } = collectionsData;
 
+// 默认按更新日期降序排序
+collections.sort((a, b) => new Date(b.updated) - new Date(a.updated));
+
 // 平台图标和名称映射
 const platformMap = {
     '115': { name: '115网盘', icon: 'fa-box', color: 'bg-orange-500' },
@@ -48,9 +51,222 @@ const platformMap = {
             </div>
         </div>
 
-        <!-- 搜索框 -->
-        <div class="ios-card p-1 mb-8 search-box max-w-2xl mx-auto">
-            <div class="flex items-center">
+        <!-- 筛选和排序 -->
+       <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+           <!-- 搜索框 -->
+           <div class="ios-card p-1 search-box flex-grow w-full md:w-auto">
+               <div class="flex items-center">
+                   <div class="pl-4 text-ios-gray">
+                       <i class="fas fa-search"></i>
+                   </div>
+                   <input
+                       type="text"
+                       id="collectionSearch"
+                       placeholder="搜索集合名称或标签..."
+                       class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-ios-gray"
+                       autocomplete="off"
+                   >
+               </div>
+           </div>
+           <!-- 排序方式 -->
+           <div class="ios-card p-1">
+               <select id="sortOrder" class="w-full md:w-auto py-4 px-4 bg-transparent outline-none text-lg text-ios-gray">
+                   <option value="updated">按更新时间</option>
+                   <option value="views">按访问次数</option>
+                   <option value="created">按创建日期</option>
+               </select>
+           </div>
+       </div>
+
+        <!-- 集合展示区域 -->
+        <div id="collectionsContainer" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {collections.map(collection => {
+                const category = categories.find(cat => cat.id === collection.category);
+                return (
+                    <div class="ios-card collection-card p-6" data-id={collection.id} data-category={collection.category} data-tags={collection.tags.join(',').toLowerCase()} data-views={collection.views || 0} data-updated={collection.updated} data-created={collection.created}>
+                        <!-- 集合封面 -->
+                        <div class="mb-4">
+                            {collection.cover ? (
+                                <div class="collection-cover overflow-hidden">
+                                    <img
+                                        src={collection.cover}
+                                        alt={collection.title}
+                                        class="w-full h-full object-cover"
+                                        onError="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                    />
+                                    <div class="collection-cover flex items-center justify-center text-white text-4xl" style="display: none;">
+                                        <i class={`fas ${category?.icon || 'fa-folder'}`}></i>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div class="collection-cover flex items-center justify-center text-white text-4xl">
+                                    <i class={`fas ${category?.icon || 'fa-folder'}`}></i>
+                                </div>
+                            )}
+                        </div>
+                        
+                        <!-- 集合信息 -->
+                        <div class="mb-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xl font-semibold text-ios-dark line-clamp-2">{collection.title}</h3>
+                                <span class={`platform-icon ${category?.color || 'bg-gray-500'} text-xs px-2 py-1 rounded-full`}>
+                                    <i class={`fas ${category?.icon || 'fa-folder'}`}></i>
+                                </span>
+                            </div>
+                            <p class="text-ios-gray text-sm mb-3 line-clamp-2">{collection.description}</p>
+                            
+                            <!-- 标签 -->
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                {collection.tags.slice(0, 3).map(tag => (
+                                    <span class="platform-tag text-xs">{tag}</span>
+                                ))}
+                                {collection.tags.length > 3 && (
+                                    <span class="platform-tag text-xs">+{collection.tags.length - 3}</span>
+                                )}
+                            </div>
+                            
+                            <!-- 统计信息 -->
+                            <div class="flex items-center justify-between text-sm text-ios-gray">
+                                <span>
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span class="view-count">{collection.views || 0}</span> 次访问
+                                </span>
+                                <span>
+                                    <i class="fas fa-clock mr-1"></i>
+                                    {new Date(collection.updated).toLocaleDateString('zh-CN')}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- 操作按钮 -->
+                        <div class="flex gap-2">
+                            <a href={`/collection?id=${collection.id}`} class="flex-1 bg-gradient-to-r from-ios-blue to-blue-500 text-white rounded-xl py-2 px-4 font-medium hover:opacity-90 transition-opacity text-center">
+                                查看详情
+                            </a>
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+
+
+        <!-- 页脚 -->
+        <div class="mt-12 text-center text-ios-gray">
+            <p class="text-sm">
+                <a href="/" class="text-ios-blue hover:underline">返回搜索页面</a>
+            </p>
+        </div>
+    </div>
+
+    <script define:vars={{ collections, platformMap }}>
+        // DOM 元素
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        const searchInput = document.getElementById('collectionSearch');
+        const sortOrderSelect = document.getElementById('sortOrder');
+        const collectionsContainer = document.getElementById('collectionsContainer');
+        
+        let allCollectionCards = Array.from(document.querySelectorAll('.collection-card'));
+
+        // 渲染集合
+        function renderCollections(cards) {
+            collectionsContainer.innerHTML = '';
+            cards.forEach(card => {
+                collectionsContainer.appendChild(card);
+            });
+        }
+
+        // 排序函数
+        function sortCollections(cards, sortBy) {
+            return [...cards].sort((a, b) => {
+                const aValue = a.dataset[sortBy];
+                const bValue = b.dataset[sortBy];
+
+                if (sortBy === 'views') {
+                    return parseInt(bValue, 10) - parseInt(aValue, 10);
+                }
+                // For dates, we want descending order
+                return new Date(bValue) - new Date(aValue);
+            });
+        }
+
+        // 筛选和排序主函数
+        function filterAndSort() {
+            const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+            const searchTerm = searchInput.value.toLowerCase();
+            const sortBy = sortOrderSelect.value;
+
+            // 1. 筛选
+            let filteredCards = allCollectionCards.filter(card => {
+                const cardCategory = card.dataset.category;
+                const cardTags = card.dataset.tags;
+                const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+                
+                const matchesCategory = activeCategory === 'all' || cardCategory === activeCategory;
+                const matchesSearch = !searchTerm || cardTitle.includes(searchTerm) || cardTags.includes(searchTerm);
+                
+                return matchesCategory && matchesSearch;
+            });
+
+            // 2. 排序
+            const sortedCards = sortCollections(filteredCards, sortBy);
+            
+            // 3. 渲染
+            renderCollections(sortedCards);
+        }
+
+        // 事件监听
+        categoryTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                categoryTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                filterAndSort();
+            });
+        });
+
+        searchInput.addEventListener('input', filterAndSort);
+        sortOrderSelect.addEventListener('change', filterAndSort);
+
+        // 获取并更新所有访问次数
+        async function fetchAllViews() {
+            try {
+                const response = await fetch('/api/get-all-views');
+                if (!response.ok) return;
+                const views = await response.json();
+                
+                allCollectionCards.forEach(card => {
+                    const collectionId = card.dataset.id;
+                    if (views[collectionId] !== undefined) {
+                        const viewCountSpan = card.querySelector('.view-count');
+                        if (viewCountSpan) {
+                            viewCountSpan.textContent = views[collectionId];
+                        }
+                        // 更新卡片上的 data-views 属性以便排序
+                        card.dataset.views = views[collectionId];
+                    }
+                });
+                // 获取数据后重新排序和渲染
+                filterAndSort();
+            } catch (error) {
+                console.error('Failed to fetch all views:', error);
+            }
+        }
+
+        // 初始加载
+        window.addEventListener('pageshow', (event) => {
+            // 每次页面显示时都获取最新数据
+            fetchAllViews();
+            // 如果页面是从缓存中加载的，我们可能需要重新初始化一些状态
+            if (event.persisted) {
+                console.log("Page was loaded from the cache.");
+                // 可以在这里添加需要重新初始化的逻辑
+            }
+            // 确保筛选和排序在数据更新后执行
+            // fetchAllViews 内部已经调用了 filterAndSort
+        });
+
+        // 页面初次加载时，也执行一次排序
+        filterAndSort();
+    </script>
                 <div class="pl-4 text-ios-gray">
                     <i class="fas fa-search"></i>
                 </div>

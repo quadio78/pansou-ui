@@ -190,6 +190,10 @@ const config = config$1({
           label: "更新日期",
           defaultValue: { kind: "today" }
         }),
+        views: fields.number({
+          label: "访问次数",
+          defaultValue: 0
+        }),
         resources: fields.array(
           fields.object({
             name: fields.text({

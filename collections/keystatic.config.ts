@@ -102,9 +102,13 @@ export default config({
           label: '创建日期',
           defaultValue: { kind: 'today' }
         }),
-        updated: fields.date({ 
+        updated: fields.date({
           label: '更新日期',
           defaultValue: { kind: 'today' }
+        }),
+        views: fields.number({
+          label: '访问次数',
+          defaultValue: 0
         }),
         resources: fields.array(
           fields.object({
