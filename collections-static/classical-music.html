@@ -66,9 +66,9 @@
                             <button class="text-blue-600 hover:underline text-sm copy-link-btn" data-link="https://pan.quark.cn/s/3457409dc28d">
                                 <i class="fas fa-copy mr-1"></i>复制链接
                             </button>
-                            <button class="text-blue-600 hover:underline text-sm open-link-btn" data-link="https://pan.quark.cn/s/3457409dc28d">
+                            <a href="https://pan.quark.cn/s/3457409dc28d" target="_blank" rel="noreferrer" class="text-blue-600 hover:underline text-sm">
                                 <i class="fas fa-external-link-alt mr-1"></i>立即查看
-                            </button>
+                            </a>
                             
                         </div>
                     </div>
@@ -92,9 +92,9 @@
                             <button class="text-blue-600 hover:underline text-sm copy-link-btn" data-link="https://pan.quark.cn/s/d76e2482e5af">
                                 <i class="fas fa-copy mr-1"></i>复制链接
                             </button>
-                            <button class="text-blue-600 hover:underline text-sm open-link-btn" data-link="https://pan.quark.cn/s/d76e2482e5af">
+                            <a href="https://pan.quark.cn/s/d76e2482e5af" target="_blank" rel="noreferrer" class="text-blue-600 hover:underline text-sm">
                                 <i class="fas fa-external-link-alt mr-1"></i>立即查看
-                            </button>
+                            </a>
                             
                         </div>
                     </div>
@@ -114,12 +114,6 @@
                     setTimeout(() => {
                         btn.innerHTML = '<i class="fas fa-copy mr-1"></i>复制链接';
                     }, 2000);
-                });
-            });
-
-            document.querySelectorAll('.open-link-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    window.open('/go?url=' + encodeURIComponent(btn.dataset.link), '_blank');
                 });
             });
 

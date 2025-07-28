@@ -500,9 +500,9 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
                             <button class="text-blue-600 hover:underline text-sm copy-link-btn" data-link="${resource.link}">
                                 <i class="fas fa-copy mr-1"></i>复制链接
                             </button>
-                            <button class="text-blue-600 hover:underline text-sm open-link-btn" data-link="${resource.link}">
+                            <a href="${resource.link}" target="_blank" rel="noreferrer" class="text-blue-600 hover:underline text-sm">
                                 <i class="fas fa-external-link-alt mr-1"></i>立即查看
-                            </button>
+                            </a>
                             ${resource.password ? `
                                 <button class="text-blue-600 hover:underline text-sm copy-password-btn" data-password="${resource.password}">
                                     <i class="fas fa-key mr-1"></i>复制密码
@@ -579,12 +579,6 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
                     setTimeout(() => {
                         btn.innerHTML = '<i class="fas fa-copy mr-1"></i>复制链接';
                     }, 2000);
-                });
-            });
-
-            document.querySelectorAll('.open-link-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    window.open('/go?url=' + encodeURIComponent(btn.dataset.link), '_blank');
                 });
             });
 
