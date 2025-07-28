@@ -78,3 +78,22 @@ pansou-ui/
     -   **生产构建 (`npm run build`)**: 最终的 `collections-static/*.html` 文件内容由 `build-script.js` 中的 HTML 生成函数（如 `generateStaticCollectionHtml`）决定。因此，对这些页面的最终修改**必须在 `build-script.js` 中完成**。
     -   **开发环境 (`npm run dev`)**: 开发服务器直接使用 `.astro` 文件（如 `src/pages/collection.astro`）来实时渲染页面。
     -   **开发流程建议**: 为了确保开发环境和最终构建的一致性，当修改这些页面时，**建议同时修改对应的 `.astro` 文件和 `build-script.js` 中的 HTML 生成逻辑**。这样可以保证在 `dev` 模式下实时预览效果，同时确保 `build` 后的生产文件也包含了这些更改。
+
+---
+
+### 链接规范
+
+为了确保全站链接行为的一致性和安全性，所有指向外部资源的“立即查看”链接，必须遵循以下 `<a>` 标签结构：
+
+```html
+<a href="${resource.link}" target="_blank" rel="noreferrer" class="text-blue-600 hover:underline text-sm">
+    <i class="fas fa-external-link-alt mr-1"></i>立即查看
+</a>
+```
+
+**关键属性说明:**
+-   `href`: 必须直接指向资源的原始链接 (`resource.link`)。
+-   `target="_blank"`: 确保链接在新标签页中打开。
+-   `rel="noreferrer"`: 出于安全考虑，阻止新打开的页面通过 `window.opener` 访问原始页面。
+
+**注意：** 严禁使用 JavaScript (`window.open`) 或中间页 (`go.html`) 来处理外部链接跳转。所有跳转必须通过标准的 `<a>` 标签完成。
