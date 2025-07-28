@@ -251,16 +251,23 @@
                 <div class="pl-4 text-ios-gray">
                     <i class="fas fa-search"></i>
                 </div>
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="输入您要搜索的资源名称，快速查找多个网盘资源，支持115、百度云、阿里云盘等主流网盘" 
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="搜索网盘资源，支持115、百度云、阿里云盘等"
                     class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-ios-gray"
                     autocomplete="off"
                     inputmode="search"
                     enterkeyhint="search"
                 >
-                <button 
+                <button
+                    id="resetButton"
+                    class="bg-gradient-to-r from-gray-400 to-gray-500 text-white rounded-xl py-3 px-6 m-1 font-medium hover:opacity-90 transition-opacity hidden"
+                    title="重置搜索"
+                >
+                    重置
+                </button>
+                <button
                     id="searchButton"
                     class="bg-gradient-to-r from-ios-blue to-blue-500 text-white rounded-xl py-3 px-6 m-1 font-medium hover:opacity-90 transition-opacity"
                 >
@@ -337,6 +344,7 @@
         // DOM元素
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
+        const resetButton = document.getElementById('resetButton');
         const searchContainer = document.getElementById('searchContainer');
         const resultsContainer = document.getElementById('resultsContainer');
         const resultsHeader = document.getElementById('resultsHeader');
@@ -368,6 +376,26 @@
         
         
         searchButton.addEventListener('click', performSearch);
+        
+        // 重置按钮事件
+        const resetSearch = () => {
+            searchInput.value = '';
+            // 隐藏重置按钮
+            resetButton.classList.add('hidden');
+            // 刷新页面
+            location.reload();
+        };
+        
+        resetButton.addEventListener('click', resetSearch);
+        
+        // 监听输入框变化，控制重置按钮显示/隐藏
+        searchInput.addEventListener('input', () => {
+            if (searchInput.value.trim() !== '') {
+                resetButton.classList.remove('hidden');
+            } else {
+                resetButton.classList.add('hidden');
+            }
+        });
         
         // 排序选择事件
         sortSelect.addEventListener('change', () => {
@@ -506,8 +534,11 @@
             // 更新搜索按钮状态
             const originalText = searchButton.textContent;
             searchButton.disabled = true;
-            searchButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>搜索中';
+            searchButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>搜';
             searchButton.classList.add('opacity-75');
+            
+            // 隐藏重置按钮
+            resetButton.classList.add('hidden');
 
             // 首先检查是否为违规词
             try {
@@ -623,6 +654,11 @@
                     searchButton.disabled = false;
                     searchButton.textContent = originalText;
                     searchButton.classList.remove('opacity-75');
+                    
+                    // 如果搜索框中有内容，显示重置按钮
+                    if (searchInput.value.trim() !== '') {
+                        resetButton.classList.remove('hidden');
+                    }
                 });
         }
         
