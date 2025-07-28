@@ -92,10 +92,16 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
 
         // \u83B7\u53D6\u5E76\u66F4\u65B0\u6240\u6709\u8BBF\u95EE\u6B21\u6570
         async function fetchAllViews() {
+            console.log('fetchAllViews called');
             try {
                 const response = await fetch('/api/get-all-views');
-                if (!response.ok) return;
+                console.log('API response status:', response.status);
+                if (!response.ok) {
+                    console.log('API response not ok');
+                    return;
+                }
                 const views = await response.json();
+                console.log('Data received from API:', views);
                 
                 allCollectionCards.forEach(card => {
                     const collectionId = card.dataset.id;

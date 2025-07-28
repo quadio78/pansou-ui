@@ -232,10 +232,16 @@ const platformMap = {
 
         // 获取并更新所有访问次数
         async function fetchAllViews() {
+            console.log('fetchAllViews called');
             try {
                 const response = await fetch('/api/get-all-views');
-                if (!response.ok) return;
+                console.log('API response status:', response.status);
+                if (!response.ok) {
+                    console.log('API response not ok');
+                    return;
+                }
                 const views = await response.json();
+                console.log('Data received from API:', views);
                 
                 allCollectionCards.forEach(card => {
                     const collectionId = card.dataset.id;

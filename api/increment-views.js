@@ -33,32 +33,18 @@ export default async function handler(request, response) {
         }
         // --- End of IP-based rate limiting ---
 
-        const filePath = path.join(process.cwd(), 'collections', 'src', 'data', 'collections', `${collectionId}.mdoc`);
+        // Increment view count in KV
+        const viewCountKey = `views:${collectionId}`;
+        const currentViews = await kv.get(viewCountKey) || 0;
+        const newViews = currentViews + 1;
+        await kv.set(viewCountKey, newViews);
 
-        let fileContent;
-        try {
-            fileContent = await fs.readFile(filePath, 'utf-8');
-        } catch (error) {
-            if (error.code === 'ENOENT') {
-                return response.status(404).json({ error: 'Collection not found.' });
-            }
-            throw error;
-        }
-
-        const { data, content } = matter(fileContent);
-        
-        data.views = (data.views || 0) + 1;
-
-        const newFileContent = matter.stringify(content, data);
-
-        await fs.writeFile(filePath, newFileContent, 'utf-8');
-
-        // Update the timestamp in KV store
+        // Update the timestamp in KV store for rate limiting
         console.log(`DEBUG: About to set new timestamp in KV: ${now}`);
         await kv.set(key, now, { ex: COOLDOWN_PERIOD / 1000 }); // Set with expiration
         console.log(`DEBUG: KV timestamp set successfully.`);
 
-        return response.status(200).json({ message: 'View count incremented.', views: data.views });
+        return response.status(200).json({ message: 'View count incremented.', views: newViews });
 
     } catch (error) {
         console.error('Error incrementing view count:', error);

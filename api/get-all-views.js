@@ -1,3 +1,4 @@
+import { kv } from '@vercel/kv';
 import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
@@ -8,20 +9,19 @@ export default async function handler(request, response) {
     }
 
     try {
-        const collectionsDir = path.join(process.cwd(), 'collections', 'src', 'data', 'collections');
-        const files = await fs.readdir(collectionsDir);
-        const mdocFiles = files.filter(file => file.endsWith('.mdoc'));
-
+        // Get all view counts from KV
+        const keys = await kv.keys('views:*');
+        console.log('DEBUG: Found keys in KV:', keys);
         const allViews = {};
 
-        for (const file of mdocFiles) {
-            const filePath = path.join(collectionsDir, file);
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const { data } = matter(fileContent);
-            const collectionId = path.basename(file, '.mdoc');
-            allViews[collectionId] = data.views || 0;
+        for (const key of keys) {
+            const collectionId = key.replace('views:', '');
+            const views = await kv.get(key) || 0;
+            console.log(`DEBUG: Key: ${key}, Collection ID: ${collectionId}, Views: ${views}`);
+            allViews[collectionId] = views;
         }
 
+        console.log('DEBUG: Final allViews object:', allViews);
         return response.status(200).json(allViews);
 
     } catch (error) {

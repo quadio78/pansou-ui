@@ -559,7 +559,7 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
                 <p class="text-gray-600 mt-2">${collection.description}</p>
                 <div class="mt-4 flex justify-center items-center gap-4 text-sm text-gray-500">
                     <span><i class="fas fa-clock mr-1"></i>更新于 ${new Date(collection.updated).toLocaleDateString('zh-CN')}</span>
-                    <span><i class="fas fa-eye mr-1"></i><span id="view-count">${collection.views || 0}</span> 次访问</span>
+                    <span><i class="fas fa-eye mr-1"></i><span id="view-count">-</span> 次访问</span>
                 </div>
             </div>
 
