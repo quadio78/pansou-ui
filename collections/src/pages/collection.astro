@@ -147,7 +147,7 @@ const category = categories.find(cat => cat.id === collection.category);
                                     </div>
                                     <div class="flex-1">
                                         <h4 class="font-bold text-ios-dark mb-2 text-xl">{resource.name}</h4>
-                                        <p class="text-ios-gray mb-4 leading-relaxed">{resource.description || ''}</p>
+                                        <p class="text-ios-gray mb-4 leading-relaxed mobile-scrollable-description">{resource.description || ''}</p>
                                         <div class="flex flex-wrap gap-2 mb-4">
                                             <span class="platform-tag px-2 py-0.5 rounded-full">{platform.name}</span>
                                             {resource.size && <span class="platform-tag px-2 py-0.5 rounded-full">{resource.size}</span>}
@@ -240,4 +240,27 @@ const category = categories.find(cat => cat.id === collection.category);
             });
         });
     </script>
+    <style>
+    @media (max-width: 767px) {
+        .mobile-scrollable-description {
+            max-height: 4.5rem; /* 约3行文本的高度 */
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #a0aec0 #f7fafc;
+        }
+
+        .mobile-scrollable-description::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .mobile-scrollable-description::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .mobile-scrollable-description::-webkit-scrollbar-thumb {
+            background-color: #a0aec0;
+            border-radius: 10px;
+        }
+    }
+    </style>
 </Layout>

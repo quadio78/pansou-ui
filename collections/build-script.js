@@ -492,7 +492,7 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
                     </div>
                     <div class="flex-1">
                         <h4 class="font-semibold text-gray-800 mb-1">${resource.name}</h4>
-                        <p class="text-sm text-gray-600 mb-2">${resource.description || ''}</p>
+                        <p class="text-sm text-gray-600 mb-2 mobile-scrollable-description">${resource.description || ''}</p>
                         <div class="flex flex-wrap gap-2 mb-2">
                             <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">${platform.name}</span>
                             <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">${resource.size}</span>
@@ -557,6 +557,27 @@ function generateStaticCollectionHtml(collection, categories, platformMap) {
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 767px) {
+            .mobile-scrollable-description {
+                max-height: 4.5rem; /* 约3行文本的高度 */
+                overflow-y: auto;
+                scrollbar-width: thin;
+                scrollbar-color: #a0aec0 #f7fafc;
+            }
+
+            .mobile-scrollable-description::-webkit-scrollbar {
+                width: 5px;
+            }
+
+            .mobile-scrollable-description::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .mobile-scrollable-description::-webkit-scrollbar-thumb {
+                background-color: #a0aec0;
+                border-radius: 10px;
+            }
         }
     </style>
 </head>
