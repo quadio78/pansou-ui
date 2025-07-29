@@ -56,6 +56,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://pansou.jkai.de/collections-static/suspense-2024.html</loc>
+        <lastmod>2025-07-29</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://pansou.jkai.de/collections-static/zombie-movies.html</loc>
         <lastmod>2025-07-28</lastmod>
         <changefreq>weekly</changefreq>

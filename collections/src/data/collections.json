@@ -649,6 +649,115 @@
       ]
     },
     {
+      "id": "suspense-2024",
+      "title": "2024年最佳悬疑惊悚剧盘点",
+      "category": "episodes",
+      "description": "收集2024年最佳悬疑惊悚剧",
+      "cover": "https://img.jkai.de/2025/07/b86497c90b2eb4e961e45c665ef62d65.png",
+      "tags": [
+        "最佳",
+        "悬疑",
+        "惊悚",
+        "2024"
+      ],
+      "created": "2025-07-29T00:00:00.000Z",
+      "updated": "2025-07-29T00:00:00.000Z",
+      "resourceCount": 7,
+      "views": 0,
+      "resources": [
+        {
+          "name": "唐朝诡事录之西行",
+          "platform": "quark",
+          "link": "https://pan.quark.cn/s/49ebe344e798",
+          "password": "",
+          "size": "完结",
+          "tags": [
+            "悬疑",
+            "奇幻",
+            "古装"
+          ],
+          "description": "作为《唐朝诡事录》系列的第二部，这部剧延续了前作的古装探案风格，卢凌风和苏无名一行人一路西行，破解离奇案件。"
+        },
+        {
+          "name": "边水往事",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1RpHmLfNc3X4T5F2X2yadXw?pwd=e87a",
+          "password": "e87a",
+          "size": "完结",
+          "tags": [
+            "剧情",
+            "冒险"
+          ],
+          "description": "这部剧以其大尺度的剧情和缜密的逻辑吸引了观众，讲述了沈星在三边坡打工时卷入多方势力斗争的故事。"
+        },
+        {
+          "name": "雪迷宫 2024",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1YYyZll1W-9GF56_K4ll-4g?pwd=igcs",
+          "password": "igcs",
+          "size": "完结",
+          "tags": [
+            "剧情",
+            "悬疑",
+            "犯罪"
+          ],
+          "description": "这部刑侦禁毒剧以东北为背景，讲述了刑警与贩毒集团斗智斗勇的故事，展现了东北的社会风貌和人物群像。"
+        },
+        {
+          "name": "豺狼的日子 第一季",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1I8zu8uVebv1a_nDtbtAudw?pwd=27xr",
+          "password": "27xr",
+          "size": "全集",
+          "tags": [
+            "剧情",
+            "惊悚"
+          ],
+          "description": "本剧基于Frederick Forsyth的同名小说和1973年环球影业同名改编电影创作。\n“豺狼”（埃迪·雷德梅恩 Eddie Redmayne 饰）是一个无与伦比、难以捉摸的独行杀手，他以执行高报酬的刺杀任务为生。处于“豺狼”私人生活中心的Nuria（乌苏拉·科尔维罗 Úrsula Corberó 饰）对他的身份却一无所知。在最近一次杀人后，“豺狼”遇到了自己的对手，顽强的英国情报探员Bianca（拉什纳·林奇 Lashana Lynch 饰）。Bianca开始在欧洲各地追捕“豺狼”，一场惊心动魄的猫鼠追逐战由此展开，随之而来的是一连串的破坏。"
+        },
+        {
+          "name": "雷普利 Ripley (2024)",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1IpiIsU5y5edZ-gZugDiauA?pwd=vjzq",
+          "password": "vjzq",
+          "size": "全集",
+          "tags": [
+            "剧情",
+            "惊悚",
+            "犯罪"
+          ],
+          "description": "剧集版背景为60年代的纽约，Tom Ripley（Andrew Scott饰）被一个富豪招募，让他到意大利说服富豪的浪子..."
+        },
+        {
+          "name": "9号秘事 第九季 Inside No. 9 Season 9 (2024)",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/15Rf81r4b1cuYwmejDZ-YRw?pwd=63tg",
+          "password": "63tg",
+          "size": "全集",
+          "tags": [
+            "剧情",
+            "喜剧",
+            "悬疑",
+            "惊悚",
+            "恐怖"
+          ],
+          "description": "本季为《9号秘事》系列的最终季，依旧延续前几季的高能反转与暗黑风格，六个单元故事短小精悍又立意深刻，充斥着黑色幽默和令人心跳骤停的恐怖气氛，观众得以在英国“鬼才二人组”史蒂夫·佩姆伯顿（Steve Pemberton）和里斯·谢尔史密斯（Reece Shearsmith）编织的激动、颤栗、惊悚和杀戮的氛围中，获得超乎寻常的感官体验。"
+        },
+        {
+          "name": "流人第四季",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1nxoC5oD869RrYEYeno0YUg?pwd=chc8",
+          "password": "chc8",
+          "size": "1-4季",
+          "tags": [
+            "剧情",
+            "惊悚"
+          ],
+          "description": "本季改编自原著系列中的第四本《惊魂街》。\n　　一场爆炸拉开序幕，随之引爆了一系列惊人的秘密，动摇了斯劳部门本就不太稳定的关系。"
+        }
+      ]
+    },
+    {
       "id": "zombie-movies",
       "title": "丧尸电影",
       "category": "movies",
