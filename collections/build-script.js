@@ -418,6 +418,35 @@ function generateCollectionsHTML(collectionsData) {
     </div>
 
     <script>
+        // 全局变量
+        let allCollectionCards = []; // 所有集合卡片
+        
+        // 获取并更新所有访问次数（全局函数）
+        async function fetchAllViews() {
+            try {
+                const response = await fetch('/api/get-all-views');
+                if (!response.ok) return;
+                const views = await response.json();
+                
+                // 更新所有集合卡片的访问次数（包括不在当前页的）
+                allCollectionCards.forEach(card => {
+                    const collectionId = card.dataset.id;
+                    if (views[collectionId] !== undefined) {
+                        const viewCountSpan = card.querySelector('.view-count');
+                        if (viewCountSpan) {
+                            viewCountSpan.textContent = views[collectionId];
+                        }
+                        // 更新卡片上的 data-views 属性以便排序
+                        card.dataset.views = views[collectionId];
+                    }
+                });
+                // 获取数据后重新排序和渲染
+                filterAndSort();
+            } catch (error) {
+                console.error('Failed to fetch all views:', error);
+            }
+        }
+        
         window.addEventListener('pageshow', () => {
             fetchAllViews();
         });
@@ -428,7 +457,8 @@ function generateCollectionsHTML(collectionsData) {
             const sortOrderSelect = document.getElementById('sortOrder');
             const collectionsContainer = document.getElementById('collectionsContainer');
             
-            let allCollectionCards = Array.from(document.querySelectorAll('.collection-card'));
+            // 初始化所有集合卡片
+            allCollectionCards = Array.from(document.querySelectorAll('.collection-card'));
 
             function renderCollections(cards) {
                 collectionsContainer.innerHTML = '';
@@ -592,28 +622,6 @@ function generateCollectionsHTML(collectionsData) {
             });
 
             filterAndSort(); // Initial sort and render
-
-            async function fetchAllViews() {
-                try {
-                    const response = await fetch('/api/get-all-views');
-                    if (!response.ok) return;
-                    const views = await response.json();
-                    
-                    document.querySelectorAll('.collection-card').forEach(card => {
-                        const collectionId = card.dataset.id;
-                        if (views[collectionId] !== undefined) {
-                            const viewCountSpan = card.querySelector('.view-count');
-                            if (viewCountSpan) {
-                                viewCountSpan.textContent = views[collectionId];
-                            }
-                            card.dataset.views = views[collectionId];
-                        }
-                    });
-                    filterAndSort();
-                } catch (error) {
-                    console.error('Failed to fetch all views:', error);
-                }
-            }
 
         });
     <\/script>
