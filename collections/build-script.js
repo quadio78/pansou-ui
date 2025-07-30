@@ -253,6 +253,9 @@ function generateCollectionsHTML(collectionsData) {
         `;
     }).join('');
     
+    // 计算总页数（每页9个集合）
+    const totalPages = Math.ceil(collections.length / 9);
+    
     // 生成分类标签HTML
     const categoryTabsHTML = categories.map(category => `
         <button class="category-tab" data-category="${category.id}">
@@ -315,8 +318,21 @@ function generateCollectionsHTML(collectionsData) {
            background-position: right 0.75rem center;
            background-size: 1em;
            padding-right: 2.5rem;
-        }
-    </style>
+       }
+       .ios-button {
+           background: white;
+           border: 1px solid #e5e7eb;
+           color: #6b7280;
+           transition: all 0.2s;
+           cursor: pointer;
+       }
+       
+       .ios-button:not(.opacity-50):hover {
+           background: #3b82f6;
+           color: white;
+           border-color: #3b82f6;
+       }
+   </style>
 </head>
 <body class="bg-gray-50">
     <div class="max-w-6xl mx-auto p-4">
@@ -369,10 +385,29 @@ function generateCollectionsHTML(collectionsData) {
            </div>
        </div>
 
-        <!-- 集合展示区域 -->
-        <div id="collectionsContainer" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            ${collectionsHTML}
-        </div>
+       <!-- 集合展示区域 -->
+       <div id="collectionsContainer" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+           ${collectionsHTML}
+       </div>
+       
+       <!-- 分页控件 -->
+       <div class="mt-8 flex justify-center">
+           <div id="pagination" class="flex items-center space-x-2">
+               <button id="firstPage" class="ios-button px-3 py-1 rounded">
+                   <i class="fas fa-angle-double-left"><\/i>
+               <\/button>
+               <button id="prevPage" class="ios-button px-3 py-1 rounded">
+                   <i class="fas fa-angle-left"><\/i>
+               <\/button>
+               <span id="pageInfo" class="text-gray-600 mx-2"><\/span>
+               <button id="nextPage" class="ios-button px-3 py-1 rounded">
+                   <i class="fas fa-angle-right"><\/i>
+               <\/button>
+               <button id="lastPage" class="ios-button px-3 py-1 rounded">
+                   <i class="fas fa-angle-double-right"><\/i>
+               <\/button>
+           <\/div>
+       <\/div>
 
         <!-- 页脚 -->
         <div class="mt-12 text-center text-gray-600">
@@ -399,6 +434,70 @@ function generateCollectionsHTML(collectionsData) {
                 collectionsContainer.innerHTML = '';
                 cards.forEach(card => {
                     collectionsContainer.appendChild(card);
+                });
+            }
+
+            // 分页相关元素
+            const firstPageBtn = document.getElementById('firstPage');
+            const prevPageBtn = document.getElementById('prevPage');
+            const nextPageBtn = document.getElementById('nextPage');
+            const lastPageBtn = document.getElementById('lastPage');
+            const pageInfoSpan = document.getElementById('pageInfo');
+            
+            // 分页配置
+            const ITEMS_PER_PAGE = 9; // 每页显示的集合数量
+            let currentPage = 1; // 当前页码
+
+            // 渲染集合（带分页）
+            function renderCollections(cards) {
+                // 计算总页数
+                const totalPages = Math.ceil(cards.length / ITEMS_PER_PAGE);
+                
+                // 确保当前页码在有效范围内
+                if (currentPage < 1) currentPage = 1;
+                if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+                if (totalPages === 0) currentPage = 1;
+                
+                // 计算当前页要显示的集合
+                const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+                const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, cards.length);
+                const pageCards = cards.slice(startIndex, endIndex);
+                
+                // 渲染集合
+                collectionsContainer.innerHTML = '';
+                pageCards.forEach(card => {
+                    collectionsContainer.appendChild(card);
+                });
+                
+                // 更新分页控件
+                updatePagination(totalPages);
+            }
+            
+            // 更新分页控件
+            function updatePagination(totalPages) {
+                // 显示页码信息
+                if (totalPages > 0) {
+                    pageInfoSpan.textContent = currentPage + ' \/ ' + totalPages;
+                } else {
+                    pageInfoSpan.textContent = '0 \/ 0';
+                }
+                
+                // 更新按钮状态
+                firstPageBtn.disabled = currentPage <= 1;
+                prevPageBtn.disabled = currentPage <= 1;
+                nextPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
+                lastPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
+                
+                // 添加按钮样式
+                const buttons = [firstPageBtn, prevPageBtn, nextPageBtn, lastPageBtn];
+                buttons.forEach(btn => {
+                    if (btn.disabled) {
+                        btn.classList.add('opacity-50', 'cursor-not-allowed');
+                        btn.classList.remove('hover:opacity-90');
+                    } else {
+                        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        btn.classList.add('hover:opacity-90');
+                    }
                 });
             }
 
@@ -445,6 +544,53 @@ function generateCollectionsHTML(collectionsData) {
             searchInput.addEventListener('input', filterAndSort);
             sortOrderSelect.addEventListener('change', filterAndSort);
 
+            // 分页控制函数
+            function goToPage(page) {
+                // 获取分页按钮元素
+                const firstPageBtn = document.getElementById('firstPage');
+                const prevPageBtn = document.getElementById('prevPage');
+                const nextPageBtn = document.getElementById('nextPage');
+                const lastPageBtn = document.getElementById('lastPage');
+                
+                // 重新获取当前页码（在filterAndSort后可能已重置）
+                currentPage = page;
+                filterAndSort(); // 重新渲染当前页
+            }
+            
+            function goToFirstPage() {
+                goToPage(1);
+            }
+            
+            function goToPrevPage() {
+                if (currentPage > 1) {
+                    goToPage(currentPage - 1);
+                }
+            }
+            
+            function goToNextPage() {
+                // 总页数会在renderCollections中计算，这里简单处理
+                goToPage(currentPage + 1);
+            }
+            
+            function goToLastPage() {
+                // 总页数会在renderCollections中计算，这里简单处理
+                goToPage(9999); // 一个足够大的数，会在renderCollections中被修正
+            }
+            
+            // 分页按钮事件监听
+            // 使用事件委托，因为按钮可能在DOM加载时还不存在
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('#firstPage')) {
+                    goToFirstPage();
+                } else if (e.target.closest('#prevPage')) {
+                    goToPrevPage();
+                } else if (e.target.closest('#nextPage')) {
+                    goToNextPage();
+                } else if (e.target.closest('#lastPage')) {
+                    goToLastPage();
+                }
+            });
+
             filterAndSort(); // Initial sort and render
 
             async function fetchAllViews() {
@@ -469,7 +615,6 @@ function generateCollectionsHTML(collectionsData) {
                 }
             }
 
-            fetchAllViews();
         });
     <\/script>
 </body>

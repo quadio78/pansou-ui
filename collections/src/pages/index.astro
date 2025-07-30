@@ -35,6 +35,22 @@ const platformMap = {
                 <a href="/" class="text-ios-blue hover:underline text-sm">← 返回搜索页面</a>
             </div>
         </div>
+        
+        <style>
+            .ios-button {
+                background: white;
+                border: 1px solid #e5e7eb;
+                color: #6b7280;
+                transition: all 0.2s;
+                cursor: pointer;
+            }
+            
+            .ios-button:not(.opacity-50):hover {
+                background: #3b82f6;
+                color: white;
+                border-color: #3b82f6;
+            }
+        </style>
 
         <!-- 分类导航 -->
         <div class="mb-8">
@@ -154,6 +170,25 @@ const platformMap = {
         </div>
 
 
+        <!-- 分页控件 -->
+        <div class="mt-8 flex justify-center">
+            <div id="pagination" class="flex items-center space-x-2">
+                <button id="firstPage" class="ios-button px-3 py-1 rounded">
+                    <i class="fas fa-angle-double-left"></i>
+                </button>
+                <button id="prevPage" class="ios-button px-3 py-1 rounded">
+                    <i class="fas fa-angle-left"></i>
+                </button>
+                <span id="pageInfo" class="text-ios-gray mx-2"></span>
+                <button id="nextPage" class="ios-button px-3 py-1 rounded">
+                    <i class="fas fa-angle-right"></i>
+                </button>
+                <button id="lastPage" class="ios-button px-3 py-1 rounded">
+                    <i class="fas fa-angle-double-right"></i>
+                </button>
+            </div>
+        </div>
+
         <!-- 页脚 -->
         <div class="mt-12 text-center text-ios-gray">
             <p class="text-sm">
@@ -163,21 +198,210 @@ const platformMap = {
     </div>
 
     <script define:vars={{ collections, platformMap }}>
-        // DOM 元素
-        const categoryTabs = document.querySelectorAll('.category-tab');
-        const searchInput = document.getElementById('collectionSearch');
-        const sortOrderSelect = document.getElementById('sortOrder');
-        const collectionsContainer = document.getElementById('collectionsContainer');
-        
-        let allCollectionCards = Array.from(document.querySelectorAll('.collection-card'));
+    // DOM 元素
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const searchInput = document.getElementById('collectionSearch');
+    const sortOrderSelect = document.getElementById('sortOrder');
+    const collectionsContainer = document.getElementById('collectionsContainer');
+    
+    // 分页相关元素
+    const firstPageBtn = document.getElementById('firstPage');
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+    const lastPageBtn = document.getElementById('lastPage');
+    const pageInfoSpan = document.getElementById('pageInfo');
+    
+    let allCollectionCards = Array.from(document.querySelectorAll('.collection-card'));
+    
+    // 分页配置
+    const ITEMS_PER_PAGE = 9; // 每页显示的集合数量
+    let currentPage = 1; // 当前页码
 
+    // 渲染集合（带分页）
+    function renderCollections(cards) {
+        // 计算总页数
+        const totalPages = Math.ceil(cards.length / ITEMS_PER_PAGE);
+        
+        // 确保当前页码在有效范围内
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+        if (totalPages === 0) currentPage = 1;
+        
+        // 计算当前页要显示的集合
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, cards.length);
+        const pageCards = cards.slice(startIndex, endIndex);
+        
         // 渲染集合
-        function renderCollections(cards) {
-            collectionsContainer.innerHTML = '';
-            cards.forEach(card => {
-                collectionsContainer.appendChild(card);
-            });
+        collectionsContainer.innerHTML = '';
+        pageCards.forEach(card => {
+            collectionsContainer.appendChild(card);
+        });
+        
+        // 更新分页控件
+        updatePagination(totalPages);
+    }
+    
+    // 更新分页控件
+    function updatePagination(totalPages) {
+        // 显示页码信息
+        if (totalPages > 0) {
+            pageInfoSpan.textContent = `${currentPage} / ${totalPages}`;
+        } else {
+            pageInfoSpan.textContent = '0 / 0';
         }
+        
+        // 更新按钮状态
+        firstPageBtn.disabled = currentPage <= 1;
+        prevPageBtn.disabled = currentPage <= 1;
+        nextPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
+        lastPageBtn.disabled = currentPage >= totalPages || totalPages === 0;
+        
+        // 添加按钮样式
+        const buttons = [firstPageBtn, prevPageBtn, nextPageBtn, lastPageBtn];
+        buttons.forEach(btn => {
+            if (btn.disabled) {
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.classList.remove('hover:opacity-90');
+            } else {
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.classList.add('hover:opacity-90');
+            }
+        });
+    }
+    
+    // 排序函数
+    function sortCollections(cards, sortBy) {
+        return [...cards].sort((a, b) => {
+            const aValue = a.dataset[sortBy];
+            const bValue = b.dataset[sortBy];
+
+            if (sortBy === 'views') {
+                return parseInt(bValue, 10) - parseInt(aValue, 10);
+            }
+            // For dates, we want descending order
+            return new Date(bValue) - new Date(aValue);
+        });
+    }
+
+    // 筛选和排序主函数
+    function filterAndSort() {
+        const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+        const searchTerm = searchInput.value.toLowerCase();
+        const sortBy = sortOrderSelect.value;
+
+        // 1. 筛选
+        let filteredCards = allCollectionCards.filter(card => {
+            const cardCategory = card.dataset.category;
+            const cardTags = card.dataset.tags;
+            const cardTitle = card.querySelector('h3').textContent.toLowerCase();
+            
+            const matchesCategory = activeCategory === 'all' || cardCategory === activeCategory;
+            const matchesSearch = !searchTerm || cardTitle.includes(searchTerm) || cardTags.includes(searchTerm);
+            
+            return matchesCategory && matchesSearch;
+        });
+
+        // 2. 排序
+        const sortedCards = sortCollections(filteredCards, sortBy);
+        
+        // 3. 重置到第一页
+        currentPage = 1;
+        
+        // 4. 渲染
+        renderCollections(sortedCards);
+    }
+    
+    // 分页控制函数
+    function goToPage(page) {
+        currentPage = page;
+        filterAndSort(); // 重新渲染当前页
+    }
+    
+    function goToFirstPage() {
+        goToPage(1);
+    }
+    
+    function goToPrevPage() {
+        if (currentPage > 1) {
+            goToPage(currentPage - 1);
+        }
+    }
+    
+    function goToNextPage() {
+        // 总页数会在renderCollections中计算，这里简单处理
+        goToPage(currentPage + 1);
+    }
+    
+    function goToLastPage() {
+        // 总页数会在renderCollections中计算，这里简单处理
+        goToPage(9999); // 一个足够大的数，会在renderCollections中被修正
+    }
+
+    // 事件监听
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            categoryTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            filterAndSort();
+        });
+    });
+
+    searchInput.addEventListener('input', filterAndSort);
+    sortOrderSelect.addEventListener('change', filterAndSort);
+    
+    // 分页按钮事件监听
+    firstPageBtn.addEventListener('click', goToFirstPage);
+    prevPageBtn.addEventListener('click', goToPrevPage);
+    nextPageBtn.addEventListener('click', goToNextPage);
+    lastPageBtn.addEventListener('click', goToLastPage);
+
+    // 获取并更新所有访问次数
+    async function fetchAllViews() {
+        console.log('fetchAllViews called');
+        try {
+            const response = await fetch('/api/get-all-views');
+            console.log('API response status:', response.status);
+            if (!response.ok) {
+                console.log('API response not ok');
+                return;
+            }
+            const views = await response.json();
+            console.log('Data received from API:', views);
+            
+            allCollectionCards.forEach(card => {
+                const collectionId = card.dataset.id;
+                if (views[collectionId] !== undefined) {
+                    const viewCountSpan = card.querySelector('.view-count');
+                    if (viewCountSpan) {
+                        viewCountSpan.textContent = views[collectionId];
+                    }
+                    // 更新卡片上的 data-views 属性以便排序
+                    card.dataset.views = views[collectionId];
+                }
+            });
+            // 获取数据后重新排序和渲染
+            filterAndSort();
+        } catch (error) {
+            console.error('Failed to fetch all views:', error);
+        }
+    }
+
+    // 初始加载
+    window.addEventListener('pageshow', (event) => {
+        // 每次页面显示时都获取最新数据
+        fetchAllViews();
+        // 如果页面是从缓存中加载的，我们可能需要重新初始化一些状态
+        if (event.persisted) {
+            console.log("Page was loaded from the cache.");
+            // 可以在这里添加需要重新初始化的逻辑
+        }
+        // 确保筛选和排序在数据更新后执行
+        // fetchAllViews 内部已经调用了 filterAndSort
+    });
+
+    // 页面初次加载时，也执行一次排序
+    filterAndSort();
 
         // 排序函数
         function sortCollections(cards, sortBy) {
