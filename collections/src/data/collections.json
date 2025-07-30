@@ -416,6 +416,101 @@
       ]
     },
     {
+      "id": "english-materials",
+      "title": "英语学习资源",
+      "category": "study",
+      "description": "整理收集各种英语学习资料",
+      "cover": "https://img.jkai.de/2025/07/90af17f551649c733e19ceffc77ae2f5.png",
+      "tags": [
+        "英语",
+        "热门",
+        "最新"
+      ],
+      "created": "2025-07-30T00:00:00.000Z",
+      "updated": "2025-07-30T00:00:00.000Z",
+      "resourceCount": 6,
+      "views": 0,
+      "resources": [
+        {
+          "name": "KO大魔王：英语语法通关计划-[B站]",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1UU5jfefQ61iFBGL1qhBcsw?pwd=9stk",
+          "password": "9stk",
+          "size": "完结",
+          "tags": [
+            "KO大魔王",
+            "英语语法"
+          ],
+          "description": "好玩有趣的英语学习课程，B站超多好评的英语学习课程"
+        },
+        {
+          "name": "Duolingo 多邻国 v6.41.1 解锁MAX会员",
+          "platform": "quark",
+          "link": "https://pan.quark.cn/s/86ab24e70ae8",
+          "password": "",
+          "size": "77.8M",
+          "tags": [
+            "软件",
+            "破解",
+            "多邻国"
+          ],
+          "description": "多邻国Duolingo是一款零基础轻松学习多国语言的软件，每天只需几分钟,人人都可免费使用多邻国学习超过 30 种的外语。小口小口啃外语,科学又有趣。实用日常英语对话，多邻国手把手从基础教起，让你轻松开口说地道英语。针对已有基础之用户，通过多邻国跳级测试后，也能自动匹配相应程度课程进行学习。\n高级/付费功能已解锁\n语言课程已解锁\n开始课程已解锁\n特别优惠已解锁\n强力功能已解锁\n能力提升功能已解锁\n服装功能已解锁\n奖励功能已解锁"
+        },
+        {
+          "name": "雪梨老师《速记中小学1500词》",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/17XDPhm4SehuQNhuXdfo4hw?pwd=5km1",
+          "password": "5km1",
+          "size": "完结",
+          "tags": [
+            "雪梨老师",
+            "单词",
+            "视频",
+            "PDF"
+          ],
+          "description": "雪梨老师《速记中小学1500词 (视频+PDF) 》"
+        },
+        {
+          "name": "英语从零基础直达六级视频课程",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/194iZ-ePFUB2jrkS3sf9irA?pwd=iq4m",
+          "password": "iq4m",
+          "size": "英语",
+          "tags": [
+            "零基础",
+            "6级",
+            "视频"
+          ],
+          "description": "英语从零基础直达六级视频课程"
+        },
+        {
+          "name": "丹尼Danny老师高频词汇速记，72节视频课程",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1v2bXt82zc9RID04KLJL3Iw?pwd=hjy7",
+          "password": "hjy7",
+          "size": "完结",
+          "tags": [
+            "视频",
+            "词汇"
+          ],
+          "description": "丹尼Danny老师高频词汇速记，72节视频课程"
+        },
+        {
+          "name": "陈嘉铭英语3套",
+          "platform": "baidu",
+          "link": "https://pan.baidu.com/s/1JOvPpR5CUqy-onzYeNGS5w?pwd=f71j",
+          "password": "f71j",
+          "size": "完结",
+          "tags": [
+            "视频",
+            "单词",
+            "考研"
+          ],
+          "description": "陈嘉铭英语3套"
+        }
+      ]
+    },
+    {
       "id": "episodes-2025",
       "title": "2025电视剧",
       "category": "episodes",
