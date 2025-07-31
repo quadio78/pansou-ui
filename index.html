@@ -747,7 +747,7 @@
                     }
                     return response.json();
                 })
-                .then(data => {
+                .then(async data => {
                     // 首先，检查API请求是否成功，但没有返回任何数据
                     if (data.code === 0 && (!data.data || data.data.total === 0)) {
                         renderEmptyResults();
@@ -776,9 +776,27 @@
                     let filteredMergedByType = {};
                     let filteredTotal = 0;
 
+                    // 获取失效状态
+                    const allResourceUrls = Object.values(data.data.merged_by_type).flat().map(r => r.url).filter(url => url);
+                    let invalidStatus = {};
+                    if (allResourceUrls.length > 0) {
+                        const invalidStatusResponse = await fetch('/api/get-invalid-status', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ urls: allResourceUrls })
+                        });
+                        if (invalidStatusResponse.ok) {
+                            const result = await invalidStatusResponse.json();
+                            if(result.success) {
+                                invalidStatus = result.invalidStatus;
+                            }
+                        }
+                    }
+
                     for (const platform in data.data.merged_by_type) {
                         const items = data.data.merged_by_type[platform];
                         const validItems = items.filter(item => {
+                            if (invalidStatus[item.url]) return false; // 过滤失效资源
                             if (!item.url || item.url.trim() === '') return false;
                             const expectedDomain = platformDomains[platform];
                             if (expectedDomain && !item.url.includes(expectedDomain)) return false;
@@ -1078,6 +1096,10 @@
                                             <i class="fas fa-copy mr-1 text-xs"></i>
                                             复制
                                         </button>
+                                        <button class="mark-invalid-btn text-sm text-red-500 hover:text-red-700 transition-colors flex items-center" data-url="${resource.url}" title="标记为失效链接">
+                                            <i class="fas fa-times-circle mr-1 text-xs"></i>
+                                            标记失效
+                                        </button>
                                         <div class="text-sm text-ios-blue flex items-center">
                                             立即查看 <i class="fas fa-external-link-alt ml-1 text-xs"></i>
                                         </div>
@@ -1142,11 +1164,17 @@
             const showMoreBtn = e.target.closest('.show-more-btn');
             const toggleBtn = e.target.closest('.toggle-btn');
             const copyBtn = e.target.closest('.copy-link-btn');
+            const markInvalidBtn = e.target.closest('.mark-invalid-btn');
 
             if (copyBtn) {
                 e.preventDefault();
                 e.stopPropagation();
                 copyToClipboard(copyBtn.dataset.url, copyBtn);
+            } else if (markInvalidBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const resourceUrl = markInvalidBtn.dataset.url;
+                markResourceAsInvalid(resourceUrl, markInvalidBtn);
             } else if (showMoreBtn) {
                 handleToggle(showMoreBtn.dataset.platform, showMoreBtn);
                 showMoreBtn.parentElement.classList.add('hidden'); // Hide "Show More" after click
@@ -1215,6 +1243,43 @@
                     return sorted.sort((a, b) => (b.note || '').localeCompare(a.note || '', 'zh-CN'));
                 default:
                     return resources; // 保持原始顺序
+            }
+        }
+
+        // 标记资源为失效
+        async function markResourceAsInvalid(resourceUrl, button) {
+            if (confirm('您确定要将此资源标记为失效吗？')) {
+                try {
+                    const response = await fetch('/api/mark-invalid', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ url: resourceUrl }),
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // 视觉上禁用按钮，并提示用户
+                            button.disabled = true;
+                            button.innerHTML = '<i class="fas fa-check-circle mr-1 text-xs"></i> 已标记';
+                            button.classList.remove('text-red-500', 'hover:text-red-700');
+                            button.classList.add('text-gray-400', 'cursor-not-allowed');
+                            
+                            // 可以在这里添加一个更友好的提示，比如一个小的toast通知
+                            console.log('资源已成功标记为失效');
+                        } else {
+                            throw new Error(result.message || '标记失败');
+                        }
+                    } else {
+                        throw new Error('网络请求失败');
+                    }
+                } catch (error) {
+                    console.error('标记失效时出错:', error);
+                    // 可以在这里向用户显示一个错误提示
+                    alert('标记失败，请稍后重试。');
+                }
             }
         }
 
