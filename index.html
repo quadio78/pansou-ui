@@ -192,6 +192,45 @@
             box-shadow: 0 2px 10px rgba(10, 132, 255, 0.2);
         }
         
+        .category-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: rgba(0,0,0,0.05);
+            color: #1c1c1e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            min-height: 44px; /* 增加触摸区域 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
+        .category-tab:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        .category-tab.active {
+            background-color: #0a84ff;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(10, 132, 255, 0.2);
+        }
+        
+        /* Tab内容区域样式 */
+        #categoryContentContainer .category-item-btn,
+        #categoryContentContainer .hot-search-btn {
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        #categoryContentContainer .category-item-btn:hover,
+        #categoryContentContainer .hot-search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
         /* 移动端触摸优化 */
         @media (max-width: 768px) {
             .result-item {
@@ -282,9 +321,23 @@
             </div>
         </div>
         
-        <!-- 热搜 -->
-        <div id="hotSearchesContainer" class="mb-6 px-2 flex flex-wrap gap-2 items-center">
-            <!-- 热搜词将在这里动态生成 -->
+        <!-- 分类Tab切换 -->
+        <div id="categoryTabsContainer" class="mb-6 px-2 ios-card">
+            <!-- Tab导航 -->
+            <div class="flex flex-wrap gap-2 p-4 border-b border-gray-100">
+                <button class="category-tab active" data-category="hot">热搜</button>
+                <button class="category-tab" data-category="电影">电影</button>
+                <button class="category-tab" data-category="电视剧">电视剧</button>
+                <button class="category-tab" data-category="小说">小说</button>
+                <button class="category-tab" data-category="综艺">综艺</button>
+                <button class="category-tab" data-category="游戏">游戏</button>
+                <button class="category-tab" data-category="动漫">动漫</button>
+            </div>
+            
+            <!-- Tab内容 -->
+            <div id="categoryContentContainer" class="flex flex-wrap gap-2 items-center p-4">
+                <!-- 内容将在这里动态生成 -->
+            </div>
         </div>
 
         <!-- 筛选器 -->
@@ -435,9 +488,10 @@
 
                 if (response.ok) {
                     alert('热搜记录已清除！');
-                    const hotSearchesContainer = document.getElementById('hotSearchesContainer');
-                    if(hotSearchesContainer) {
-                        hotSearchesContainer.innerHTML = '';
+                    // 检查当前是否是热搜tab，如果是则刷新内容
+                    const activeTab = document.querySelector('.category-tab.active');
+                    if (activeTab && activeTab.getAttribute('data-category') === 'hot') {
+                        fetchAndRenderHotTabContent();
                     }
                 } else {
                     const result = await response.json();
@@ -469,7 +523,11 @@
 
                 if (response.ok) {
                     alert(`热搜词 "${termToDelete}" 已删除！`);
-                    fetchAndRenderHotSearches(); // Refresh the list
+                    // 检查当前是否是热搜tab，如果是则刷新内容
+                    const activeTab = document.querySelector('.category-tab.active');
+                    if (activeTab && activeTab.getAttribute('data-category') === 'hot') {
+                        fetchAndRenderHotTabContent();
+                    }
                 } else {
                     const result = await response.json();
                     alert(`删除失败: ${result.error || '未知错误'}`);
@@ -479,17 +537,18 @@
             }
         });
 
-        // 获取并渲染热搜
-        async function fetchAndRenderHotSearches() {
+
+        // 获取并渲染热搜tab内容
+        async function fetchAndRenderHotTabContent() {
             try {
                 const response = await fetch('/api/hot-searches');
                 if (!response.ok) return;
 
                 const { hotSearches } = await response.json();
-                const container = document.getElementById('hotSearchesContainer');
+                const container = document.getElementById('categoryContentContainer');
                 
                 if (hotSearches && hotSearches.length > 0) {
-                    let html = '<span class="text-sm text-ios-gray font-medium mr-2">热搜:</span>';
+                    let html = '';
                     hotSearches.forEach(item => {
                         html += `<button class="text-sm text-ios-blue bg-blue-50 px-3 py-1 rounded-full hover:bg-blue-100 transition-colors hot-search-btn">${item.term}</button>`;
                     });
@@ -510,9 +569,72 @@
             }
         }
 
-        // 页面加载时获取热搜
-        document.addEventListener('DOMContentLoaded', fetchAndRenderHotSearches);
+        // 渲染分类tab内容
+        function renderCategoryTabContent(category) {
+            const container = document.getElementById('categoryContentContainer');
+            // 定义每个分类的固定数据
+            const categoryData = {
+    '电影': ['阿凡达3', '超人传承', '雷神5', '蜘蛛侠4', '奇异博士3', '尚气2', '碟中谍8', '速度与激情11', '侏罗纪世界4', '猩球崛起', '疯狂的麦克斯', '疾速追杀5', '沙丘3', '美国队长4', '雷霆特攻队', '神奇四侠', '刀锋战士', '海洋奇缘2', '冰雪奇缘3', '疯狂动物城2', '功夫熊猫4', '封神第二部', '传说', '射雕英雄传侠之大者'],
+    '电视剧': ['庆余年2', '赘婿2', '唐朝诡事录2', '大奉打更人', '藏海传', '凡人修仙传', '赴山海', '水龙吟', '英雄联盟剧集', '人生切割术2', '星期三2', '最后生还者2', '鱿鱼游戏3', '甜蜜家园3', '三体', '莲花楼', '繁花', '与凤行', '墨雨云间', '狐妖小红娘', '狂飙', '漫长的季节', '人生复本'],
+    '小说': ['大奉打更人', '宿命之环', '赤心巡天', '灵境行者', '道诡异仙', '深海余烬', '择日飞升', '万道剑尊', '星门', '黜龙', '我本无意成仙', '光阴之外', '诡秘之主', '明克街13号', '玩家凶猛', '长夜余火', '从红月开始', '黎明之剑', '镇妖博物馆', '这个人仙太过正经', '全球高武', '万族之劫', '第一序列'],
+    '综艺': ['歌手2025', '乘风2025', '披荆斩棘', '声生不息', '奔跑吧', '极限挑战', '王牌对王牌', '你好星期六', '密室大逃脱', '明星大侦探', '五十公里桃花坞', '向往的生活', '天赐的声音', '乐队的夏天', '奇葩说', '一年一度喜剧大赛', '这!就是街舞', '种地吧', '哈哈哈哈哈', '半熟恋人', '心动的信号', '我们的歌'],
+    '游戏': ['黑神话悟空', 'GTA6', '怪物猎人荒野', '永劫无间', '三角洲行动', '红色沙漠', '死亡搁浅2', '寂静岭2', '最终幻想7', '王国之心4', '刺客信条影', '星刃', '对马岛之魂', '艾尔登法环', '赛博朋克2077', '战神诸神黄昏', '塞尔达传说王国之泪', '博德之门3', '原神', '崩坏星穹铁道', '王者荣耀', '和平精英', '英雄联盟', '无畏契约', '燕云十六声'],
+    '动漫': ['鬼灭之刃', '咒术回战3', '我独自升级2', '怪兽8号', '链锯人', '龙珠DAIMA', '海贼王', '死神千年血战篇', '间谍过家家3', '进击的巨人', '航海王', '名侦探柯南', '一人之下', '镖人', '雾山五行', '凡人修仙传', '斗破苍穹', '斗罗大陆', '完美世界', '吞噬星空', '中国奇谭', '转生成为史莱姆这档事', '无职转生', '辉夜大小姐想让我告白']
+};
+            
+            // 获取当前分类的数据
+            const data = categoryData[category] || [];
+            
+            // 渲染数据，不添加前缀
+            if (data.length > 0) {
+                let html = '';
+                data.forEach(item => {
+                    html += `<button class="text-sm text-ios-blue bg-blue-50 px-3 py-1 rounded-full hover:bg-blue-100 transition-colors category-item-btn">${item}</button>`;
+                });
+                container.innerHTML = html;
+                
+                // 为分类项按钮添加点击事件
+                container.querySelectorAll('.category-item-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        searchInput.value = btn.textContent;
+                        performSearch();
+                    });
+                });
+            } else {
+                container.innerHTML = '';
+            }
+        }
 
+        // Tab切换处理
+        function handleTabSwitch() {
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // 移除所有tab的active类
+                    document.querySelectorAll('.category-tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // 为当前tab添加active类
+                    tab.classList.add('active');
+                    
+                    // 获取分类
+                    const category = tab.getAttribute('data-category');
+                    
+                    // 根据分类渲染内容
+                    if (category === 'hot') {
+                        fetchAndRenderHotTabContent();
+                    } else {
+                        renderCategoryTabContent(category);
+                    }
+                });
+            });
+        }
+
+        // 页面加载时初始化tab切换和获取热搜
+        document.addEventListener('DOMContentLoaded', () => {
+            handleTabSwitch();
+            fetchAndRenderHotTabContent();
+        });
 
         // 返回顶部按钮逻辑
         const backToTopBtn = document.getElementById('backToTopBtn');
@@ -682,6 +804,11 @@
         // 显示加载状态
         function showLoading() {
             resultsHeader.classList.add('hidden');
+            // 隐藏分类tab区域
+            const categoryTabsContainer = document.getElementById('categoryTabsContainer');
+            if (categoryTabsContainer) {
+                categoryTabsContainer.classList.add('hidden');
+            }
             resultsContainer.innerHTML = `
                 <div class="ios-card p-8 text-center fade-in">
                     <div class="loading-dots mb-4">
@@ -737,6 +864,12 @@
             });
             
             filterContainer.classList.add('hidden');
+            
+            // 隐藏分类tab区域
+            const categoryTabsContainer = document.getElementById('categoryTabsContainer');
+            if (categoryTabsContainer) {
+                categoryTabsContainer.classList.add('hidden');
+            }
         }
 
         // 渲染筛选器
@@ -780,6 +913,12 @@
             `;
             resultsCount.textContent = `共找到 0 个资源`;
             resultsHeader.classList.remove('hidden');
+            
+            // 隐藏分类tab区域
+            const categoryTabsContainer = document.getElementById('categoryTabsContainer');
+            if (categoryTabsContainer) {
+                categoryTabsContainer.classList.add('hidden');
+            }
         }
 
         // 渲染搜索结果
@@ -803,6 +942,13 @@
                 `;
                 resultsHeader.classList.add('hidden');
                 filterContainer.classList.add('hidden');
+                
+                // 隐藏分类tab区域
+                const categoryTabsContainer = document.getElementById('categoryTabsContainer');
+                if (categoryTabsContainer) {
+                    categoryTabsContainer.classList.add('hidden');
+                }
+                
                 return;
             }
 
@@ -920,6 +1066,12 @@
             }
             resultsCount.textContent = `共找到 ${finalTotal} 个资源`;
             resultsHeader.classList.remove('hidden');
+            
+            // 隐藏分类tab区域
+            const categoryTabsContainer = document.getElementById('categoryTabsContainer');
+            if (categoryTabsContainer) {
+                categoryTabsContainer.classList.add('hidden');
+            }
         }
         
         // 事件委托处理筛选、显示更多、展开/收起
@@ -1074,55 +1226,6 @@
                     }, 2000);
                 }
             }
-        }
-
-        // 获取并渲染热搜
-        function fetchAndRenderHotSearches() {
-            fetch('/api/hot-searches')
-                .then(response => response.json())
-                .then(data => {
-                    let hotSearchesHTML = '';
-                    if (data.hotSearches && data.hotSearches.length > 0) {
-                        hotSearchesHTML = `
-                            <div class="ios-card p-8 text-center fade-in">
-                                <h4 class="text-xl font-semibold mb-6 text-ios-dark">热搜榜</h4>
-                                <div class="flex flex-wrap justify-center gap-x-4 gap-y-3">
-                        `;
-                        data.hotSearches.forEach(item => {
-                            hotSearchesHTML += `<span class="text-ios-blue cursor-pointer examples text-lg">${item.term}</span>`;
-                        });
-                        hotSearchesHTML += `</div></div>`;
-                    } else {
-                        // 如果没有热搜，可以显示一个默认提示
-                        hotSearchesHTML = `
-                            <div class="ios-card p-8 text-center">
-                                <div class="text-5xl mb-4 text-ios-gray">
-                                    <i class="fas fa-cloud-download-alt"></i>
-                                </div>
-                                <h3 class="text-xl font-medium mb-2">搜索网盘资源</h3>
-                                <p class="text-ios-gray max-w-md mx-auto">
-                                    开启你的第一次搜索吧
-                                </p>
-                            </div>
-                        `;
-                    }
-                    
-                    // 仅当是初始加载时才注入热搜
-                    if (isInitialLoad) {
-                        resultsContainer.innerHTML = hotSearchesHTML;
-                    }
-
-                    // 为热搜词（也是示例）添加事件监听器
-                    document.querySelectorAll('.examples').forEach(el => {
-                        el.addEventListener('click', (e) => {
-                            searchInput.value = e.target.textContent;
-                            performSearch();
-                        });
-                    });
-                })
-                .catch(error => {
-                    console.error('Failed to fetch hot searches:', error);
-                });
         }
 
         // 添加键盘快捷键支持
