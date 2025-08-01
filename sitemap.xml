@@ -26,6 +26,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://pansou.jkai.de/collections-static/brotherhood.html</loc>
+        <lastmod>2025-08-02</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://pansou.jkai.de/collections-static/cartoon.html</loc>
         <lastmod>2025-07-24</lastmod>
         <changefreq>weekly</changefreq>
