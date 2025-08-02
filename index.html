@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000"/>
     <title>盘搜 - 基于TG频道的网盘搜索工具</title>
     <meta name="description" content="盘搜是一个强大的网盘搜索工具，聚合来自Telegram频道的海量资源，支持115、百度云、阿里云盘等主流网盘。快速、精准地找到您需要的电影、音乐、游戏、学习资料等。">
     <meta name="keywords" content="网盘搜索, 阿里云盘, 百度网盘, 115网盘, 迅雷云盘, 夸克网盘, 资源搜索, 盘搜, pansou, Telegram, TG频道">
     <link rel="canonical" href="https://pansou.jkai.de/">
     <link rel="icon" href="/logo.png" type="image/png">
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <meta name="msvalidate.01" content="9C398069E06C029D29F994105CDF858B" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -172,6 +174,105 @@
         #backToTopBtn:hover {
             background-color: rgba(10, 132, 255, 1);
             transform: scale(1.1);
+        }
+
+        #mobileAccessBtn {
+            position: fixed;
+            bottom: 80px; /* Positioned above the back-to-top button */
+            right: 20px;
+            background-color: rgba(44, 187, 99, 0.8); /* Green color */
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+        }
+
+        #mobileAccessBtn:hover {
+            background-color: rgba(44, 187, 99, 1);
+            transform: scale(1.1);
+        }
+
+        #installPwaBtn {
+            position: fixed;
+            bottom: 80px; /* Adjusted to be on top of backToTopBtn on mobile */
+            right: 20px;
+            background-color: rgba(88, 86, 214, 0.8); /* Purple color */
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+        }
+
+        #installPwaBtn:hover {
+            background-color: rgba(88, 86, 214, 1);
+            transform: scale(1.1);
+        }
+
+        /* QR Code Modal Styles */
+        .qr-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        .qr-modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .qr-modal-overlay.visible .qr-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .qr-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            color: #8e8e93;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .qr-modal-close:hover {
+            transform: scale(1.2);
+        }
+        #qrcode {
+            margin: 1.5rem auto 0;
+            width: 200px !important;
+            height: 200px !important;
         }
 
         .filter-btn {
@@ -434,6 +535,24 @@
     <button id="backToTopBtn" title="返回顶部">
         <i class="fas fa-arrow-up"></i>
     </button>
+
+    <button id="mobileAccessBtn" title="手机访问">
+        <i class="fas fa-qrcode"></i>
+    </button>
+
+    <button id="installPwaBtn" title="安装应用">
+        <i class="fas fa-download"></i>
+    </button>
+
+    <!-- QR Code Modal -->
+    <div id="qrModal" class="qr-modal-overlay">
+        <div class="qr-modal-content">
+            <i id="closeQrModal" class="fas fa-times qr-modal-close"></i>
+            <h3 class="text-2xl font-bold text-ios-dark">在手机上继续访问</h3>
+            <p class="text-ios-gray mt-2">使用手机扫描二维码</p>
+            <img id="qrCodeImg" src="/qrcode.png" alt="手机访问二维码" class="w-48 h-48 mx-auto mt-4 rounded-lg shadow-md">
+        </div>
+    </div>
     
     <script>
         // 平台图标和名称映射
@@ -1362,5 +1481,86 @@
         // 页面加载时获取热搜
         document.addEventListener('DOMContentLoaded', fetchAndRenderHotSearches);
     </script>
-</body>
+    <script>
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    
+        // QR Code Modal Logic
+        const qrModal = document.getElementById('qrModal');
+        const mobileAccessBtn = document.getElementById('mobileAccessBtn');
+        const closeQrBtn = document.getElementById('closeQrModal');
+
+        mobileAccessBtn.addEventListener('click', () => {
+            qrModal.style.display = 'flex';
+            setTimeout(() => qrModal.classList.add('visible'), 10);
+        });
+    
+        const closeModal = () => {
+            qrModal.classList.remove('visible');
+            setTimeout(() => qrModal.style.display = 'none', 300);
+        };
+    
+        closeQrBtn.addEventListener('click', closeModal);
+        qrModal.addEventListener('click', (e) => {
+            if (e.target === qrModal) {
+                closeModal();
+            }
+        });
+    
+        // PWA Installation Prompt Logic
+        let deferredPrompt;
+        const installButton = document.getElementById('installPwaBtn');
+    
+        window.addEventListener('beforeinstallprompt', (e) => {
+            const isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;
+            if (isMobile) {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (installButton) {
+                    installButton.style.display = 'flex';
+                }
+            }
+        });
+    
+        if (installButton) {
+            installButton.addEventListener('click', (e) => {
+                if (deferredPrompt) {
+                    installButton.style.display = 'none';
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the A2HS prompt');
+                        } else {
+                            console.log('User dismissed the A2HS prompt');
+                        }
+                        deferredPrompt = null;
+                    });
+                }
+            });
+        }
+        
+        window.addEventListener('appinstalled', (evt) => {
+          console.log('PWA was installed.');
+          if (installButton) {
+            installButton.style.display = 'none';
+          }
+        });
+    
+        // Show mobile access button only on desktop
+        document.addEventListener('DOMContentLoaded', () => {
+            const isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;
+            if (!isMobile) {
+                mobileAccessBtn.style.display = 'flex';
+            }
+        });
+    </script>
+    </body>
 </html>
