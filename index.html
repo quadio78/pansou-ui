@@ -405,6 +405,14 @@
                 right: 20px;
             }
         }
+
+        /* 新版搜索模式切换控件样式 */
+        .search-mode-btn.active {
+            color: #0a84ff;
+        }
+        .search-mode-btn {
+            color: #8e8e93;
+        }
     </style>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9067024774549867"
      crossorigin="anonymous"></script>
@@ -469,6 +477,16 @@
                 >
                     搜索
                 </button>
+            </div>
+        </div>
+
+        <!-- 搜索模式切换 -->
+        <!-- 搜索模式切换 -->
+        <div class="flex justify-center mb-6">
+            <div id="searchModeContainer" class="relative grid grid-cols-2 items-center bg-gray-200/60 p-1 rounded-full w-64">
+                <div id="searchModeSlider" class="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] bg-white rounded-full shadow-md transition-transform duration-300 ease-in-out" style="transform: translateX(calc(100% + 4px));"></div>
+                <button id="modeFast" class="search-mode-btn z-10 py-2 text-center text-sm font-semibold transition-colors duration-300">快速搜索</button>
+                <button id="modeDeep" class="search-mode-btn active z-10 py-2 text-center text-sm font-semibold transition-colors duration-300">深度搜索</button>
             </div>
         </div>
         
@@ -579,6 +597,13 @@
         const resultsCount = document.getElementById('resultsCount');
         const filterContainer = document.getElementById('filterContainer');
         const sortSelect = document.getElementById('sortSelect');
+        
+        // 新版搜索模式控件元素
+        const modeFastBtn = document.getElementById('modeFast');
+        const modeDeepBtn = document.getElementById('modeDeep');
+        const modeSlider = document.getElementById('searchModeSlider');
+        
+        let currentSearchMode = 'deep'; // 'fast' or 'deep'
 
         let currentData = null; // 缓存当前搜索结果
         let currentFilter = 'all'; // 当前筛选条件
@@ -805,6 +830,36 @@
             fetchAndRenderHotTabContent();
         });
 
+        // --- 新版搜索模式切换逻辑 ---
+        function setSearchMode(mode, isInitial = false) {
+            if (!isInitial && currentSearchMode === mode) return;
+            
+            currentSearchMode = mode;
+            
+            if (mode === 'deep') {
+                modeSlider.style.transform = 'translateX(100%)';
+                modeDeepBtn.classList.add('active');
+                modeFastBtn.classList.remove('active');
+            } else {
+                modeSlider.style.transform = 'translateX(0)';
+                modeFastBtn.classList.add('active');
+                modeDeepBtn.classList.remove('active');
+            }
+            
+            if (!isInitial) {
+                localStorage.setItem('searchMode', mode);
+            }
+        }
+
+        modeFastBtn.addEventListener('click', () => setSearchMode('fast'));
+        modeDeepBtn.addEventListener('click', () => setSearchMode('deep'));
+
+        // 页面加载时初始化搜索模式
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedMode = localStorage.getItem('searchMode') || 'deep'; // 默认深度
+            setSearchMode(savedMode, true);
+        });
+
         // 返回顶部按钮逻辑
         const backToTopBtn = document.getElementById('backToTopBtn');
 
@@ -824,6 +879,11 @@
         async function performSearch() {
             const keyword = searchInput.value.trim();
             if (!keyword || isSearching) return;
+
+            // 根据新的模式变量确定插件
+            const fastPlugins = 'pansearch,pan666';
+            const allPlugins = 'pansearch,qupansou,panta,pan666,hunhepan,jikepan';
+            const plugins = currentSearchMode === 'deep' ? allPlugins : fastPlugins;
 
             isInitialLoad = false;
             isSearching = true;
@@ -859,7 +919,7 @@
             // 显示加载状态
             showLoading();
             
-            fetch(`https://pansou.252035.xyz/api/search?kw=${encodeURIComponent(keyword)}&plugins=pansearch,qupansou,panta,pan666,hunhepan,jikepan`)
+            fetch(`https://pansou.252035.xyz/api/search?kw=${encodeURIComponent(keyword)}&plugins=${plugins}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
