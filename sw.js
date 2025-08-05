@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pansou-cache-v5'; // 更新缓存版本
+const CACHE_NAME = 'pansou-cache-v6'; // 更新缓存版本
 const urlsToCache = [
   '/',
   '/index.html',
