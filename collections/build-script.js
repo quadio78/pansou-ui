@@ -109,6 +109,14 @@ if (fs.existsSync(imagesSrcDir)) {
     }
 }
 
+// 复制 collections.json
+const collectionsSrc = path.join(__dirname, 'src', 'data', 'collections.json');
+const collectionsTarget = path.join(targetDir, 'collections.json');
+if (fs.existsSync(collectionsSrc)) {
+    fs.copyFileSync(collectionsSrc, collectionsTarget);
+    console.log('✓ collections.json 已复制');
+}
+
 // 生成静态的collections.html文件
 generateStaticCollectionsHtml();
 

@@ -1,9 +1,10 @@
-const CACHE_NAME = 'pansou-cache-v6'; // 更新缓存版本
+const CACHE_NAME = 'pansou-cache-v8'; // 更新缓存版本
 const urlsToCache = [
   '/',
   '/index.html',
   '/logo.png',
-  '/manifest.json' // 将 manifest 也加入缓存
+  '/manifest.json', // 将 manifest 也加入缓存
+  '/collections-static/collections.json'
 ];
 
 // 安装 Service Worker
