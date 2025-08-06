@@ -50,11 +50,34 @@ const platformMap = {
                 color: white;
                 border-color: #3b82f6;
             }
+
+            /* 隐藏滚动条但保留滚动功能 */
+            .no-scrollbar::-webkit-scrollbar { display: none; }
+            .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+            .category-tab {
+                white-space: nowrap; /* 防止按钮文字换行 */
+            }
+            .sort-button {
+                padding: 8px 16px;
+                border-radius: 20px;
+                border: 1px solid #e5e7eb;
+                background: white;
+                color: #6b7280;
+                transition: all 0.2s;
+                cursor: pointer;
+                font-size: 14px;
+            }
+            .sort-button.active, .sort-button:hover {
+                background: #3b82f6;
+                color: white;
+                border-color: #3b82f6;
+            }
         </style>
 
         <!-- 分类导航 -->
         <div class="mb-8">
-            <div class="flex flex-wrap gap-3 justify-center">
+            <div class="flex overflow-x-auto no-scrollbar py-2 gap-3 justify-start md:justify-center">
                 <button class="category-tab active" data-category="all">
                     <i class="fas fa-th-large mr-2"></i>全部
                 </button>
@@ -68,9 +91,9 @@ const platformMap = {
         </div>
 
         <!-- 筛选和排序 -->
-       <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-8">
+       <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
            <!-- 搜索框 -->
-           <div class="ios-card p-1 search-box flex-grow w-full md:w-auto">
+           <div class="ios-card p-1 search-box flex-grow w-full sm:w-auto">
                <div class="flex items-center">
                    <div class="pl-4 text-ios-gray">
                        <i class="fas fa-search"></i>
@@ -78,20 +101,24 @@ const platformMap = {
                    <input
                        type="text"
                        id="collectionSearch"
-                       placeholder="搜索集合名称或标签..."
-                       class="w-full py-4 px-4 bg-transparent outline-none text-lg placeholder-ios-gray"
+                       placeholder="搜索集合或标签..."
+                       class="w-full py-3 px-4 bg-transparent outline-none text-base placeholder-ios-gray"
                        autocomplete="off"
                    >
                </div>
            </div>
            <!-- 排序方式 -->
-           <div class="ios-card p-1">
-               <select id="sortOrder" class="w-full md:w-auto py-4 px-4 bg-transparent outline-none text-lg text-ios-gray">
-                   <option value="updated">按更新时间</option>
-                   <option value="views">按访问次数</option>
-                   <option value="created">按创建日期</option>
-               </select>
-           </div>
+            <div id="sort-container" class="flex items-center gap-2">
+                <button class="sort-button active" data-sort="updated">
+                    <i class="fas fa-sync-alt mr-1"></i>按更新
+                </button>
+                <button class="sort-button" data-sort="views">
+                    <i class="fas fa-fire mr-1"></i>按热度
+                </button>
+                <button class="sort-button" data-sort="created">
+                    <i class="fas fa-calendar-plus mr-1"></i>按创建
+                </button>
+            </div>
        </div>
 
         <!-- 集合展示区域 -->
@@ -201,7 +228,7 @@ const platformMap = {
     // DOM 元素
     const categoryTabs = document.querySelectorAll('.category-tab');
     const searchInput = document.getElementById('collectionSearch');
-    const sortOrderSelect = document.getElementById('sortOrder');
+    const sortButtons = document.querySelectorAll('.sort-button');
     const collectionsContainer = document.getElementById('collectionsContainer');
     
     // 分页相关元素
@@ -288,7 +315,7 @@ const platformMap = {
     function filterAndSort() {
         const activeCategory = document.querySelector('.category-tab.active').dataset.category;
         const searchTerm = searchInput.value.toLowerCase();
-        const sortBy = sortOrderSelect.value;
+        const sortBy = document.querySelector('.sort-button.active').dataset.sort;
 
         // 1. 筛选
         let filteredCards = allCollectionCards.filter(card => {
@@ -348,7 +375,13 @@ const platformMap = {
     });
 
     searchInput.addEventListener('input', filterAndSort);
-    sortOrderSelect.addEventListener('change', filterAndSort);
+    sortButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            sortButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            filterAndSort();
+        });
+    });
     
     // 分页按钮事件监听
     firstPageBtn.addEventListener('click', goToFirstPage);
@@ -421,7 +454,7 @@ const platformMap = {
         function filterAndSort() {
             const activeCategory = document.querySelector('.category-tab.active').dataset.category;
             const searchTerm = searchInput.value.toLowerCase();
-            const sortBy = sortOrderSelect.value;
+            const sortBy = document.querySelector('.sort-button.active').dataset.sort;
 
             // 1. 筛选
             let filteredCards = allCollectionCards.filter(card => {
@@ -452,7 +485,13 @@ const platformMap = {
         });
 
         searchInput.addEventListener('input', filterAndSort);
-        sortOrderSelect.addEventListener('change', filterAndSort);
+        sortButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                sortButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                filterAndSort();
+            });
+        });
 
         // 获取并更新所有访问次数
         async function fetchAllViews() {
@@ -498,6 +537,5 @@ const platformMap = {
             // fetchAllViews 内部已经调用了 filterAndSort
         });
 
-        // 页面初次加载时，也执行一次排序
-        filterAndSort();
-    </script>
+</script>
+</Layout>
