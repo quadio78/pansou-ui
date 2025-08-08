@@ -784,6 +784,135 @@
       ]
     },
     {
+      "id": "pc-game",
+      "title": "精选PC游戏",
+      "category": "games",
+      "description": "精选PC游戏资源",
+      "cover": "https://img.jkai.de/2025/08/27e48d6eb7ab23e19d69766b6edd8ae5.png",
+      "tags": [
+        "精选",
+        "迅雷云盘",
+        "PC游戏"
+      ],
+      "created": "2025-08-08T00:00:00.000Z",
+      "updated": "2025-08-08T00:00:00.000Z",
+      "resourceCount": 9,
+      "views": 0,
+      "resources": [
+        {
+          "name": "使命召唤18：先锋",
+          "platform": "xunlei",
+          "link": "https://pan.xunlei.com/s/VOX9PQibRQWZ8pH-uuDOFCVkA1?pwd=ncfr",
+          "password": "ncfr",
+          "size": "官方中文",
+          "tags": [
+            "解压可玩",
+            "战役",
+            "射击"
+          ],
+          "description": "【启动说明】：\n\n首次运行时，以管理员身份运行install.bat（仅首次需要！）\n\n然后运行 StartGame.bat\n\n游戏现已可完整运行\n\n【配置项（config.ini文件）】：\n\n‘name’：最长36字符的用户名\n\n‘language’：游戏语言设置，支持语言见’languages.txt’文件\n\n‘missionCheat’：解锁全部战役任务\n\n【注意事项】：\n\n必须通过提供的StartGame.bat启动游戏以绕过反作弊系统\n\n多人模式无法使用机器人，但战役和僵尸模式可完整运行\n\n不支持局域网联机，仅可单人进行私人对战\n\n极少数情况下会强制登出，需重启游戏\n\n联网时可验证纹理流功能是否生效（检查’Call of Duty\\xpak_cache’目录）\n\n安装目录不能使用中文！！！"
+        },
+        {
+          "name": "赛博朋克2077",
+          "platform": "xunlei",
+          "link": "https://pan.xunlei.com/s/VOX8m78XzmfvMQZNQr6gP0gFA1?pwd=dr5k",
+          "password": "dr5k",
+          "size": "赛博朋克",
+          "tags": [
+            "PC游戏",
+            "动作",
+            "冒险",
+            "开放世界"
+          ],
+          "description": "终极典藏版|v2.3+升级补丁+全DLC|官方中文|解压可玩"
+        },
+        {
+          "name": "艾尔登法环 黑夜君临|v1.01.4豪华版+升级补丁+联机补丁",
+          "platform": "xunlei",
+          "link": "https://pan.xunlei.com/s/VOX9P-xipN9vXlj1eBKF-XVLA1?pwd=gr5v",
+          "password": "gr5v",
+          "size": "官方中文",
+          "tags": [
+            "解压可玩"
+          ],
+          "description": "《艾尔登法环 黑夜君临》（ELDEN RING NIGHTREIGN）为基于《艾尔登法环》（ELDEN RING）的世界观， 重新构思游戏的核心设计，带给玩家全新体验的衍生作品。"
+        },
+        {
+          "name": "完蛋！我被美女包围了|官方中文|解压可玩",
+          "platform": "xunlei",
+          "link": "https://pan.xunlei.com/s/VOX9NTHOEq6pxM-oSv-H14r0A1?pwd=upt7",
+          "password": "upt7",
+          "size": "真人影游",
+          "tags": [
+            "沉浸式",
+            "模拟"
+          ],
+          "description": "用户化身男主角顾易，用第一视角沉浸式与六位长相、性格都大相径庭的美女相识，并与她们展开轻喜甜蜜的恋爱之旅。 魅惑魔女、清纯女生、知性姐姐、刁蛮大小姐、性感辣妈、冷艳总裁，与谁走到最后，由你来决定。"
+        },
+        {
+          "name": "最后生还者2",
+          "platform": "xunlei",
+          "link": "https://pan.xunlei.com/s/VOX9M2own0Whe1lpG3S6K04nA1?pwd=vnak",
+          "password": "vnak",
+          "size": "最佳",
+          "tags": [
+            "生存"
+          ],
+          "description": "v1.5.10708+时间顺序模式+升级补丁|解压可玩【附第一部】体验这个荣获超过300项年度最佳游戏奖项肯定的作品，现已登陆PC。通过强化的图形效果、Roguelike生存体验“赴死之旅”等游戏模式以及更多其他内容，探索艾莉和埃比的故事。"
+        },
+        {
+          "name": "僵尸毁灭工程|v42.10|官方中文|解压可玩",
+          "platform": "xunlei",
+          "link": "https://pan.xunlei.com/s/VOX9Mod0xr1tvGymWFqlmN74A1?pwd=xsxb",
+          "password": "xsxb",
+          "size": "末日",
+          "tags": [
+            "建造",
+            "制作",
+            "战斗"
+          ],
+          "description": "《僵尸毁灭工程》（Project Zomboid）是终极的僵尸生存体验。无论是单人还是多人联机：你都需要通过搜刮、建造、制作、战斗、耕种和钓鱼，在末世中艰难求生。硬核的RPG技能系统、广阔的地图、可高度自定义的沙盒模式，以及一只可爱的浣熊新手教程，都在等待着毫无防备的你。那么，你的死法会是哪一种呢？毕竟，被咬一口就足以致命…"
+        },
+        {
+          "name": "使命召唤16",
+          "platform": "xunlei",
+          "link": "https://pan.xunlei.com/s/VOX8lO7PdLAAZ_farws_9G6AA1?pwd=q2b6",
+          "password": "q2b6",
+          "size": "使命召唤",
+          "tags": [
+            "游戏",
+            "使命召唤",
+            "射击"
+          ],
+          "description": "【PC】使命召唤16|v1.67+v2补丁|繁体中文|解压可玩 【战役版+完整版】"
+        },
+        {
+          "name": "苍翼:混沌效应|v1.0.5.114544+芭烈特+全DLC",
+          "platform": "xunlei",
+          "link": "https://pan.xunlei.com/s/VOX9O2LYZWYhuK2DRAmHFYBaA1?pwd=uhtz",
+          "password": "uhtz",
+          "size": "官方中文",
+          "tags": [
+            "解压可玩",
+            "动作"
+          ],
+          "description": "超华丽动作战斗，极致畅爽连招！ 超多角色、超百种招式！这款独树一帜的动作Rogue游戏将带给你酣畅淋漓的超预期体验。\n\n"
+        },
+        {
+          "name": "哈迪斯2|v0.121907+匿踪遁形",
+          "platform": "xunlei",
+          "link": "https://pan.xunlei.com/s/VOX9OXwv5ADUY0Jfk8CkGTAnA1?pwd=2gnd",
+          "password": "2gnd",
+          "size": "官方中文",
+          "tags": [
+            "解压可玩",
+            "迷宫探索"
+          ],
+          "description": "在冥界之外奋勇战斗，驾驭黑暗巫术，与时之泰坦一决高下。在这款屡获殊荣的类 Rogue 迷宫探索游戏的续作中，踏上一场引人入迷的神话之旅。\n"
+        }
+      ]
+    },
+    {
       "id": "programming-courses",
       "title": "编程学习课程合集",
       "category": "study",

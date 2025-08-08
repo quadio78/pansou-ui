@@ -1,6 +1,6 @@
 import { e as createComponent, k as renderComponent, r as renderTemplate, n as defineScriptVars, h as addAttribute, m as maybeRenderHead } from '../chunks/astro/server_CzBadtu_.mjs';
 import 'kleur/colors';
-import { c as collectionsData, $ as $$Layout } from '../chunks/collections_CRXh2lP6.mjs';
+import { c as collectionsData, $ as $$Layout } from '../chunks/collections_C7tZf6go.mjs';
 /* empty css                                 */
 export { renderers } from '../renderers.mjs';
 
@@ -31,9 +31,9 @@ const $$Index = createComponent(async ($$result, $$props, $$slots) => {
 查看详情
 </a> </div> </div>`;
   }), defineScriptVars({ collections, platformMap })) })}`;
-}, "D:/vhost/pansou/collections/src/pages/index.astro", void 0);
+}, "/Users/hua/Documents/vhost/pansou-ui/collections/src/pages/index.astro", void 0);
 
-const $$file = "D:/vhost/pansou/collections/src/pages/index.astro";
+const $$file = "/Users/hua/Documents/vhost/pansou-ui/collections/src/pages/index.astro";
 const $$url = "";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

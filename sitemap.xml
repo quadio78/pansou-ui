@@ -56,6 +56,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>https://pansou.jkai.de/collections-static/pc-game.html</loc>
+        <lastmod>2025-08-08</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://pansou.jkai.de/collections-static/programming-courses.html</loc>
         <lastmod>2025-07-23</lastmod>
         <changefreq>weekly</changefreq>
