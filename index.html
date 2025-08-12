@@ -487,8 +487,8 @@
         </a>
 
         <!-- 公告 -->
-        <div class="ios-card p-4 mb-8 bg-red-50">
-             <p class="text-center text-red-600 font-bold">🚨 搜索服务正在维护，暂不可用.</p>
+        <div class="ios-card p-4 mb-8 bg-green-50">
+             <p class="text-center text-green-600 font-bold">✅ 搜索服务已恢复正常，可以正常使用.</p>
         </div>
 
         <!-- 搜索框 -->
@@ -986,7 +986,7 @@
             // 显示加载状态
             showLoading();
             
-            fetch(`http://112.74.56.8:8888/api/search?kw=${encodeURIComponent(keyword)}&plugins=${plugins}`)
+            fetch(`https://api.jkai.de/api/search?kw=${encodeURIComponent(keyword)}&plugins=${plugins}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
