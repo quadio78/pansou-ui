@@ -487,8 +487,8 @@
         </a>
 
         <!-- 公告 -->
-        <div class="ios-card p-4 mb-8 bg-blue-50">
-             <p class="text-center text-ios-blue font-bold">📢 公告：后端接口维护更新中,搜索暂不可用</p>
+        <div class="ios-card p-4 mb-8 bg-green-50">
+             <p class="text-center text-green-600 font-bold">🎉 盘搜全站功能已恢复，感谢您的耐心等待！</p>
         </div>
 
         <!-- 搜索框 -->
@@ -986,7 +986,7 @@
             // 显示加载状态
             showLoading();
             
-            fetch(`https://pansou.252035.xyz/api/search?kw=${encodeURIComponent(keyword)}&plugins=${plugins}`)
+            fetch(`http://112.74.56.8:8888/api/search?kw=${encodeURIComponent(keyword)}&plugins=${plugins}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
