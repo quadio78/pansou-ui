@@ -947,10 +947,8 @@
                 randomCollectionsEl.style.display = 'none';
             }
 
-            // 根据新的模式变量确定插件
-            const fastPlugins = 'pansearch,pan666';
-            const allPlugins = 'pansearch,qupansou,panta,pan666,hunhepan,jikepan';
-            const plugins = currentSearchMode === 'deep' ? allPlugins : fastPlugins;
+            // 根据新的模式变量确定src参数
+            const src = currentSearchMode === 'deep' ? 'all' : 'tg';
 
             isInitialLoad = false;
             isSearching = true;
@@ -974,7 +972,7 @@
                 if (checkResponse.ok) {
                     const checkResult = await checkResponse.json();
                     if (checkResult.isForbidden) {
-                        renderEmptyResults(); // 使用默认的“无结果”提示
+                        renderEmptyResults(); // 使用默认的"无结果"提示
                         return;
                     }
                 }
@@ -986,7 +984,7 @@
             // 显示加载状态
             showLoading();
             
-            fetch(`https://api.jkai.de/api/search?kw=${encodeURIComponent(keyword)}&plugins=${plugins}`)
+            fetch(`https://api.jkai.de/api/search?kw=${encodeURIComponent(keyword)}&src=${src}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
