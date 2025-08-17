@@ -1,67 +1,48 @@
-const CACHE_NAME = 'pansou-cache-v15'; // 更新缓存版本
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/logo.png',
-  '/manifest.json', // 将 manifest 也加入缓存
-  '/collections-static/collections.json'
-];
+// 静默清理版本 - 为域名切换到Next.js做准备
+const CLEANUP_VERSION = 'pansou-cleanup-final';
 
-// 安装 Service Worker
+// 安装阶段：立即激活
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
-  );
   self.skipWaiting();
 });
 
-// 激活 Service Worker，并清理旧缓存
+// 激活阶段：静默清理所有缓存
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
+    Promise.all([
+      // 清理所有旧缓存
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => caches.delete(cacheName))
+        );
+      }),
+      // 立即控制所有客户端
+      self.clients.claim()
+    ]).then(() => {
+      // 静默刷新所有客户端
+      return self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          if (client.url && client.navigate) {
+            client.navigate(client.url);
           }
-        })
-      );
-    }).then(() => self.clients.claim())
+        });
+      });
+    }).then(() => {
+      // 清理完成后卸载自己，为新版本让路
+      setTimeout(() => {
+        self.registration.unregister();
+      }, 3000);
+    }).catch(() => {
+      // 确保无论如何都会卸载
+      setTimeout(() => {
+        self.registration.unregister();
+      }, 3000);
+    })
   );
 });
 
-// 拦截网络请求
+// 拦截请求：不再缓存，直接从网络获取
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // 如果缓存中有匹配的响应，则直接返回
-        if (response) {
-          return response;
-        }
-        // 否则，从网络请求，并缓存响应
-        return fetch(event.request).then(
-          response => {
-            // 检查响应是否有效
-            if(!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          }
-        );
-      })
-    );
+  // 直接从网络获取，不缓存任何内容
+  event.respondWith(fetch(event.request));
 });
